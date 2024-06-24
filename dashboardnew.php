@@ -1,8 +1,8 @@
 <style>
-select.select_box_fix_width {
-    width: 12%;
-    overflow-x: auto;
-}
+	select.select_box_fix_width {
+		width: 12%;
+		overflow-x: auto;
+	}
 </style>
 <?php
 
@@ -349,51 +349,51 @@ function getPopupContent(int $warehouseid): string
 
 if ($_REQUEST["show"] == "inventory_new") {
 ?>
-<style type="text/css">
-.main_data_css {
-    margin: 0 auto;
-    width: 100%;
-    height: auto;
-    clear: both !important;
-    padding-top: 35px;
-    margin-left: 10px;
-    margin-right: 10px;
-}
+	<style type="text/css">
+		.main_data_css {
+			margin: 0 auto;
+			width: 100%;
+			height: auto;
+			clear: both !important;
+			padding-top: 35px;
+			margin-left: 10px;
+			margin-right: 10px;
+		}
 
-.black_overlay {
-    display: none;
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    width: 100%;
-    height: 100%;
-    background-color: gray;
-    z-index: 1001;
-    -moz-opacity: 0.8;
-    opacity: .80;
-    filter: alpha(opacity=80);
-}
+		.black_overlay {
+			display: none;
+			position: absolute;
+			top: 0%;
+			left: 0%;
+			width: 100%;
+			height: 100%;
+			background-color: gray;
+			z-index: 1001;
+			-moz-opacity: 0.8;
+			opacity: .80;
+			filter: alpha(opacity=80);
+		}
 
-.white_content {
-    display: none;
-    position: absolute;
-    top: 5%;
-    left: 10%;
-    width: 60%;
-    height: 90%;
-    padding: 16px;
-    border: 1px solid gray;
-    background-color: white;
-    z-index: 1002;
-    overflow: auto;
-}
-</style>
-<title>Dashboard</title>
+		.white_content {
+			display: none;
+			position: absolute;
+			top: 5%;
+			left: 10%;
+			width: 60%;
+			height: 90%;
+			padding: 16px;
+			border: 1px solid gray;
+			background-color: white;
+			z-index: 1002;
+			overflow: auto;
+		}
+	</style>
+	<title>Dashboard</title>
 
-<?php include("inc/header.php"); ?>
-<br><br>
-<div class="main_data_css">
-    <?php
+	<?php include("inc/header.php"); ?>
+	<br><br>
+	<div class="main_data_css">
+		<?php
 		db();
 		$query = "SELECT report_name, report_cache_str, sync_time from reports_cache where report_name = 'dash_inventory_new'";
 		$res = db_query($query);
@@ -406,7 +406,7 @@ if ($_REQUEST["show"] == "inventory_new") {
 			echo $row["report_cache_str"];
 		}
 		?>
-</div>
+	</div>
 <?php
 	exit;
 }
@@ -1174,1436 +1174,833 @@ if ($_REQUEST["show"] == "search") {
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-    <title><?php echo $initials; ?> - Dashboard</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title><?php echo $initials; ?> - Dashboard</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;1,300;1,400&display=swap"
-        rel="stylesheet">
-    <SCRIPT LANGUAGE="JavaScript" SRC="inc/CalendarPopup.js"></SCRIPT>
-    <script LANGUAGE="JavaScript">
-    document.write(getCalendarStyles());
-    </script>
-    <script LANGUAGE="JavaScript">
-    var cal2xx = new CalendarPopup("listdiv");
-    cal2xx.showNavigationDropdowns();
-    </script>
+	<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+	<SCRIPT LANGUAGE="JavaScript" SRC="inc/CalendarPopup.js"></SCRIPT>
+	<script LANGUAGE="JavaScript">
+		document.write(getCalendarStyles());
+	</script>
+	<script LANGUAGE="JavaScript">
+		var cal2xx = new CalendarPopup("listdiv");
+		cal2xx.showNavigationDropdowns();
+	</script>
 
-    <?php
+	<?php
 	echo "<LINK rel='stylesheet' type='text/css' href='one_style.css' >";
 	?>
-    <script type="text/javascript">
-    function todoitem_markcomp_dash(unqid) {
-        window.location.href = "todolist_update.php?fromdash=y&unqid=" + unqid + "&markcomp=1";
-    }
-
-    function todoitem_showall() {
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                selectobject = document.getElementById("todoshowall");
-                n_left = f_getPosition(selectobject, 'Left');
-                n_top = f_getPosition(selectobject, 'Top');
-
-                document.getElementById("light_todo").innerHTML =
-                    "<a href='javascript:void(0)' onclick=document.getElementById('light_todo').style.display='none';document.getElementById('fade_todo').style.display='none'>Close</a> &nbsp;<center></center><br/>" +
-                    xmlhttp.responseText;
-                document.getElementById('light_todo').style.display = 'block';
-
-                document.getElementById('light_todo').style.left = (n_left - 400) + 'px';
-                document.getElementById('light_todo').style.top = n_top - 40 + 'px';
-                document.getElementById('light_todo').style.width = 700 + 'px';
-            }
-        }
-
-        xmlhttp.open("GET", "todolist_view.php?fromdash=y&compid=0", true);
-        xmlhttp.send();
-    }
-
-    function showtable(tablenm, sort_order_pre, sort) {
-        var emp_list_selected = '';
-        document.getElementById("divdealinprocess").innerHTML =
-            "<br/><br/>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("divdealinprocess").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "loop_index_load_tables.php?tablenm=" + tablenm + "&sort_order_pre=" + sort_order_pre +
-            "&sort=" + sort + "&emp_list_selected=" + emp_list_selected, true);
-        xmlhttp.send();
-    }
-
-    function showcontact_details(compid, search_keyword) {
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                selectobject = document.getElementById("com_contact" + compid);
-                n_left = f_getPosition(selectobject, 'Left');
-                n_top = f_getPosition(selectobject, 'Top');
-
-                document.getElementById("light_todo").innerHTML =
-                    "<a href='javascript:void(0)' onclick=document.getElementById('light_todo').style.display='none';document.getElementById('fade_todo').style.display='none'>Close</a> &nbsp;<center></center><br/>" +
-                    xmlhttp.responseText;
-                document.getElementById('light_todo').style.display = 'block';
-
-                document.getElementById('light_todo').style.left = (n_left + 50) + 'px';
-                document.getElementById('light_todo').style.top = n_top - 40 + 'px';
-                document.getElementById('light_todo').style.width = 400 + 'px';
-            }
-        }
-
-        xmlhttp.open("GET", "dashboard-search-contact.php?compid=" + compid + "&search_keyword=" + encodeURIComponent(
-            search_keyword), true);
-        xmlhttp.send();
-    }
-
-    function inv_summary(inv_summ_text_id, top_header_flg) {
-        selectobject = document.getElementById("inv_summ_div");
-
-        n_left = f_getPosition(selectobject, 'Left');
-        n_top = f_getPosition(selectobject, 'Top');
-
-        if (top_header_flg == 1) {
-            var tabl_head =
-                "<tr vAlign='left'>	<td bgColor='#e4e4e4' class='style12'><b>Actual</b></td> <td bgColor='#e4e4e4' class='style12'><b>After PO</b></td>";
-            tabl_head = tabl_head +
-                "<td bgColor='#e4e4e4' class='style12'><b>Last Month Quantity</b></td> <td bgColor='#e4e4e4' class='style12'><b>Availability</b></td>";
-            tabl_head = tabl_head +
-                "<td bgColor='#e4e4e4' class='style12' ><font size=1><b>Account Owner</b></font></td><td bgColor='#e4e4e4' class='style12' ><font size=1><b>Supplier</b></font></td><td bgColor='#e4e4e4' class='style12' ><font size=1><b>Ship From</b></font></td>";
-            tabl_head = tabl_head +
-                "<td bgColor='#e4e4e4' class='style12' width='100px;'><b>LxWxH</b></font></td><td bgColor='#e4e4e4' class='style12left' ><b>Description</b></font></td>";
-            tabl_head = tabl_head +
-                "<td bgColor='#e4e4e4' class='style12' width='150px;'><b>SKU</b></font></td><td bgColor='#e4e4e4' class='style12' ><b>Per Pallet</b></td>";
-            tabl_head = tabl_head +
-                "<td bgColor='#e4e4e4' class='style12' ><b>Per Trailer&nbsp;</b></td><td bgColor='#e4e4e4' class='style12' width='70px;'><b>Min FOB&nbsp;</b></td>";
-            tabl_head = tabl_head +
-                "<td bgColor='#e4e4e4' class='style12' width='70px;'><b>Cost&nbsp;</b></td><td bgColor='#e4e4e4' class='style12' ><b>Update</b></td>";
-            tabl_head = tabl_head + "<td bgColor='#e4e4e4'class='style12left' ><b>Notes</b></td></tr>";
-        } else {
-            var tabl_head = "<tr ><td bgColor='#e4e4e4' class='style12'>";
-            tabl_head = tabl_head + "Transaction ID</td><td bgColor='#e4e4e4' class='style12'>";
-            tabl_head = tabl_head + "Company Name</td></tr>";
-
-        }
-
-        document.getElementById("light_todo").innerHTML =
-            "<a href='javascript:void(0)' onclick=document.getElementById('light_todo').style.display='none';document.getElementById('fade_todo').style.display='none'>Close</a> &nbsp;<center></center><br/><table cellspacing='1' cellpadding='1' border='0'>" +
-            tabl_head + document.getElementById(inv_summ_text_id).value + "</table>";
-        document.getElementById('light_todo').style.display = 'block';
-
-        document.getElementById('light_todo').style.left = (n_left - 100) + 'px';
-        document.getElementById('light_todo').style.top = n_top - 250 + 'px';
-        document.getElementById('light_todo').style.width = 1200 + 'px';
-
-        document.getElementById("inv_summ_div").focus();
-    }
-
-    function showdealinprocess(emp_list_selected, sort_order_pre, sort) {
-        document.getElementById("divdealinprocess").innerHTML =
-            "<br/><br/>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("divdealinprocess").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET",
-            "loop_index_load_tables_dashboard.php?dashboardflg=yes&tablenm=all_inbound&sort_order_pre=" +
-            sort_order_pre + "&sort=" + sort + "&emp_list_selected=" + emp_list_selected, true);
-        xmlhttp.send();
-    }
-
-    function update_checked(cnt) {
-        var transid = document.getElementById('transid' + cnt).value;
-        var note = document.getElementById('note' + cnt).value;
-        var warehouseid = document.getElementById('warehouseid' + cnt).value;
-
-        var txtpo_delivery_dt = "";
-        if (document.getElementById('txtpo_delivery_dt' + cnt)) {
-            txtpo_delivery_dt = document.getElementById('txtpo_delivery_dt' + cnt).value;
-        }
-        var tablenm = document.getElementById('tablenm' + cnt).value;
-
-        document.getElementById("tbl_div" + cnt).innerHTML =
-            "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("tbl_div" + cnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "loop_index_updatedata.php?cnt=" + cnt + "&payrollchk=1&transid=" + transid +
-            "&warehouseid=" + warehouseid + "&tablenm=" + tablenm + "&note=" + note + "&txtpo_delivery_dt=" +
-            txtpo_delivery_dt, true);
-        xmlhttp.send();
-    }
-
-    function update_checked_undo(cnt) {
-        var transid = document.getElementById('transid' + cnt).value;
-        var note = document.getElementById('note' + cnt).value;
-        var warehouseid = document.getElementById('warehouseid' + cnt).value;
-
-        var txtpo_delivery_dt = "";
-        if (document.getElementById('txtpo_delivery_dt' + cnt)) {
-            txtpo_delivery_dt = document.getElementById('txtpo_delivery_dt' + cnt).value;
-        }
-        var tablenm = document.getElementById('tablenm' + cnt).value;
-
-        document.getElementById("tbl_div" + cnt).innerHTML =
-            "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("tbl_div" + cnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "loop_index_updatedata.php?cnt=" + cnt + "&payrollchkundo=1&transid=" + transid +
-            "&warehouseid=" + warehouseid + "&tablenm=" + tablenm + "&note=" + note + "&txtpo_delivery_dt=" +
-            txtpo_delivery_dt, true);
-        xmlhttp.send();
-    }
-
-    function update_cancelbtn(cnt) {
-        var transid = document.getElementById('transid' + cnt).value;
-        var note = document.getElementById('note' + cnt).value;
-        var warehouseid = document.getElementById('warehouseid' + cnt).value;
-
-        var txtpo_delivery_dt = "";
-        if (document.getElementById('txtpo_delivery_dt' + cnt)) {
-            txtpo_delivery_dt = document.getElementById('txtpo_delivery_dt' + cnt).value;
-        }
-        var tablenm = document.getElementById('tablenm' + cnt).value;
-
-        document.getElementById("tbl_div" + cnt).innerHTML =
-            "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("tbl_div" + cnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "loop_index_updatedata.php?cnt=" + cnt + "&cancelflg=1&transid=" + transid +
-            "&warehouseid=" + warehouseid + "&tablenm=" + tablenm + "&note=" + note + "&txtpo_delivery_dt=" +
-            txtpo_delivery_dt, true);
-        xmlhttp.send();
-    }
-
-    function update_movepending(cnt) {
-        var transid = document.getElementById('transid' + cnt).value;
-        var note = document.getElementById('note' + cnt).value;
-        var warehouseid = document.getElementById('warehouseid' + cnt).value;
-
-        var txtpo_delivery_dt = "";
-        if (document.getElementById('txtpo_delivery_dt' + cnt)) {
-            txtpo_delivery_dt = document.getElementById('txtpo_delivery_dt' + cnt).value;
-        }
-        var tablenm = document.getElementById('tablenm' + cnt).value;
-
-        document.getElementById("tbl_div" + cnt).innerHTML =
-            "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("tbl_div" + cnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "loop_index_updatedata.php?cnt=" + cnt + "&movepending=1&transid=" + transid +
-            "&warehouseid=" + warehouseid + "&tablenm=" + tablenm + "&note=" + note + "&txtpo_delivery_dt=" +
-            txtpo_delivery_dt, true);
-        xmlhttp.send();
-    }
-
-
-    function update_movepending_preorder(cnt) {
-        var transid = document.getElementById('transid' + cnt).value;
-        var note = document.getElementById('note' + cnt).value;
-        var warehouseid = document.getElementById('warehouseid' + cnt).value;
-
-        var txtpo_delivery_dt = "";
-        if (document.getElementById('txtpo_delivery_dt' + cnt)) {
-            txtpo_delivery_dt = document.getElementById('txtpo_delivery_dt' + cnt).value;
-        }
-        var tablenm = document.getElementById('tablenm' + cnt).value;
-
-        document.getElementById("tbl_div" + cnt).innerHTML =
-            "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("tbl_div" + cnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "loop_index_updatedata.php?cnt=" + cnt + "&movependingpreorder=1&transid=" + transid +
-            "&warehouseid=" + warehouseid + "&tablenm=" + tablenm + "&note=" + note + "&txtpo_delivery_dt=" +
-            txtpo_delivery_dt, true);
-        xmlhttp.send();
-    }
-
-    function update_goodtoship(cnt) {
-        var transid = document.getElementById('transid' + cnt).value;
-        var note = document.getElementById('note' + cnt).value;
-        var warehouseid = document.getElementById('warehouseid' + cnt).value;
-
-        var txtpo_delivery_dt = "";
-        if (document.getElementById('txtpo_delivery_dt' + cnt)) {
-            txtpo_delivery_dt = document.getElementById('txtpo_delivery_dt' + cnt).value;
-        }
-        var tablenm = document.getElementById('tablenm' + cnt).value;
-
-        document.getElementById("tbl_div" + cnt).innerHTML =
-            "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("tbl_div" + cnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "loop_index_updatedata.php?cnt=" + cnt + "&goodtoship=1&transid=" + transid +
-            "&warehouseid=" + warehouseid + "&tablenm=" + tablenm + "&note=" + note + "&txtpo_delivery_dt=" +
-            txtpo_delivery_dt, true);
-        xmlhttp.send();
-    }
-
-    function update_details_6_7(cnt) {
-        var transid = document.getElementById('transid' + cnt).value;
-        var note = document.getElementById('note' + cnt).value;
-        var warehouseid = document.getElementById('warehouseid' + cnt).value;
-
-        var tablenm = document.getElementById('tablenm' + cnt).value;
-
-        var txtfr_pickup_date = document.getElementById('txtfr_pickup_date' + cnt).value;
-        var txtfreight_booked_delivery_date = document.getElementById('txtfreight_booked_delivery_date' + cnt).value;
-        var freight_booking_vendor = document.getElementById('freight_booking_vendor' + cnt).value;
-        var txt_quotedamount = "";
-        if (document.getElementById('txt_quotedamount' + cnt)) {
-            txt_quotedamount = document.getElementById('txt_quotedamount' + cnt).value;
-        }
-        var txt_booked_delivery_cost = "";
-        if (document.getElementById('txt_booked_delivery_cost' + cnt)) {
-            txt_booked_delivery_cost = document.getElementById('txt_booked_delivery_cost' + cnt).value;
-        }
-
-        var entinfo_link = "";
-        if (document.getElementById('txt_entinfo_link' + cnt)) {
-            entinfo_link = document.getElementById('txt_entinfo_link' + cnt).value;
-        }
-
-        document.getElementById("tbl_div" + cnt).innerHTML =
-            "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("tbl_div" + cnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "loop_index_updatedata.php?cnt=" + cnt + "&updatedata=67&transid=" + transid +
-            "&entinfo_link=" + entinfo_link + "&warehouseid=" + warehouseid + "&tablenm=" + tablenm + "&note=" +
-            note + "&txtfr_pickup_date=" + txtfr_pickup_date + "&txtfreight_booked_delivery_date=" +
-            txtfreight_booked_delivery_date + "&freight_booking_vendor=" + freight_booking_vendor +
-            "&txt_quotedamount=" + txt_quotedamount + "&txt_booked_delivery_cost=" + txt_booked_delivery_cost, true);
-        xmlhttp.send();
-    }
-
-    function update_details_8_9(cnt) {
-        var transid = document.getElementById('transid' + cnt).value;
-        var note = document.getElementById('note' + cnt).value;
-        var warehouseid = document.getElementById('warehouseid' + cnt).value;
-
-        var tablenm = document.getElementById('tablenm' + cnt).value;
-
-        var txt_actual_pickup_date = "";
-        var txtfreight_booked_delivery_date = document.getElementById('txtfreight_booked_delivery_date' + cnt).value;
-        var freight_booking_vendor = 0;
-        var txt_quotedamount = "";
-        if (document.getElementById('txt_quotedamount' + cnt)) {
-            txt_quotedamount = document.getElementById('txt_quotedamount' + cnt).value;
-        }
-        var txt_booked_delivery_cost = "";
-        if (document.getElementById('txt_booked_delivery_cost' + cnt)) {
-            txt_booked_delivery_cost = document.getElementById('txt_booked_delivery_cost' + cnt).value;
-        }
-        var txt_additional_freight_costs;
-        if (document.getElementById('txt_additional_freight_costs' + cnt)) {
-            txt_additional_freight_costs = document.getElementById('txt_additional_freight_costs' + cnt).value;
-        }
-
-        var entinfo_link = "";
-        if (document.getElementById('txt_entinfo_link' + cnt)) {
-            entinfo_link = document.getElementById('txt_entinfo_link' + cnt).value;
-        }
-
-        document.getElementById("tbl_div" + cnt).innerHTML =
-            "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("tbl_div" + cnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "loop_index_updatedata.php?cnt=" + cnt + "&updatedata=89&transid=" + transid +
-            "&txt_additional_freight_costs=" + txt_additional_freight_costs + "&entinfo_link=" + entinfo_link +
-            "&warehouseid=" + warehouseid + "&tablenm=" + tablenm + "&note=" + note + "&txt_actual_pickup_date=" +
-            txt_actual_pickup_date + "&txtfreight_booked_delivery_date=" + txtfreight_booked_delivery_date +
-            "&freight_booking_vendor=" + freight_booking_vendor + "&txt_quotedamount=" + txt_quotedamount +
-            "&txt_booked_delivery_cost=" + txt_booked_delivery_cost, true);
-        xmlhttp.send();
-    }
-
-    function update_details_b2bsurvey_ignore(cnt) {
-        var transid = document.getElementById('transid' + cnt).value;
-        var note = document.getElementById('note' + cnt).value;
-        var warehouseid = document.getElementById('warehouseid' + cnt).value;
-
-        var tablenm = document.getElementById('tablenm' + cnt).value;
-
-        document.getElementById("tbl_div" + cnt).innerHTML =
-            "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("tbl_div" + cnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "loop_index_updatedata.php?cnt=" + cnt + "&updatedata=896&transid=" + transid +
-            "&warehouseid=" + warehouseid + "&tablenm=" + tablenm, true);
-        xmlhttp.send();
-    }
-
-    function update_details(ctrl_cnt, comp_id) {
-        var notes_data = encodeURIComponent(document.getElementById('note' + ctrl_cnt).value);
-        var notes_date = encodeURIComponent(document.getElementById('txt_next_step_dt' + ctrl_cnt).value);
-        document.getElementById("tbl_div" + ctrl_cnt).innerHTML =
-            "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("tbl_div" + ctrl_cnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "loop_note_updatedata.php?updatedata=1&comp_id=" + comp_id + "&ctrl_cnt=" + ctrl_cnt +
-            "&notes_data=" + notes_data + "&notes_date=" + notes_date, true);
-        xmlhttp.send();
-    }
-
-
-    function load_div(id) {
-        var element = document.getElementById(id); //replace elementId with your element's Id.
-        var rect = element.getBoundingClientRect();
-        var elementLeft, elementTop; //x and y
-        var scrollTop = document.documentElement.scrollTop ?
-            document.documentElement.scrollTop : document.body.scrollTop;
-        var scrollLeft = document.documentElement.scrollLeft ?
-            document.documentElement.scrollLeft : document.body.scrollLeft;
-        elementTop = rect.top + scrollTop;
-        elementLeft = rect.left + scrollLeft;
-
-        document.getElementById("light").innerHTML = document.getElementById(id).innerHTML;
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        document.getElementById('light').style.left = '100px';
-        document.getElementById('light').style.width = '900px';
-        document.getElementById('light').style.top = elementTop + 100 + 'px';
-    }
-
-    function load_div_dash_purchasing(id) {
-        var element = document.getElementById(id); //replace elementId with your element's Id.
-        var rect = element.getBoundingClientRect();
-        var elementLeft, elementTop; //x and y
-        var scrollTop = document.documentElement.scrollTop ?
-            document.documentElement.scrollTop : document.body.scrollTop;
-        var scrollLeft = document.documentElement.scrollLeft ?
-            document.documentElement.scrollLeft : document.body.scrollLeft;
-        elementTop = rect.top + scrollTop;
-        elementLeft = rect.left + scrollLeft;
-
-        document.getElementById("light").innerHTML = document.getElementById(id).innerHTML;
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        document.getElementById('light').style.width = '1100px';
-        document.getElementById('light').style.left = '100px';
-        document.getElementById('light').style.top = elementTop + 100 + 'px';
-    }
-
-    function load_div_spin(id) {
-        var element = document.getElementById(id); //replace elementId with your element's Id.
-        var rect = element.getBoundingClientRect();
-        var elementLeft, elementTop; //x and y
-        var scrollTop = document.documentElement.scrollTop ?
-            document.documentElement.scrollTop : document.body.scrollTop;
-        var scrollLeft = document.documentElement.scrollLeft ?
-            document.documentElement.scrollLeft : document.body.scrollLeft;
-        elementTop = rect.top + scrollTop;
-        elementLeft = rect.left + scrollLeft;
-
-        document.getElementById("light").innerHTML = document.getElementById(id).innerHTML;
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        document.getElementById('light').style.left = '100px';
-        document.getElementById('light').style.top = elementTop + 100 + 'px';
-    }
-
-
-    function close_div() {
-        document.getElementById('light').style.display = 'none';
-    }
-
-    function display_preoder_sel(tmpcnt, reccnt, box_id, wid) {
-
-        if (reccnt > 0) {
-
-            if (document.getElementById('inventory_preord_org_top_' + tmpcnt).style.display == 'table-row') {
-                document.getElementById('inventory_preord_org_top_' + tmpcnt).style.display = 'none';
-            } else {
-                document.getElementById('inventory_preord_org_top_' + tmpcnt).style.display = 'table-row';
-            }
-
-            document.getElementById("inventory_preord_org_middle_div_" + tmpcnt).innerHTML =
-                "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-
-            if (window.XMLHttpRequest) {
-                xmlhttp = new XMLHttpRequest();
-            } else {
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            xmlhttp.onreadystatechange = function() {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    document.getElementById("inventory_preord_org_middle_div_" + tmpcnt).innerHTML = xmlhttp
-                        .responseText;
-                }
-            }
-
-            xmlhttp.open("GET", "inventory_preorder_childtable.php?box_id=" + box_id + "&wid=" + wid, true);
-            xmlhttp.send();
-
-        }
-    }
-
-    function show_val() {
-
-        var skillsSelect = document.getElementById("unpaid_paid");
-        var selectedText = skillsSelect.options[skillsSelect.selectedIndex].text;
-        document.getElementById("paidunpaid_flg").value = selectedText;
-
-        if (selectedText == 'Paid') {
-            document.getElementById("showcal").style.display = "inline";
-        }
-        if (selectedText == 'Unpaid') {
-            document.getElementById("showcal").style.display = "none";
-        }
-        if (selectedText == 'Invoice Not Paid') {
-            document.getElementById("showcal").style.display = "none";
-        }
-
-    }
-
-    function set_paidflg(data) {
-
-        if (document.getElementById("match_confirmed").value == "commissions_paid") {
-            document.getElementById("paidunpaid_flg").value = "Paid";
-            document.getElementById("showcal").style.display = "inline";
-        } else {
-            document.getElementById("showcal").style.display = "none";
-        }
-    }
-
-    function loadmainpg() {
-        //document.getElementById("paidunpaid_flg").value = value;
-        if (document.getElementById("match_confirmed").value == "commissions_paid") {
-            document.getElementById("paidunpaid_flg").value = "Paid";
-        } else {
-            document.getElementById("paidunpaid_flg").value = "Unpaid";
-        }
-
-        //if(document.getElementById ("paidunpaid_flg").value == "Paid")
-        if (document.getElementById("match_confirmed").value == "commissions_paid") {
-            if (document.getElementById('date_from').value != "" && document.getElementById('date_to').value != "") {
-                //document.frmactive.action = "adminpg.php";
-                document.rptcommission.submit();
-            } else {
-                alert("Please select Mark as paid date From/To.");
-                return false;
-            }
-        } else {
-            document.rptcommission.submit();
-        }
-    }
-
-    function f_getPosition(e_elemRef, s_coord) {
-        var n_pos = 0,
-            n_offset,
-            //e_elem = selectobject;
-            e_elem = e_elemRef;
-        while (e_elem) {
-            n_offset = e_elem["offset" + s_coord];
-            n_pos += n_offset;
-            e_elem = e_elem.offsetParent;
-
-        }
-        e_elem = e_elemRef;
-        //e_elem = selectobject;
-        while (e_elem != document.body) {
-            n_offset = e_elem["windows" + s_coord];
-            if (n_offset && e_elem.style.overflow == 'windows')
-                n_pos -= n_offset;
-            e_elem = e_elem.parentNode;
-        }
-
-        return n_pos;
-
-    }
-
-    function show_sidebar() {
-        var selectobject;
-        selectobject = document.getElementById("searchterm");
-
-        var n_left = f_getPosition(selectobject, 'Left');
-        //alert(n_left);
-        var n_top = f_getPosition(selectobject, 'Top');
-        document.getElementById("light").innerHTML = document.getElementById("sidebar").innerHTML;
-        document.getElementById('light').style.display = 'block';
-
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 60 + 'px';
-        document.getElementById('light').style.width = 550 + 'px';
-        document.getElementById('light').style.height = 200 + 'px';
-
-    }
-
-    function show_fast_search() {
-        var selectobject;
-        selectobject = document.getElementById("searchterm");
-
-        var n_left = f_getPosition(selectobject, 'Left');
-        //alert(n_left);
-        var n_top = f_getPosition(selectobject, 'Top');
-        document.getElementById("light").innerHTML = document.getElementById("fast_search_helptext").innerHTML;
-        document.getElementById('light').style.display = 'block';
-
-        document.getElementById('light').style.left = n_left + 150 + 'px';
-        document.getElementById('light').style.top = n_top + 30 + 'px';
-        document.getElementById('light').style.width = 350 + 'px';
-        document.getElementById('light').style.height = 100 + 'px';
-
-    }
-
-    function hide_sidebar() {
-        document.getElementById('light').style.display = 'none';
-    }
-    </script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <style>
-    .onlytext-link {
-        FONT-WEIGHT: bold;
-        FONT-SIZE: 8pt;
-        COLOR: 006600;
-        FONT-FAMILY: Arial;
-    }
-
-    table.newlinks tr:nth-child(even) {
-        background-color: #e4e4e4;
-    }
-
-    table.newlinks tr:nth-child(odd) {
-        background-color: #F7F7F7;
-    }
-
-    table.newlinks tr td.style12 {
-        text-align: left !important;
-    }
-
-    .style24 {
-        font-size: 14px;
-        font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
-    }
-
-    /*Tooltip style*/
-    .tooltip {
-        position: relative;
-        display: inline-block;
-
-    }
-
-    .tooltip .tooltiptext {
-        visibility: hidden;
-        width: 250px;
-        background-color: #464646;
-        color: #fff;
-        text-align: left;
-        border-radius: 6px;
-        padding: 5px 7px;
-        position: absolute;
-        z-index: 1;
-        top: -5px;
-        left: 110%;
-        /*white-space: nowrap;*/
-        font-size: 12px;
-        font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif !important;
-    }
-
-    .tooltip .tooltiptext::after {
-        content: "";
-        position: absolute;
-        top: 35%;
-        right: 100%;
-        margin-top: -5px;
-        border-width: 5px;
-        border-style: solid;
-        border-color: transparent black transparent transparent;
-    }
-
-    .tooltip:hover .tooltiptext {
-        visibility: visible;
-    }
-
-    .fa-info-circle {
-        font-size: 9px;
-        color: #767676;
-    }
-
-    .main_data_css {
-        margin: 0 auto;
-        width: 100%;
-        height: auto;
-        clear: both !important;
-        padding-top: 35px;
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-
-    .dashboard_heading {
-        margin-top: 20px;
-        width: 100%;
-        font-size: 24px;
-        /*font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif!important;*/
-        font-family: 'Titillium Web', sans-serif;
-        font-weight: 600;
-    }
-
-    .newtxttheam_withdot {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: xx-small;
-        padding: 4px;
-        background-color: #e4e4e4;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .newtxttheam_withdot_light {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: xx-small;
-        padding: 4px;
-        background-color: #f4f5ef;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .newtxttheam_withdot_red {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: xx-small;
-        padding: 4px;
-        background-color: red;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .highlight_row {
-        background-color: #df2f2f;
-    }
-
-    .rec_row {
-        background-color: #e4e4e4;
-    }
-
-    .viewable_txt {
-        font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif !important;
-        font-size: 13px;
-        color: #666666;
-    }
-
-    .viewable_frm {
-        border: 1px solid #E0E0E0;
-        padding: 0px 10px 4px 10px;
-        border-radius: 7px;
-    }
-
-    .viewable_dd_style {
-        border: 1px solid #ccc !important;
-        font-size: 12px;
-    }
-
-    .viewable_button {
-        background-color: #D4D4D4;
-        border: none;
-        color: #464646;
-        padding: 2px 10px;
-        text-decoration: none;
-        margin: 4px 2px;
-        cursor: pointer;
-        border: 1px solid #4E4E4E;
-        font-size: 12px;
-        font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif !important;
-    }
-    </style>
-    <style type="text/css">
-    span.infotxt:hover {
-        text-decoration: none;
-        background: #ffffff;
-        z-index: 6;
-    }
-
-    span.infotxt span {
-        position: absolute;
-        left: -9999px;
-        margin: 20px 0 0 0px;
-        padding: 3px 3px 3px 3px;
-        z-index: 6;
-    }
-
-    span.infotxt:hover span {
-        left: 12%;
-        background: #ffffff;
-    }
-
-    span.infotxt span {
-        position: absolute;
-        left: -9999px;
-        margin: 1px 0 0 0px;
-        padding: 0px 3px 3px 3px;
-        border-style: solid;
-        border-color: black;
-        border-width: 1px;
-    }
-
-    span.infotxt:hover span {
-        margin: 1px 0 0 170px;
-        background: #ffffff;
-        z-index: 6;
-    }
-
-    .style12_new1 {
-        font-size: small;
-        font-family: Arial, Helvetica, sans-serif;
-        color: #333333;
-        text-align: left;
-    }
-
-    .style12_new_top {
-        font-size: small;
-        font-family: Arial, Helvetica, sans-serif;
-        background-color: #FF9900;
-        text-align: center;
-    }
-
-    .style12_new_center {
-        font-size: small;
-        font-family: Arial, Helvetica, sans-serif;
-        color: #333333;
-        text-align: center;
-    }
-
-    .style12_new2 {
-        font-size: small;
-        font-family: Arial, Helvetica, sans-serif;
-        color: #333333;
-        text-align: right;
-    }
-
-    .txtstyle_color {
-        font-family: arial;
-        font-size: 12;
-        height: 16px;
-        background: #ABC5DF;
-    }
-
-    .header_td_style {
-        font-family: arial;
-        font-size: 12;
-        height: 16px;
-        background: #ABC5DF;
-    }
-
-    .white_content_search {
-        display: none;
-        position: absolute;
-        padding: 5px;
-        border: 1px solid black;
-        background-color: #FFF8C6;
-        z-index: 1002;
-        overflow: auto;
-        color: black;
-        border-radius: 8px;
-        padding: 5px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-
-    .black_overlay {
-        display: none;
-        position: absolute;
-    }
-
-    .white_content {
-        display: none;
-        position: absolute;
-        border: 1px solid #909090;
-        background-color: white;
-        overflow: auto;
-        height: 600px;
-        width: 850px;
-        z-index: 999999;
-        margin: 0px 0 0 0px;
-        padding: 10px 10px 10px 10px;
-        border-color: black;
-        /*border-width:2px;*/
-        overflow: auto;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-    </style>
-
-    <script type="text/javascript">
-    function ex_emp_status(viewin, eid, show_number, dtrange) {
-        var display_div = "StatusesDashboard_div";
-
-        if (document.getElementById(display_div).innerHTML == "") {
-            document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
-
-            if (document.getElementById(display_div).style.display == "none") {
-                document.getElementById(display_div).style.display = "block";
-            } else {
-                if (window.XMLHttpRequest) {
-                    xmlhttp = new XMLHttpRequest();
-                } else {
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        document.getElementById("span_emp_status").style.display = "none";
-                        document.getElementById(display_div).innerHTML = xmlhttp.responseText;
-                    }
-                }
-            }
-
-            xmlhttp.open("POST", "dash_emp_status.php?viewin=" + viewin + "&eid=" + eid + "&show_number=" +
-                show_number + "&dtrange=" + dtrange, true);
-            //xmlhttp.open("POST","showStatusesDashboard.php?viewin="+viewin+"&eid="+eid+"&show_number="+show_number+"&dtrange="+dtrange,true);
-            xmlhttp.send();
-        } else {
-            document.getElementById("span_emp_status").style.display = "none";
-            document.getElementById(display_div).style.display = "block";
-        }
-    }
-
-    function colp_emp_status() {
-        var display_div = "StatusesDashboard_div";
-        document.getElementById(display_div).style.display = "none";
-        document.getElementById("span_emp_status").style.display = "block";
-    }
-
-
-    function ex_today_snapshot(initials, dashboard_view) {
-        var display_div = "ex_today_snapshot_div";
-
-        if (document.getElementById(display_div).innerHTML == "") {
-            document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
-
-            if (document.getElementById(display_div).style.display == "none") {
-                document.getElementById(display_div).style.display = "block";
-            } else {
-                if (window.XMLHttpRequest) {
-                    xmlhttp = new XMLHttpRequest();
-                } else {
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        document.getElementById("span_today_snapshot").style.display = "none";
-                        document.getElementById(display_div).innerHTML = xmlhttp.responseText;
-                    }
-                }
-            }
-
-            xmlhttp.open("POST", "dash_today_snapshot.php?initials=" + initials + "&dashboard_view=" + dashboard_view,
-                true);
-            xmlhttp.send();
-        } else {
-            document.getElementById("span_close_deal_pipline").style.display = "none";
-            document.getElementById(display_div).style.display = "block";
-        }
-    }
-
-    function colp_today_snapshot() {
-        var display_div = "ex_today_snapshot_div";
-        document.getElementById(display_div).style.display = "none";
-        document.getElementById("span_today_snapshot").style.display = "block";
-    }
-
-
-    function ex_activity_tracking(initials, dashboard_view) {
-        var display_div = "activity_tracking_div";
-
-        if (document.getElementById(display_div).innerHTML == "") {
-            document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
-
-            if (document.getElementById(display_div).style.display == "none") {
-                document.getElementById(display_div).style.display = "block";
-            } else {
-                if (window.XMLHttpRequest) {
-                    xmlhttp = new XMLHttpRequest();
-                } else {
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        document.getElementById("span_activity_tracking").style.display = "none";
-                        document.getElementById(display_div).innerHTML = xmlhttp.responseText;
-                    }
-                }
-            }
-
-            xmlhttp.open("POST", "dash_activity_tracking.php?initials=" + initials + "&dashboard_view=" +
-                dashboard_view, true);
-            xmlhttp.send();
-        } else {
-            document.getElementById("span_activity_tracking").style.display = "none";
-            document.getElementById(display_div).style.display = "block";
-        }
-    }
-
-    function colp_activity_tracking() {
-        var display_div = "activity_tracking_div";
-        document.getElementById(display_div).style.display = "none";
-        document.getElementById("span_activity_tracking").style.display = "block";
-    }
-
-
-    function ex_close_deal_pipline(initials, dashboard_view) {
-        var display_div = "close_deal_pipline_div";
-
-        if (document.getElementById(display_div).innerHTML == "") {
-            document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
-
-            if (document.getElementById(display_div).style.display == "none") {
-                document.getElementById(display_div).style.display = "block";
-            } else {
-                if (window.XMLHttpRequest) {
-                    xmlhttp = new XMLHttpRequest();
-                } else {
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        document.getElementById("span_close_deal_pipline").style.display = "none";
-                        document.getElementById(display_div).innerHTML = xmlhttp.responseText;
-                    }
-                }
-            }
-
-            xmlhttp.open("POST", "dash_closed_deal_pipeline.php?initials=" + initials + "&dashboard_view=" +
-                dashboard_view, true);
-            xmlhttp.send();
-        } else {
-            document.getElementById("span_close_deal_pipline").style.display = "none";
-            document.getElementById(display_div).style.display = "block";
-        }
-    }
-
-    function colp_close_deal_pipline() {
-        var display_div = "close_deal_pipline_div";
-        document.getElementById(display_div).style.display = "none";
-        document.getElementById("span_close_deal_pipline").style.display = "block";
-    }
-
-    function ex_close_deal_pipline_sourcing(initials, dashboard_view) {
-        var display_div = "close_deal_pipline_div";
-
-        if (document.getElementById(display_div).innerHTML == "") {
-            document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
-
-            if (document.getElementById(display_div).style.display == "none") {
-                document.getElementById(display_div).style.display = "block";
-            } else {
-                if (window.XMLHttpRequest) {
-                    xmlhttp = new XMLHttpRequest();
-                } else {
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        document.getElementById("span_close_deal_pipline").style.display = "none";
-                        document.getElementById(display_div).innerHTML = xmlhttp.responseText;
-                    }
-                }
-            }
-
-            xmlhttp.open("POST", "dash_closed_deal_pipeline_sourcing.php?initials=" + initials + "&dashboard_view=" +
-                dashboard_view, true);
-            xmlhttp.send();
-        } else {
-            document.getElementById("span_close_deal_pipline").style.display = "none";
-            document.getElementById(display_div).style.display = "block";
-        }
-    }
-
-    function colp_close_deal_pipline_sourcing() {
-        var display_div = "close_deal_pipline_div";
-        document.getElementById(display_div).style.display = "none";
-        document.getElementById("span_close_deal_pipline").style.display = "block";
-    }
-
-    function ex_rev_tracker(initials, dashboard_view) {
-        var display_div = "rev_tracker_div";
-
-        if (document.getElementById(display_div).innerHTML == "") {
-            document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
-
-            if (document.getElementById(display_div).style.display == "none") {
-                document.getElementById(display_div).style.display = "block";
-            } else {
-                if (window.XMLHttpRequest) {
-                    xmlhttp = new XMLHttpRequest();
-                } else {
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        document.getElementById("span_rev_tracker").style.display = "none";
-                        document.getElementById(display_div).innerHTML = xmlhttp.responseText;
-                    }
-                }
-            }
-
-            if (dashboard_view == "Rescue") {
-                xmlhttp.open("POST", "dash_revenue_tracker_period_new.php?initials=" + initials + "&dashboard_view=" +
-                    dashboard_view, true);
-            } else {
-                //xmlhttp.open("POST","dash_revenue_tracker.php?initials="+initials+"&dashboard_view="+dashboard_view,true);
-                xmlhttp.open("POST", "dash_revenue_tracker_new.php?initials=" + initials + "&dashboard_view=" +
-                    dashboard_view, true);
-            }
-            xmlhttp.send();
-        } else {
-            document.getElementById("span_rev_tracker").style.display = "none";
-            document.getElementById(display_div).style.display = "block";
-        }
-    }
-
-    function colp_rev_tracker() {
-        var display_div = "rev_tracker_div";
-        document.getElementById(display_div).style.display = "none";
-        document.getElementById("span_rev_tracker").style.display = "block";
-    }
-
-    function ex_dash_po_enter(st_date, end_date, po_key, emp_initial, dashboardview) {
-        var display_div = "po_entered_display_" + po_key;
-
-        if (document.getElementById(display_div).innerHTML == "") {
-            document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
-
-            if (document.getElementById(display_div).style.display == "none") {
-                document.getElementById(display_div).style.display = "block";
-            } else {
-                if (window.XMLHttpRequest) {
-                    xmlhttp = new XMLHttpRequest();
-                } else {
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        document.getElementById("hide_tr").style.display = "none";
-                        document.getElementById(display_div).innerHTML = xmlhttp.responseText;
-                    }
-                }
-            }
-
-            xmlhttp.open("POST", "dash_po_entered.php?st_date=" + st_date + "&end_date=" + end_date + "&po_key=" +
-                po_key + "&emp_initial=" + emp_initial + "&dashboardview=" + dashboardview, true);
-            xmlhttp.send();
-        } else {
-            document.getElementById("hide_tr").style.display = "none";
-            document.getElementById(display_div).style.display = "block";
-        }
-    }
-
-    function colp_dash_po_enter(po_key) {
-        var display_div = "po_entered_display_" + po_key;
-        document.getElementById(display_div).style.display = "none";
-        document.getElementById("hide_tr").style.display = "block";
-    }
-
-    function ex_dash_po_enter_rescue(st_date, end_date, po_key, emp_initial, dashboardview) {
-        var display_div = "po_entered_display_" + po_key;
-
-        if (document.getElementById(display_div).innerHTML == "") {
-            document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
-
-            if (document.getElementById(display_div).style.display == "none") {
-                document.getElementById(display_div).style.display = "block";
-            } else {
-                if (window.XMLHttpRequest) {
-                    xmlhttp = new XMLHttpRequest();
-                } else {
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        document.getElementById("hide_tr").style.display = "none";
-                        document.getElementById(display_div).innerHTML = xmlhttp.responseText;
-                    }
-                }
-            }
-
-            xmlhttp.open("POST", "dash_po_entered_rescue.php?st_date=" + st_date + "&end_date=" + end_date +
-                "&po_key=" + po_key + "&emp_initial=" + emp_initial + "&dashboardview=" + dashboardview, true);
-            xmlhttp.send();
-        } else {
-            document.getElementById("hide_tr").style.display = "none";
-            document.getElementById(display_div).style.display = "block";
-        }
-    }
-
-    function colp_dash_po_enter_rescue(po_key) {
-        var display_div = "po_entered_display_" + po_key;
-        document.getElementById(display_div).style.display = "none";
-        document.getElementById("hide_tr").style.display = "block";
-    }
-
-    //New Deal Spin expand and collaps
-    function ex_dash_deal_spin(emp_initial, dashboardview) {
-        //alert(dashboardview);
-        var display_div = "deal_spin_display";
-        if (document.getElementById(display_div).innerHTML == "") {
-            document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
-
-            if (document.getElementById(display_div).style.display == "none") {
-                document.getElementById(display_div).style.display = "block";
-            } else {
-                if (window.XMLHttpRequest) {
-                    xmlhttp = new XMLHttpRequest();
-                } else {
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        document.getElementById("hide_tr_spin").style.display = "none";
-                        document.getElementById(display_div).innerHTML = xmlhttp.responseText;
-                    }
-                }
-            }
-
-            xmlhttp.open("POST", "dash_new_deal_spin.php?initial=" + emp_initial + "&dashboardview=" + dashboardview,
-                true);
-            xmlhttp.send();
-        } else {
-            document.getElementById("hide_tr_spin").style.display = "none";
-            document.getElementById(display_div).style.display = "block";
-        }
-    }
-
-    function colp_dash_deal_spin() {
-        var display_div = "deal_spin_display";
-        document.getElementById(display_div).style.display = "none";
-        document.getElementById("hide_tr_spin").style.display = "block";
-    }
-    </script>
+	<script type="text/javascript">
+		function showcontact_details(compid, search_keyword) {
+			if (window.XMLHttpRequest) {
+				xmlhttp = new XMLHttpRequest();
+			} else {
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					selectobject = document.getElementById("com_contact" + compid);
+					n_left = f_getPosition(selectobject, 'Left');
+					n_top = f_getPosition(selectobject, 'Top');
+
+					document.getElementById("light_todo").innerHTML =
+						"<a href='javascript:void(0)' onclick=document.getElementById('light_todo').style.display='none';document.getElementById('fade_todo').style.display='none'>Close</a> &nbsp;<center></center><br/>" +
+						xmlhttp.responseText;
+					document.getElementById('light_todo').style.display = 'block';
+
+					document.getElementById('light_todo').style.left = (n_left + 50) + 'px';
+					document.getElementById('light_todo').style.top = n_top - 40 + 'px';
+					document.getElementById('light_todo').style.width = 400 + 'px';
+				}
+			}
+
+			xmlhttp.open("GET", "dashboard-search-contact.php?compid=" + compid + "&search_keyword=" + encodeURIComponent(
+				search_keyword), true);
+			xmlhttp.send();
+		}
+
+		function inv_summary(inv_summ_text_id, top_header_flg) {
+			selectobject = document.getElementById("inv_summ_div");
+
+			n_left = f_getPosition(selectobject, 'Left');
+			n_top = f_getPosition(selectobject, 'Top');
+
+			if (top_header_flg == 1) {
+				var tabl_head =
+					"<tr vAlign='left'>	<td bgColor='#e4e4e4' class='style12'><b>Actual</b></td> <td bgColor='#e4e4e4' class='style12'><b>After PO</b></td>";
+				tabl_head = tabl_head +
+					"<td bgColor='#e4e4e4' class='style12'><b>Last Month Quantity</b></td> <td bgColor='#e4e4e4' class='style12'><b>Availability</b></td>";
+				tabl_head = tabl_head +
+					"<td bgColor='#e4e4e4' class='style12' ><font size=1><b>Account Owner</b></font></td><td bgColor='#e4e4e4' class='style12' ><font size=1><b>Supplier</b></font></td><td bgColor='#e4e4e4' class='style12' ><font size=1><b>Ship From</b></font></td>";
+				tabl_head = tabl_head +
+					"<td bgColor='#e4e4e4' class='style12' width='100px;'><b>LxWxH</b></font></td><td bgColor='#e4e4e4' class='style12left' ><b>Description</b></font></td>";
+				tabl_head = tabl_head +
+					"<td bgColor='#e4e4e4' class='style12' width='150px;'><b>SKU</b></font></td><td bgColor='#e4e4e4' class='style12' ><b>Per Pallet</b></td>";
+				tabl_head = tabl_head +
+					"<td bgColor='#e4e4e4' class='style12' ><b>Per Trailer&nbsp;</b></td><td bgColor='#e4e4e4' class='style12' width='70px;'><b>Min FOB&nbsp;</b></td>";
+				tabl_head = tabl_head +
+					"<td bgColor='#e4e4e4' class='style12' width='70px;'><b>Cost&nbsp;</b></td><td bgColor='#e4e4e4' class='style12' ><b>Update</b></td>";
+				tabl_head = tabl_head + "<td bgColor='#e4e4e4'class='style12left' ><b>Notes</b></td></tr>";
+			} else {
+				var tabl_head = "<tr ><td bgColor='#e4e4e4' class='style12'>";
+				tabl_head = tabl_head + "Transaction ID</td><td bgColor='#e4e4e4' class='style12'>";
+				tabl_head = tabl_head + "Company Name</td></tr>";
+
+			}
+
+			document.getElementById("light_todo").innerHTML =
+				"<a href='javascript:void(0)' onclick=document.getElementById('light_todo').style.display='none';document.getElementById('fade_todo').style.display='none'>Close</a> &nbsp;<center></center><br/><table cellspacing='1' cellpadding='1' border='0'>" +
+				tabl_head + document.getElementById(inv_summ_text_id).value + "</table>";
+			document.getElementById('light_todo').style.display = 'block';
+
+			document.getElementById('light_todo').style.left = (n_left - 100) + 'px';
+			document.getElementById('light_todo').style.top = n_top - 250 + 'px';
+			document.getElementById('light_todo').style.width = 1200 + 'px';
+
+			document.getElementById("inv_summ_div").focus();
+		}
+
+		function showdealinprocess(emp_list_selected, sort_order_pre, sort) {
+			document.getElementById("divdealinprocess").innerHTML =
+				"<br/><br/>Loading .....<img src='images/wait_animated.gif' />";
+
+			if (window.XMLHttpRequest) {
+				xmlhttp = new XMLHttpRequest();
+			} else {
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					document.getElementById("divdealinprocess").innerHTML = xmlhttp.responseText;
+				}
+			}
+
+			xmlhttp.open("GET",
+				"loop_index_load_tables_dashboard.php?dashboardflg=yes&tablenm=all_inbound&sort_order_pre=" +
+				sort_order_pre + "&sort=" + sort + "&emp_list_selected=" + emp_list_selected, true);
+			xmlhttp.send();
+		}
+
+
+
+
+
+		function close_div() {
+			document.getElementById('light').style.display = 'none';
+		}
+
+		function display_preoder_sel(tmpcnt, reccnt, box_id, wid) {
+
+			if (reccnt > 0) {
+
+				if (document.getElementById('inventory_preord_org_top_' + tmpcnt).style.display == 'table-row') {
+					document.getElementById('inventory_preord_org_top_' + tmpcnt).style.display = 'none';
+				} else {
+					document.getElementById('inventory_preord_org_top_' + tmpcnt).style.display = 'table-row';
+				}
+
+				document.getElementById("inventory_preord_org_middle_div_" + tmpcnt).innerHTML =
+					"<br><br>Loading .....<img src='images/wait_animated.gif' />";
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("inventory_preord_org_middle_div_" + tmpcnt).innerHTML = xmlhttp
+							.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "inventory_preorder_childtable.php?box_id=" + box_id + "&wid=" + wid, true);
+				xmlhttp.send();
+
+			}
+		}
+
+
+
+		function f_getPosition(e_elemRef, s_coord) {
+			var n_pos = 0,
+				n_offset,
+				//e_elem = selectobject;
+				e_elem = e_elemRef;
+			while (e_elem) {
+				n_offset = e_elem["offset" + s_coord];
+				n_pos += n_offset;
+				e_elem = e_elem.offsetParent;
+
+			}
+			e_elem = e_elemRef;
+			//e_elem = selectobject;
+			while (e_elem != document.body) {
+				n_offset = e_elem["windows" + s_coord];
+				if (n_offset && e_elem.style.overflow == 'windows')
+					n_pos -= n_offset;
+				e_elem = e_elem.parentNode;
+			}
+
+			return n_pos;
+
+		}
+	</script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<style>
+		.onlytext-link {
+			FONT-WEIGHT: bold;
+			FONT-SIZE: 8pt;
+			COLOR: 006600;
+			FONT-FAMILY: Arial;
+		}
+
+		table.newlinks tr:nth-child(even) {
+			background-color: #e4e4e4;
+		}
+
+		table.newlinks tr:nth-child(odd) {
+			background-color: #F7F7F7;
+		}
+
+		table.newlinks tr td.style12 {
+			text-align: left !important;
+		}
+
+		.style24 {
+			font-size: 14px;
+			font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+		}
+
+		/*Tooltip style*/
+		.tooltip {
+			position: relative;
+			display: inline-block;
+
+		}
+
+		.tooltip .tooltiptext {
+			visibility: hidden;
+			width: 250px;
+			background-color: #464646;
+			color: #fff;
+			text-align: left;
+			border-radius: 6px;
+			padding: 5px 7px;
+			position: absolute;
+			z-index: 1;
+			top: -5px;
+			left: 110%;
+			/*white-space: nowrap;*/
+			font-size: 12px;
+			font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif !important;
+		}
+
+		.tooltip .tooltiptext::after {
+			content: "";
+			position: absolute;
+			top: 35%;
+			right: 100%;
+			margin-top: -5px;
+			border-width: 5px;
+			border-style: solid;
+			border-color: transparent black transparent transparent;
+		}
+
+		.tooltip:hover .tooltiptext {
+			visibility: visible;
+		}
+
+		.fa-info-circle {
+			font-size: 9px;
+			color: #767676;
+		}
+
+		.main_data_css {
+			margin: 0 auto;
+			width: 100%;
+			height: auto;
+			clear: both !important;
+			padding-top: 35px;
+			margin-left: 10px;
+			margin-right: 10px;
+		}
+
+		.dashboard_heading {
+			margin-top: 20px;
+			width: 100%;
+			font-size: 24px;
+			/*font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif!important;*/
+			font-family: 'Titillium Web', sans-serif;
+			font-weight: 600;
+		}
+
+		.newtxttheam_withdot {
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: xx-small;
+			padding: 4px;
+			background-color: #e4e4e4;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.newtxttheam_withdot_light {
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: xx-small;
+			padding: 4px;
+			background-color: #f4f5ef;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.newtxttheam_withdot_red {
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: xx-small;
+			padding: 4px;
+			background-color: red;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.highlight_row {
+			background-color: #df2f2f;
+		}
+
+		.rec_row {
+			background-color: #e4e4e4;
+		}
+
+		.viewable_txt {
+			font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif !important;
+			font-size: 13px;
+			color: #666666;
+		}
+
+		.viewable_frm {
+			border: 1px solid #E0E0E0;
+			padding: 0px 10px 4px 10px;
+			border-radius: 7px;
+		}
+
+		.viewable_dd_style {
+			border: 1px solid #ccc !important;
+			font-size: 12px;
+		}
+
+		.viewable_button {
+			background-color: #D4D4D4;
+			border: none;
+			color: #464646;
+			padding: 2px 10px;
+			text-decoration: none;
+			margin: 4px 2px;
+			cursor: pointer;
+			border: 1px solid #4E4E4E;
+			font-size: 12px;
+			font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif !important;
+		}
+	</style>
+	<style type="text/css">
+		span.infotxt:hover {
+			text-decoration: none;
+			background: #ffffff;
+			z-index: 6;
+		}
+
+		span.infotxt span {
+			position: absolute;
+			left: -9999px;
+			margin: 20px 0 0 0px;
+			padding: 3px 3px 3px 3px;
+			z-index: 6;
+		}
+
+		span.infotxt:hover span {
+			left: 12%;
+			background: #ffffff;
+		}
+
+		span.infotxt span {
+			position: absolute;
+			left: -9999px;
+			margin: 1px 0 0 0px;
+			padding: 0px 3px 3px 3px;
+			border-style: solid;
+			border-color: black;
+			border-width: 1px;
+		}
+
+		span.infotxt:hover span {
+			margin: 1px 0 0 170px;
+			background: #ffffff;
+			z-index: 6;
+		}
+
+		.style12_new1 {
+			font-size: small;
+			font-family: Arial, Helvetica, sans-serif;
+			color: #333333;
+			text-align: left;
+		}
+
+		.style12_new_top {
+			font-size: small;
+			font-family: Arial, Helvetica, sans-serif;
+			background-color: #FF9900;
+			text-align: center;
+		}
+
+		.style12_new_center {
+			font-size: small;
+			font-family: Arial, Helvetica, sans-serif;
+			color: #333333;
+			text-align: center;
+		}
+
+		.style12_new2 {
+			font-size: small;
+			font-family: Arial, Helvetica, sans-serif;
+			color: #333333;
+			text-align: right;
+		}
+
+		.txtstyle_color {
+			font-family: arial;
+			font-size: 12;
+			height: 16px;
+			background: #ABC5DF;
+		}
+
+		.header_td_style {
+			font-family: arial;
+			font-size: 12;
+			height: 16px;
+			background: #ABC5DF;
+		}
+
+		.white_content_search {
+			display: none;
+			position: absolute;
+			padding: 5px;
+			border: 1px solid black;
+			background-color: #FFF8C6;
+			z-index: 1002;
+			overflow: auto;
+			color: black;
+			border-radius: 8px;
+			padding: 5px;
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+		}
+
+		.black_overlay {
+			display: none;
+			position: absolute;
+		}
+
+		.white_content {
+			display: none;
+			position: absolute;
+			border: 1px solid #909090;
+			background-color: white;
+			overflow: auto;
+			height: 600px;
+			width: 850px;
+			z-index: 999999;
+			margin: 0px 0 0 0px;
+			padding: 10px 10px 10px 10px;
+			border-color: black;
+			/*border-width:2px;*/
+			overflow: auto;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+		}
+	</style>
+
+	<script type="text/javascript">
+		function ex_emp_status(viewin, eid, show_number, dtrange) {
+			var display_div = "StatusesDashboard_div";
+
+			if (document.getElementById(display_div).innerHTML == "") {
+				document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
+
+				if (document.getElementById(display_div).style.display == "none") {
+					document.getElementById(display_div).style.display = "block";
+				} else {
+					if (window.XMLHttpRequest) {
+						xmlhttp = new XMLHttpRequest();
+					} else {
+						xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+					}
+
+					xmlhttp.onreadystatechange = function() {
+						if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+							document.getElementById("span_emp_status").style.display = "none";
+							document.getElementById(display_div).innerHTML = xmlhttp.responseText;
+						}
+					}
+				}
+
+				xmlhttp.open("POST", "dash_emp_status.php?viewin=" + viewin + "&eid=" + eid + "&show_number=" +
+					show_number + "&dtrange=" + dtrange, true);
+				//xmlhttp.open("POST","showStatusesDashboard.php?viewin="+viewin+"&eid="+eid+"&show_number="+show_number+"&dtrange="+dtrange,true);
+				xmlhttp.send();
+			} else {
+				document.getElementById("span_emp_status").style.display = "none";
+				document.getElementById(display_div).style.display = "block";
+			}
+		}
+
+		function colp_emp_status() {
+			var display_div = "StatusesDashboard_div";
+			document.getElementById(display_div).style.display = "none";
+			document.getElementById("span_emp_status").style.display = "block";
+		}
+
+
+		function ex_today_snapshot(initials, dashboard_view) {
+			var display_div = "ex_today_snapshot_div";
+
+			if (document.getElementById(display_div).innerHTML == "") {
+				document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
+
+				if (document.getElementById(display_div).style.display == "none") {
+					document.getElementById(display_div).style.display = "block";
+				} else {
+					if (window.XMLHttpRequest) {
+						xmlhttp = new XMLHttpRequest();
+					} else {
+						xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+					}
+
+					xmlhttp.onreadystatechange = function() {
+						if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+							document.getElementById("span_today_snapshot").style.display = "none";
+							document.getElementById(display_div).innerHTML = xmlhttp.responseText;
+						}
+					}
+				}
+
+				xmlhttp.open("POST", "dash_today_snapshot.php?initials=" + initials + "&dashboard_view=" + dashboard_view,
+					true);
+				xmlhttp.send();
+			} else {
+				document.getElementById("span_close_deal_pipline").style.display = "none";
+				document.getElementById(display_div).style.display = "block";
+			}
+		}
+
+		function colp_today_snapshot() {
+			var display_div = "ex_today_snapshot_div";
+			document.getElementById(display_div).style.display = "none";
+			document.getElementById("span_today_snapshot").style.display = "block";
+		}
+
+
+		function ex_activity_tracking(initials, dashboard_view) {
+			var display_div = "activity_tracking_div";
+
+			if (document.getElementById(display_div).innerHTML == "") {
+				document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
+
+				if (document.getElementById(display_div).style.display == "none") {
+					document.getElementById(display_div).style.display = "block";
+				} else {
+					if (window.XMLHttpRequest) {
+						xmlhttp = new XMLHttpRequest();
+					} else {
+						xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+					}
+
+					xmlhttp.onreadystatechange = function() {
+						if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+							document.getElementById("span_activity_tracking").style.display = "none";
+							document.getElementById(display_div).innerHTML = xmlhttp.responseText;
+						}
+					}
+				}
+
+				xmlhttp.open("POST", "dash_activity_tracking.php?initials=" + initials + "&dashboard_view=" +
+					dashboard_view, true);
+				xmlhttp.send();
+			} else {
+				document.getElementById("span_activity_tracking").style.display = "none";
+				document.getElementById(display_div).style.display = "block";
+			}
+		}
+
+		function colp_activity_tracking() {
+			var display_div = "activity_tracking_div";
+			document.getElementById(display_div).style.display = "none";
+			document.getElementById("span_activity_tracking").style.display = "block";
+		}
+
+
+		function ex_close_deal_pipline(initials, dashboard_view) {
+			var display_div = "close_deal_pipline_div";
+
+			if (document.getElementById(display_div).innerHTML == "") {
+				document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
+
+				if (document.getElementById(display_div).style.display == "none") {
+					document.getElementById(display_div).style.display = "block";
+				} else {
+					if (window.XMLHttpRequest) {
+						xmlhttp = new XMLHttpRequest();
+					} else {
+						xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+					}
+
+					xmlhttp.onreadystatechange = function() {
+						if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+							document.getElementById("span_close_deal_pipline").style.display = "none";
+							document.getElementById(display_div).innerHTML = xmlhttp.responseText;
+						}
+					}
+				}
+
+				xmlhttp.open("POST", "dash_closed_deal_pipeline.php?initials=" + initials + "&dashboard_view=" +
+					dashboard_view, true);
+				xmlhttp.send();
+			} else {
+				document.getElementById("span_close_deal_pipline").style.display = "none";
+				document.getElementById(display_div).style.display = "block";
+			}
+		}
+
+		function colp_close_deal_pipline() {
+			var display_div = "close_deal_pipline_div";
+			document.getElementById(display_div).style.display = "none";
+			document.getElementById("span_close_deal_pipline").style.display = "block";
+		}
+
+		function ex_close_deal_pipline_sourcing(initials, dashboard_view) {
+			var display_div = "close_deal_pipline_div";
+
+			if (document.getElementById(display_div).innerHTML == "") {
+				document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
+
+				if (document.getElementById(display_div).style.display == "none") {
+					document.getElementById(display_div).style.display = "block";
+				} else {
+					if (window.XMLHttpRequest) {
+						xmlhttp = new XMLHttpRequest();
+					} else {
+						xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+					}
+
+					xmlhttp.onreadystatechange = function() {
+						if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+							document.getElementById("span_close_deal_pipline").style.display = "none";
+							document.getElementById(display_div).innerHTML = xmlhttp.responseText;
+						}
+					}
+				}
+
+				xmlhttp.open("POST", "dash_closed_deal_pipeline_sourcing.php?initials=" + initials + "&dashboard_view=" +
+					dashboard_view, true);
+				xmlhttp.send();
+			} else {
+				document.getElementById("span_close_deal_pipline").style.display = "none";
+				document.getElementById(display_div).style.display = "block";
+			}
+		}
+
+		function colp_close_deal_pipline_sourcing() {
+			var display_div = "close_deal_pipline_div";
+			document.getElementById(display_div).style.display = "none";
+			document.getElementById("span_close_deal_pipline").style.display = "block";
+		}
+
+		function ex_rev_tracker(initials, dashboard_view) {
+			var display_div = "rev_tracker_div";
+
+			if (document.getElementById(display_div).innerHTML == "") {
+				document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
+
+				if (document.getElementById(display_div).style.display == "none") {
+					document.getElementById(display_div).style.display = "block";
+				} else {
+					if (window.XMLHttpRequest) {
+						xmlhttp = new XMLHttpRequest();
+					} else {
+						xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+					}
+
+					xmlhttp.onreadystatechange = function() {
+						if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+							document.getElementById("span_rev_tracker").style.display = "none";
+							document.getElementById(display_div).innerHTML = xmlhttp.responseText;
+						}
+					}
+				}
+
+				if (dashboard_view == "Rescue") {
+					xmlhttp.open("POST", "dash_revenue_tracker_period_new.php?initials=" + initials + "&dashboard_view=" +
+						dashboard_view, true);
+				} else {
+					//xmlhttp.open("POST","dash_revenue_tracker.php?initials="+initials+"&dashboard_view="+dashboard_view,true);
+					xmlhttp.open("POST", "dash_revenue_tracker_new.php?initials=" + initials + "&dashboard_view=" +
+						dashboard_view, true);
+				}
+				xmlhttp.send();
+			} else {
+				document.getElementById("span_rev_tracker").style.display = "none";
+				document.getElementById(display_div).style.display = "block";
+			}
+		}
+
+		function colp_rev_tracker() {
+			var display_div = "rev_tracker_div";
+			document.getElementById(display_div).style.display = "none";
+			document.getElementById("span_rev_tracker").style.display = "block";
+		}
+
+
+		//New Deal Spin expand and collaps
+		function ex_dash_deal_spin(emp_initial, dashboardview) {
+			//alert(dashboardview);
+			var display_div = "deal_spin_display";
+			if (document.getElementById(display_div).innerHTML == "") {
+				document.getElementById(display_div).innerHTML = "<br/>Loading .....<img src='images/wait_animated.gif' />";
+
+				if (document.getElementById(display_div).style.display == "none") {
+					document.getElementById(display_div).style.display = "block";
+				} else {
+					if (window.XMLHttpRequest) {
+						xmlhttp = new XMLHttpRequest();
+					} else {
+						xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+					}
+
+					xmlhttp.onreadystatechange = function() {
+						if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+							document.getElementById("hide_tr_spin").style.display = "none";
+							document.getElementById(display_div).innerHTML = xmlhttp.responseText;
+						}
+					}
+				}
+
+				xmlhttp.open("POST", "dash_new_deal_spin.php?initial=" + emp_initial + "&dashboardview=" + dashboardview,
+					true);
+				xmlhttp.send();
+			} else {
+				document.getElementById("hide_tr_spin").style.display = "none";
+				document.getElementById(display_div).style.display = "block";
+			}
+		}
+
+		function colp_dash_deal_spin() {
+			var display_div = "deal_spin_display";
+			document.getElementById(display_div).style.display = "none";
+			document.getElementById("hide_tr_spin").style.display = "block";
+		}
+	</script>
 </head>
 
 <body>
-    <script type="text/javascript" src="wz_tooltip.js"></script>
-    <div id="light_todo" class="white_content"></div>
-    <div id="fade_todo" class="black_overlay"></div>
-    <?php
+	<script type="text/javascript" src="wz_tooltip.js"></script>
+	<div id="light_todo" class="white_content"></div>
+	<div id="fade_todo" class="black_overlay"></div>
+	<?php
 	//------------------------------------------------------------------------------
 	//New match inventory
 	function showinventory_fordashboard_invmatch_new(string|int $g_timing, string|int $sort_g_tool, string|int $sort_g_view): void
 	{
 	?>
-    <script>
-    function displayboxdata_invnew(colid, sortflg, box_type_cnt) {
-        document.getElementById("btype" + box_type_cnt).innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        //
-        var sort_g_view = document.getElementById("sort_g_view").value;
-        var sort_g_tool = document.getElementById("sort_g_tool").value;
-        var g_timing = document.getElementById("g_timing").value;
-        //
-        var fld = document.getElementById('search_tag');
-        var values = [];
-        for (var i = 0; i < fld.options.length; i++) {
-            if (fld.options[i].selected) {
-                values.push(fld.options[i].value);
-            }
-        }
-        //
+		<script>
+			function displayboxdata_invnew(colid, sortflg, box_type_cnt) {
+				document.getElementById("btype" + box_type_cnt).innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+				//
+				var sort_g_view = document.getElementById("sort_g_view").value;
+				var sort_g_tool = document.getElementById("sort_g_tool").value;
+				var g_timing = document.getElementById("g_timing").value;
+				//
+				var fld = document.getElementById('search_tag');
+				var values = [];
+				for (var i = 0; i < fld.options.length; i++) {
+					if (fld.options[i].selected) {
+						values.push(fld.options[i].value);
+					}
+				}
+				//
 
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
 
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                //alert(xmlhttp.responseText);
-                document.getElementById("btype" + box_type_cnt).innerHTML = xmlhttp.responseText;
-            }
-        }
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						//alert(xmlhttp.responseText);
+						document.getElementById("btype" + box_type_cnt).innerHTML = xmlhttp.responseText;
+					}
+				}
 
-        xmlhttp.open("GET", "dashboard_inv_sort.php?colid=" + colid + "&sortflg=" + sortflg + "&sort_g_view=" +
-            sort_g_view + "&sort_g_tool=" + sort_g_tool + "&g_timing=" + g_timing + "&box_type_cnt=" +
-            box_type_cnt + "&search_tag=" + values, true);
-        xmlhttp.send();
-    }
+				xmlhttp.open("GET", "dashboard_inv_sort.php?colid=" + colid + "&sortflg=" + sortflg + "&sort_g_view=" +
+					sort_g_view + "&sort_g_tool=" + sort_g_tool + "&g_timing=" + g_timing + "&box_type_cnt=" +
+					box_type_cnt + "&search_tag=" + values, true);
+				xmlhttp.send();
+			}
 
-    function display_preoder_sel(tmpcnt, box_id, warehouse_fullness_flg = 0) {
-        if (warehouse_fullness_flg == 0) {
-            if (document.getElementById('inventory_preord_top_' + tmpcnt).style.display == 'table-row') {
-                document.getElementById('inventory_preord_top_' + tmpcnt).style.display = 'none';
-            } else {
-                document.getElementById('inventory_preord_top_' + tmpcnt).style.display = 'table-row';
-            }
+			function display_preoder_sel(tmpcnt, box_id, warehouse_fullness_flg = 0) {
+				if (warehouse_fullness_flg == 0) {
+					if (document.getElementById('inventory_preord_top_' + tmpcnt).style.display == 'table-row') {
+						document.getElementById('inventory_preord_top_' + tmpcnt).style.display = 'none';
+					} else {
+						document.getElementById('inventory_preord_top_' + tmpcnt).style.display = 'table-row';
+					}
 
-            document.getElementById("inventory_preord_middle_div_" + tmpcnt).innerHTML =
-                "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-        } else {
-            document.getElementById("div_warehouse_fullness" + tmpcnt).innerHTML =
-                "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-        }
+					document.getElementById("inventory_preord_middle_div_" + tmpcnt).innerHTML =
+						"<br><br>Loading .....<img src='images/wait_animated.gif' />";
+				} else {
+					document.getElementById("div_warehouse_fullness" + tmpcnt).innerHTML =
+						"<br><br>Loading .....<img src='images/wait_animated.gif' />";
+				}
 
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                if (warehouse_fullness_flg == 0) {
-                    document.getElementById("inventory_preord_middle_div_" + tmpcnt).innerHTML = xmlhttp
-                        .responseText;
-                } else {
-                    document.getElementById("div_warehouse_fullness" + tmpcnt).innerHTML = xmlhttp.responseText;
-                }
-            }
-        }
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						if (warehouse_fullness_flg == 0) {
+							document.getElementById("inventory_preord_middle_div_" + tmpcnt).innerHTML = xmlhttp
+								.responseText;
+						} else {
+							document.getElementById("div_warehouse_fullness" + tmpcnt).innerHTML = xmlhttp.responseText;
+						}
+					}
+				}
 
-        xmlhttp.open("GET", "dashboard_inv_qtyavail.php?box_id=" + box_id + "&tmpcnt=" + tmpcnt, true);
-        xmlhttp.send();
-    }
-    </script>
-    <style>
-    .popup_qty {
-        text-decoration: underline;
-        cursor: pointer;
-    }
+				xmlhttp.open("GET", "dashboard_inv_qtyavail.php?box_id=" + box_id + "&tmpcnt=" + tmpcnt, true);
+				xmlhttp.send();
+			}
+		</script>
+		<style>
+			.popup_qty {
+				text-decoration: underline;
+				cursor: pointer;
+			}
 
-    #loadingDiv {
-        position: absolute;
-        ;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #000;
-    }
-    </style>
-    <?php
+			#loadingDiv {
+				position: absolute;
+				;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: #000;
+			}
+		</style>
+		<?php
 		if (isset($_REQUEST["g_timing"])) {
 			$g_timing = $_REQUEST["g_timing"];
 		} else {
@@ -2643,652 +2040,542 @@ if ($_REQUEST["show"] == "search") {
 		//echo $filter_tag."--in top<br>";
 
 		?>
-    <script language="JavaScript" SRC="inc/CalendarPopup.js"></script>
-    <script language="JavaScript" SRC="inc/general.js"></script>
-    <script language="JavaScript">
-    document.write(getCalendarStyles());
-    </script>
-    <script language="JavaScript">
-    var cal1xx = new CalendarPopup("listdiv");
-    cal1xx.showNavigationDropdowns();
-    </script>
-    <script>
-    function add_product_fun() {
-        var cnt = document.getElementById("prod_cnt").value;
-        var chkcondition = document.getElementById("filter_andorcondition" + cnt).value;
-        var filtercol = document.getElementById("filter_column" + cnt).value;
-        if (filtercol != "-" && chkcondition == "") {
-            alert("Please select Condition");
-            return false;
-        }
-        cnt = Number(cnt) + 1;
-
-        var sstr = "";
-        sstr = "<table style='font-size:8pt;' id='inv_child_div" + cnt +
-            "'><tr><td>Select table column:</td><td><select style='font-size:8pt;' name='filter_column[]' id='filter_column" +
-            cnt + "' onChange='showfilter_option(" + cnt +
-            ")'><option value=''>Select Option</option><option value='Box Type'>Box Type</option><option value='State'>Location State</option><option value='No. of Wall'>No. of Wall</option><option value='ucbwarehouse'>Warehouse</option><option value='Actual'>Actual</option><option value='After PO'>After PO</option><option value='Last Month Quantity'>Last Month Quantity</option><option value='Availability'>Availability</option><option value='Vendor'>Vendor</option><option value='Ship From'>Ship From</option><option value='Length'>Box Length</option><option value='Width'>Box Width</option><option value='Height'>Box Height</option><option value='Description'>Description</option><option value='SKU'>SKU</option><option value='Per Pallet'>Per Pallet</option><option value='Per Trailer'>Per Trailer</option><option value='Min FOB'>Min FOB</option><option value='Cost'>Cost</option></select></td><td><select style='font-size:8pt;' id='filter_compare_condition" +
-            cnt +
-            "' name='filter_compare_condition[]'><option value='='>=</option><option value='>'>></option><option value='<'><</option></select></td><td><div id='filter_sub_option" +
-            cnt +
-            "'><input style='font-size:8pt;' type='input' id='filter_inp' value='' /></div></td><td><select style='font-size:8pt;' id='filter_andorcondition" +
-            cnt +
-            "' name='filter_andorcondition[]'><option value=''>Select</option><option value='And'>And</option><option value='Or'>Or</option></select><input style='font-size:8pt;' type='button' name='btn_remove' value='X' onclick='remove_product_fun(" +
-            cnt + ")'></td></tr></table></div></div>";
-
-        var divctl = document.getElementById("inv_main_div");
-        divctl.insertAdjacentHTML('beforeend', sstr);
-
-        document.getElementById("prod_cnt").value = cnt;
-    }
-
-    function remove_product_fun(cnt) {
-        document.getElementById("inv_child_div" + cnt).innerHTML = "";
-    }
-
-
-    function showfilter_option(cnt) {
-        var str = document.getElementById("filter_column" + cnt).value;
-
-        if (str.length == 0) {
-            return;
-        } else {
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById("filter_sub_option" + cnt).innerHTML = this.responseText;
-                }
-            };
-            xmlhttp.open("POST", "getfilter_sub_options.php?op=" + str + "&cnt=" + cnt, true);
-            xmlhttp.send();
-        }
-    }
-    </script>
-    <script src="jQuery/jquery-2.1.3.min.js" type="text/javascript"></script>
-    <script>
-    function dynamic_Select(sort) {
-        var skillsSelect = document.getElementById('dropdown');
-        var selectedText = skillsSelect.options[skillsSelect.selectedIndex].value;
-        document.getElementById("temp").value = selectedText;
-    }
-
-    function displaynonucbgaylord(colid, sortflg) {
-        document.getElementById("div_noninv_gaylord").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("div_noninv_gaylord").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displaynonucbgaylord.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function displayurgentbox(colid, sortflg, cnt) {
-        document.getElementById("ug_box").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        //alert(colid);
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("ug_box").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displayurgentbox.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function displayucbinv(colid, sortflg) {
-        document.getElementById("div_ucbinv").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("div_ucbinv").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displayucbinv.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function displaynonucbshipping(colid, sortflg) {
-        document.getElementById("div_noninv_shipping").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("div_noninv_shipping").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displaynonucbshipping.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function displaynonucbsupersack(colid, sortflg) {
-        document.getElementById("div_noninv_supersack").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("div_noninv_supersack").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displaynonucbsupersack.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function displaynonucbdrumBarrel(colid, sortflg) {
-        document.getElementById("div_noninv_drumBarrel").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("div_noninv_drumBarrel").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displaynonucbdrumBarrel.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function displaynonucbpallets(colid, sortflg) {
-        document.getElementById("div_noninv_pallets").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("div_noninv_pallets").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displaynonucbpallets.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function sort_Select(warehouseid) {
-        var Selectval = document.getElementById('sort_by_order');
-        var order_type = Selectval.options[Selectval.selectedIndex].text;
-
-
-        if (document.getElementById("dropdown").value == "") {
-            alert("Please Select the field.");
-        } else {
-            document.getElementById("tempval_focus").focus();
-
-            document.getElementById("tempval").style.display = "none";
-            document.getElementById("tempval1").innerHTML =
-                "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-            if (window.XMLHttpRequest) {
-                xmlhttp = new XMLHttpRequest();
-            } else {
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-
-            xmlhttp.onreadystatechange = function() {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    if (order_type != "") {
-                        document.getElementById("tempval1").innerHTML = xmlhttp.responseText;
-                    }
-                }
-            }
-
-            xmlhttp.open("GET", "pre_order_sort.php?warehouseid=" + warehouseid + "&selectedgrpid_inedit=" + document
-                .getElementById("temp").value + "&sort_order=" + order_type, true);
-            xmlhttp.send();
-        }
-    }
-
-    function f_getPosition(e_elemRef, s_coord) {
-        var n_pos = 0,
-            n_offset,
-            e_elem = e_elemRef;
-
-        while (e_elem) {
-            n_offset = e_elem["offset" + s_coord];
-            n_pos += n_offset;
-            e_elem = e_elem.offsetParent;
-        }
-
-        e_elem = e_elemRef;
-        while (e_elem != document.body) {
-            n_offset = e_elem["scroll" + s_coord];
-            if (n_offset && e_elem.style.overflow == 'scroll')
-                n_pos -= n_offset;
-            e_elem = e_elem.parentNode;
-        }
-        return n_pos;
-    }
-
-    function displayafterpo(boxid) {
-        document.getElementById("light").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("after_pos" + boxid);
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_left = n_left - 250;
-        n_top = n_top - 100;
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 20 + 'px';
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("light").innerHTML =
-                    "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
-                    xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_showafterpo.php?id=" + boxid, true);
-        xmlhttp.send();
-    }
-
-    function displaymap() {
-        document.getElementById("light").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("show_map1");
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_left = n_left - 50;
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 20 + 'px';
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("light").innerHTML =
-                    "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
-                    xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_showmap.php", true);
-        xmlhttp.send();
-    }
-
-
-    function displayflyer(boxid, flyernm) {
-        document.getElementById("light").innerHTML =
-            "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr><embed src='boxpics/" +
-            flyernm + "' width='700' height='800'>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("box_fly_div" + boxid);
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_left = n_left - 350;
-        n_top = n_top - 200;
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 'px';
-
-    }
-
-    function displayflyer_main(boxid, flyernm) {
-        document.getElementById("light").innerHTML =
-            "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr><embed src='boxpics/" +
-            flyernm + "' width='700' height='800'>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("box_fly_div_main" + boxid);
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_left = n_left - 350;
-        n_top = n_top - 200;
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 20 + 'px';
-
-    }
-
-    function displayactualpallet(boxid) {
-        document.getElementById("light").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("actual_pos" + boxid);
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_top = n_top - 200;
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 20 + 'px';
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("light").innerHTML =
-                    "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
-                    xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "report_inventory.php?inventory_id=" + boxid + "&action=run", true);
-        xmlhttp.send();
-    }
-
-    function displayboxdata(boxid) {
-        document.getElementById("light").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("box_div" + boxid);
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_left = n_left - 350;
-        n_top = n_top - 200;
-
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 20 + 'px';
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("light").innerHTML =
-                    "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
-                    xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "manage_box_b2bloop.php?id=" + boxid + "&proc=View&", true);
-        xmlhttp.send();
-    }
-
-    function displayboxdata_main(boxid) {
-        document.getElementById("light").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("box_div_main" + boxid);
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_left = n_left - 350;
-        n_top = n_top - 200;
-
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 20 + 'px';
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("light").innerHTML =
-                    "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
-                    xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "manage_box_b2bloop.php?id=" + boxid + "&proc=View&", true);
-        xmlhttp.send();
-    }
-
-    function display_orders_data(tmpcnt, box_id, wid) {
-        if (document.getElementById('inventory_preord_top_u' + tmpcnt).style.display == 'table-row') {
-            document.getElementById('inventory_preord_top_u' + tmpcnt).style.display = 'none';
-        } else {
-            document.getElementById('inventory_preord_top_u' + tmpcnt).style.display = 'table-row';
-        }
-
-        document.getElementById("inventory_preord_middle_div_u" + tmpcnt).innerHTML =
-            "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("inventory_preord_middle_div_u" + tmpcnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "gaylordstatus_childtable.php?box_id=" + box_id + "&wid=" + wid + "&tmpcnt=" + tmpcnt,
-            true);
-        xmlhttp.send();
-    }
-
-
-    function savetranslog(warehouse_id, transid, tmpcnt, box_id) {
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                alert("Data saved.");
-                document.getElementById("inventory_preord_middle_div_" + tmpcnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        logdetail = document.getElementById("trans_notes" + transid + tmpcnt).value;
-        opsdate = document.getElementById("ops_delivery_date" + transid + tmpcnt).value;
-
-        xmlhttp.open("GET", "gaylordstatus_savetranslog.php?box_id=" + box_id + "&tmpcnt=" + tmpcnt + "&warehouse_id=" +
-            warehouse_id + "&transid=" + transid + "&logdetail=" + logdetail + "&opsdate=" + opsdate, true);
-        xmlhttp.send();
-    }
-
-    function inv_warehouse_list() {
-        var chklist_sel = document.getElementById('inv_warehouse');
-        var inv_warehouse = "";
-        var opts = [],
-            opt;
-        len = chklist_sel.options.length;
-        for (var i = 0; i < len; i++) {
-            opt = chklist_sel.options[i];
-            if (opt.selected) {
-                inv_warehouse = inv_warehouse + opt.value + ",";
-            }
-        }
-
-        if (inv_warehouse != "") {
-            inv_warehouse = inv_warehouse.substring(0, inv_warehouse.length - 1);
-        }
-
-        var opts = [],
-            opt;
-        var inv_boxtype = "";
-        var chklist_sel = document.getElementById('inv_boxtype');
-        len = chklist_sel.options.length;
-        for (var i = 0; i < len; i++) {
-            opt = chklist_sel.options[i];
-            if (opt.selected) {
-                inv_boxtype = inv_boxtype + opt.value + ",";
-            }
-        }
-        if (inv_boxtype != "") {
-            inv_boxtype = inv_boxtype.substring(0, inv_boxtype.length - 1);
-        }
-
-        document.getElementById("tempval_focus").focus();
-
-        document.getElementById("tempval").style.display = "none";
-        document.getElementById("tempval1").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("tempval1").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inv_warehouse_lst.php?warehouse_id_lst=" + inv_warehouse + "&boxtype_lst=" + inv_boxtype,
-            true);
-        xmlhttp.send();
-
-    }
-
-    function new_inventory_filter() {
-        document.getElementById("new_inv").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        //
-        var sort_g_view = document.getElementById("sort_g_view").value;
-        var sort_g_tool = document.getElementById("sort_g_tool").value;
-        var g_timing = document.getElementById("g_timing").value;
-        //
-        var fld = document.getElementById('search_tag');
-        var values = [];
-        if (fld) {
-            for (var i = 0; i < fld.options.length; i++) {
-                if (fld.options[i].selected) {
-                    values.push(fld.options[i].value);
-                }
-            }
-        }
-        //
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                //alert(xmlhttp.responseText);
-                document.getElementById("new_inv").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        //"&search_tag=" + values
-        xmlhttp.open("GET", "display_filter_inventory.php?sort_g_view=" + sort_g_view + "&sort_g_tool=" + sort_g_tool +
-            "&g_timing=" + g_timing + "&search_tag=" + values, true);
-        xmlhttp.send();
-    }
-
-    function load_div_wh_fullness(id) {
-        var element = document.getElementById(id); //replace elementId with your element's Id.
-        var rect = element.getBoundingClientRect();
-        var elementLeft, elementTop; //x and y
-        var scrollTop = document.documentElement.scrollTop ?
-            document.documentElement.scrollTop : document.body.scrollTop;
-        var scrollLeft = document.documentElement.scrollLeft ?
-            document.documentElement.scrollLeft : document.body.scrollLeft;
-        elementTop = rect.top + scrollTop;
-        elementLeft = rect.left + scrollLeft;
-
-        document.getElementById("light").innerHTML = document.getElementById(id).innerHTML;
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-        document.getElementById('light').style.width = "80%";
-        document.getElementById('light').style.left = '100px';
-        document.getElementById('light').style.top = elementTop + 100 + 'px';
-    }
-
-
-    function close_div_wh_fullness() {
-        document.getElementById('light').style.display = 'none';
-    }
-    </script>
-    <div ID="listdiv" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;">
-    </div>
-
-    <a href='dashboardnew.php?show=inventory_cron'>Go Back to Old Inventory Version</a><br />
-    <a href='javascript:void();' id='show_map1' onclick="displaymap()">Show Map with Boxes</a><br />
-    <a target="_blank" href='report_inbound_inventory_summary.php?warehouse_id=0'>Inbound Inventory Summary</a><br />
-    <!--<a target="_blank" href='report_inventory_types.php'>Inventory Report</a><br/>--><br />
-    <?php
+		<script language="JavaScript" SRC="inc/CalendarPopup.js"></script>
+		<script language="JavaScript" SRC="inc/general.js"></script>
+		<script language="JavaScript">
+			document.write(getCalendarStyles());
+		</script>
+		<script language="JavaScript">
+			var cal1xx = new CalendarPopup("listdiv");
+			cal1xx.showNavigationDropdowns();
+		</script>
+		<script>
+			function remove_product_fun(cnt) {
+				document.getElementById("inv_child_div" + cnt).innerHTML = "";
+			}
+
+
+			function showfilter_option(cnt) {
+				var str = document.getElementById("filter_column" + cnt).value;
+
+				if (str.length == 0) {
+					return;
+				} else {
+					var xmlhttp = new XMLHttpRequest();
+					xmlhttp.onreadystatechange = function() {
+						if (this.readyState == 4 && this.status == 200) {
+							document.getElementById("filter_sub_option" + cnt).innerHTML = this.responseText;
+						}
+					};
+					xmlhttp.open("POST", "getfilter_sub_options.php?op=" + str + "&cnt=" + cnt, true);
+					xmlhttp.send();
+				}
+			}
+		</script>
+		<script src="jQuery/jquery-2.1.3.min.js" type="text/javascript"></script>
+		<script>
+			function dynamic_Select(sort) {
+				var skillsSelect = document.getElementById('dropdown');
+				var selectedText = skillsSelect.options[skillsSelect.selectedIndex].value;
+				document.getElementById("temp").value = selectedText;
+			}
+
+			function displaynonucbgaylord(colid, sortflg) {
+				document.getElementById("div_noninv_gaylord").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("div_noninv_gaylord").innerHTML = xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "inventory_displaynonucbgaylord.php?colid=" + colid + "&sortflg=" + sortflg, true);
+				xmlhttp.send();
+			}
+
+			function displayurgentbox(colid, sortflg, cnt) {
+				document.getElementById("ug_box").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+				//alert(colid);
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("ug_box").innerHTML = xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "inventory_displayurgentbox.php?colid=" + colid + "&sortflg=" + sortflg, true);
+				xmlhttp.send();
+			}
+
+			function displayucbinv(colid, sortflg) {
+				document.getElementById("div_ucbinv").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("div_ucbinv").innerHTML = xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "inventory_displayucbinv.php?colid=" + colid + "&sortflg=" + sortflg, true);
+				xmlhttp.send();
+			}
+
+			function displaynonucbshipping(colid, sortflg) {
+				document.getElementById("div_noninv_shipping").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("div_noninv_shipping").innerHTML = xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "inventory_displaynonucbshipping.php?colid=" + colid + "&sortflg=" + sortflg, true);
+				xmlhttp.send();
+			}
+
+			function displaynonucbsupersack(colid, sortflg) {
+				document.getElementById("div_noninv_supersack").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("div_noninv_supersack").innerHTML = xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "inventory_displaynonucbsupersack.php?colid=" + colid + "&sortflg=" + sortflg, true);
+				xmlhttp.send();
+			}
+
+			function displaynonucbdrumBarrel(colid, sortflg) {
+				document.getElementById("div_noninv_drumBarrel").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("div_noninv_drumBarrel").innerHTML = xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "inventory_displaynonucbdrumBarrel.php?colid=" + colid + "&sortflg=" + sortflg, true);
+				xmlhttp.send();
+			}
+
+			function displaynonucbpallets(colid, sortflg) {
+				document.getElementById("div_noninv_pallets").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("div_noninv_pallets").innerHTML = xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "inventory_displaynonucbpallets.php?colid=" + colid + "&sortflg=" + sortflg, true);
+				xmlhttp.send();
+			}
+
+			function sort_Select(warehouseid) {
+				var Selectval = document.getElementById('sort_by_order');
+				var order_type = Selectval.options[Selectval.selectedIndex].text;
+
+
+				if (document.getElementById("dropdown").value == "") {
+					alert("Please Select the field.");
+				} else {
+					document.getElementById("tempval_focus").focus();
+
+					document.getElementById("tempval").style.display = "none";
+					document.getElementById("tempval1").innerHTML =
+						"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+
+					if (window.XMLHttpRequest) {
+						xmlhttp = new XMLHttpRequest();
+					} else {
+						xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+					}
+
+					xmlhttp.onreadystatechange = function() {
+						if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+							if (order_type != "") {
+								document.getElementById("tempval1").innerHTML = xmlhttp.responseText;
+							}
+						}
+					}
+
+					xmlhttp.open("GET", "pre_order_sort.php?warehouseid=" + warehouseid + "&selectedgrpid_inedit=" + document
+						.getElementById("temp").value + "&sort_order=" + order_type, true);
+					xmlhttp.send();
+				}
+			}
+
+
+
+
+
+			function displayflyer(boxid, flyernm) {
+				document.getElementById("light").innerHTML =
+					"<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr><embed src='boxpics/" +
+					flyernm + "' width='700' height='800'>";
+				document.getElementById('light').style.display = 'block';
+				document.getElementById('fade').style.display = 'block';
+
+				var selectobject = document.getElementById("box_fly_div" + boxid);
+				var n_left = f_getPosition(selectobject, 'Left');
+				var n_top = f_getPosition(selectobject, 'Top');
+				n_left = n_left - 350;
+				n_top = n_top - 200;
+				document.getElementById('light').style.left = n_left + 'px';
+				document.getElementById('light').style.top = n_top + 'px';
+
+			}
+
+			function displayflyer_main(boxid, flyernm) {
+				document.getElementById("light").innerHTML =
+					"<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr><embed src='boxpics/" +
+					flyernm + "' width='700' height='800'>";
+				document.getElementById('light').style.display = 'block';
+				document.getElementById('fade').style.display = 'block';
+
+				var selectobject = document.getElementById("box_fly_div_main" + boxid);
+				var n_left = f_getPosition(selectobject, 'Left');
+				var n_top = f_getPosition(selectobject, 'Top');
+				n_left = n_left - 350;
+				n_top = n_top - 200;
+				document.getElementById('light').style.left = n_left + 'px';
+				document.getElementById('light').style.top = n_top + 20 + 'px';
+
+			}
+
+			function displayactualpallet(boxid) {
+				document.getElementById("light").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+				document.getElementById('light').style.display = 'block';
+				document.getElementById('fade').style.display = 'block';
+
+				var selectobject = document.getElementById("actual_pos" + boxid);
+				var n_left = f_getPosition(selectobject, 'Left');
+				var n_top = f_getPosition(selectobject, 'Top');
+				n_top = n_top - 200;
+				document.getElementById('light').style.left = n_left + 'px';
+				document.getElementById('light').style.top = n_top + 20 + 'px';
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("light").innerHTML =
+							"<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
+							xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "report_inventory.php?inventory_id=" + boxid + "&action=run", true);
+				xmlhttp.send();
+			}
+
+			function displayboxdata(boxid) {
+				document.getElementById("light").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+				document.getElementById('light').style.display = 'block';
+				document.getElementById('fade').style.display = 'block';
+
+				var selectobject = document.getElementById("box_div" + boxid);
+				var n_left = f_getPosition(selectobject, 'Left');
+				var n_top = f_getPosition(selectobject, 'Top');
+				n_left = n_left - 350;
+				n_top = n_top - 200;
+
+				document.getElementById('light').style.left = n_left + 'px';
+				document.getElementById('light').style.top = n_top + 20 + 'px';
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("light").innerHTML =
+							"<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
+							xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "manage_box_b2bloop.php?id=" + boxid + "&proc=View&", true);
+				xmlhttp.send();
+			}
+
+			function displayboxdata_main(boxid) {
+				document.getElementById("light").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+				document.getElementById('light').style.display = 'block';
+				document.getElementById('fade').style.display = 'block';
+
+				var selectobject = document.getElementById("box_div_main" + boxid);
+				var n_left = f_getPosition(selectobject, 'Left');
+				var n_top = f_getPosition(selectobject, 'Top');
+				n_left = n_left - 350;
+				n_top = n_top - 200;
+
+				document.getElementById('light').style.left = n_left + 'px';
+				document.getElementById('light').style.top = n_top + 20 + 'px';
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("light").innerHTML =
+							"<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
+							xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "manage_box_b2bloop.php?id=" + boxid + "&proc=View&", true);
+				xmlhttp.send();
+			}
+
+			function display_orders_data(tmpcnt, box_id, wid) {
+				if (document.getElementById('inventory_preord_top_u' + tmpcnt).style.display == 'table-row') {
+					document.getElementById('inventory_preord_top_u' + tmpcnt).style.display = 'none';
+				} else {
+					document.getElementById('inventory_preord_top_u' + tmpcnt).style.display = 'table-row';
+				}
+
+				document.getElementById("inventory_preord_middle_div_u" + tmpcnt).innerHTML =
+					"<br><br>Loading .....<img src='images/wait_animated.gif' />";
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("inventory_preord_middle_div_u" + tmpcnt).innerHTML = xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "gaylordstatus_childtable.php?box_id=" + box_id + "&wid=" + wid + "&tmpcnt=" + tmpcnt,
+					true);
+				xmlhttp.send();
+			}
+
+
+			function savetranslog(warehouse_id, transid, tmpcnt, box_id) {
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						alert("Data saved.");
+						document.getElementById("inventory_preord_middle_div_" + tmpcnt).innerHTML = xmlhttp.responseText;
+					}
+				}
+
+				logdetail = document.getElementById("trans_notes" + transid + tmpcnt).value;
+				opsdate = document.getElementById("ops_delivery_date" + transid + tmpcnt).value;
+
+				xmlhttp.open("GET", "gaylordstatus_savetranslog.php?box_id=" + box_id + "&tmpcnt=" + tmpcnt + "&warehouse_id=" +
+					warehouse_id + "&transid=" + transid + "&logdetail=" + logdetail + "&opsdate=" + opsdate, true);
+				xmlhttp.send();
+			}
+
+			function inv_warehouse_list() {
+				var chklist_sel = document.getElementById('inv_warehouse');
+				var inv_warehouse = "";
+				var opts = [],
+					opt;
+				len = chklist_sel.options.length;
+				for (var i = 0; i < len; i++) {
+					opt = chklist_sel.options[i];
+					if (opt.selected) {
+						inv_warehouse = inv_warehouse + opt.value + ",";
+					}
+				}
+
+				if (inv_warehouse != "") {
+					inv_warehouse = inv_warehouse.substring(0, inv_warehouse.length - 1);
+				}
+
+				var opts = [],
+					opt;
+				var inv_boxtype = "";
+				var chklist_sel = document.getElementById('inv_boxtype');
+				len = chklist_sel.options.length;
+				for (var i = 0; i < len; i++) {
+					opt = chklist_sel.options[i];
+					if (opt.selected) {
+						inv_boxtype = inv_boxtype + opt.value + ",";
+					}
+				}
+				if (inv_boxtype != "") {
+					inv_boxtype = inv_boxtype.substring(0, inv_boxtype.length - 1);
+				}
+
+				document.getElementById("tempval_focus").focus();
+
+				document.getElementById("tempval").style.display = "none";
+				document.getElementById("tempval1").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("tempval1").innerHTML = xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "inv_warehouse_lst.php?warehouse_id_lst=" + inv_warehouse + "&boxtype_lst=" + inv_boxtype,
+					true);
+				xmlhttp.send();
+
+			}
+
+			function new_inventory_filter() {
+				document.getElementById("new_inv").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+				//
+				var sort_g_view = document.getElementById("sort_g_view").value;
+				var sort_g_tool = document.getElementById("sort_g_tool").value;
+				var g_timing = document.getElementById("g_timing").value;
+				//
+				var fld = document.getElementById('search_tag');
+				var values = [];
+				if (fld) {
+					for (var i = 0; i < fld.options.length; i++) {
+						if (fld.options[i].selected) {
+							values.push(fld.options[i].value);
+						}
+					}
+				}
+				//
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						//alert(xmlhttp.responseText);
+						document.getElementById("new_inv").innerHTML = xmlhttp.responseText;
+					}
+				}
+
+				//"&search_tag=" + values
+				xmlhttp.open("GET", "display_filter_inventory.php?sort_g_view=" + sort_g_view + "&sort_g_tool=" + sort_g_tool +
+					"&g_timing=" + g_timing + "&search_tag=" + values, true);
+				xmlhttp.send();
+			}
+
+			function load_div_wh_fullness(id) {
+				var element = document.getElementById(id); //replace elementId with your element's Id.
+				var rect = element.getBoundingClientRect();
+				var elementLeft, elementTop; //x and y
+				var scrollTop = document.documentElement.scrollTop ?
+					document.documentElement.scrollTop : document.body.scrollTop;
+				var scrollLeft = document.documentElement.scrollLeft ?
+					document.documentElement.scrollLeft : document.body.scrollLeft;
+				elementTop = rect.top + scrollTop;
+				elementLeft = rect.left + scrollLeft;
+
+				document.getElementById("light").innerHTML = document.getElementById(id).innerHTML;
+				document.getElementById('light').style.display = 'block';
+				document.getElementById('fade').style.display = 'block';
+				document.getElementById('light').style.width = "80%";
+				document.getElementById('light').style.left = '100px';
+				document.getElementById('light').style.top = elementTop + 100 + 'px';
+			}
+
+
+			function close_div_wh_fullness() {
+				document.getElementById('light').style.display = 'none';
+			}
+		</script>
+		<div ID="listdiv" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;">
+		</div>
+
+		<a href='dashboardnew.php?show=inventory_cron'>Go Back to Old Inventory Version</a><br />
+		<a href='javascript:void();' id='show_map1' onclick="displaymap()">Show Map with Boxes</a><br />
+		<a target="_blank" href='report_inbound_inventory_summary.php?warehouse_id=0'>Inbound Inventory Summary</a><br />
+		<!--<a target="_blank" href='report_inventory_types.php'>Inventory Report</a><br/>--><br />
+		<?php
 
 		?>
 
-    <table style="width:30%" border="0">
-        <tbody>
-            <tr bgcolor="#ff9900">
-                <td colspan="2" align="center"><b>Warehouse Fullness</b></td>
-            </tr>
-            <tr bgcolor="#ff9900">
-                <td style="width:33%"><b>Facility</b></td>
-                <td style="width:11%"><b>Fullness</b></td>
-            </tr>
-            <?php
+		<table style="width:30%" border="0">
+			<tbody>
+				<tr bgcolor="#ff9900">
+					<td colspan="2" align="center"><b>Warehouse Fullness</b></td>
+				</tr>
+				<tr bgcolor="#ff9900">
+					<td style="width:33%"><b>Facility</b></td>
+					<td style="width:11%"><b>Fullness</b></td>
+				</tr>
+				<?php
 				$wh_names_qry = "SELECT id, company_name from loop_warehouse where rec_type = 'Sorting' and Active = 1 order by company_name";
 				db();
 				$wh_names_res = db_query($wh_names_qry);
@@ -3296,85 +2583,82 @@ if ($_REQUEST["show"] == "search") {
 					$w_fullness_val = Warehouse_Fullness_Cal($data_wh_names["id"]);
 					if ($w_fullness_val != 0) {
 				?>
-            <tr bgcolor="#e4e4e4">
-                <td><?php echo $data_wh_names["company_name"]; ?></td>
-                <td><?php $data_wh_names_id = $data_wh_names['id']; ?>
-                    <a href="#"
-                        onclick="load_div_wh_fullness('wh_fullness<?php echo $data_wh_names_id; ?>'); return false;">
-                        <?php
+						<tr bgcolor="#e4e4e4">
+							<td><?php echo $data_wh_names["company_name"]; ?></td>
+							<td><?php $data_wh_names_id = $data_wh_names['id']; ?>
+								<a href="#" onclick="load_div_wh_fullness('wh_fullness<?php echo $data_wh_names_id; ?>'); return false;">
+									<?php
 									if ($w_fullness_val >= 80) {
 										echo '<span style="color: red;">' . number_format($w_fullness_val, 0) . '%';
 									} else {
 										echo '<span >' . number_format($w_fullness_val, 0) . '%';
 									}
 									?></a>
-                    <span id="wh_fullness<?php echo $data_wh_names["id"]; ?>" style="display: none;"><a href="#"
-                            onclick="close_div_wh_fullness(); return false; ">Close</a>
-                        <?php echo getPopupContent($data_wh_names["id"]); ?></span>
-                </td>
-            </tr>
-            <?php
+								<span id="wh_fullness<?php echo $data_wh_names["id"]; ?>" style="display: none;"><a href="#" onclick="close_div_wh_fullness(); return false; ">Close</a>
+									<?php echo getPopupContent($data_wh_names["id"]); ?></span>
+							</td>
+						</tr>
+				<?php
 					}
 				}
 				?>
-            <tr>
-                <td bgColor="#e4e4e4" class="style12" colspan="2">
-                    <a href="update_inventory_cronjob_warehouse_fullness.php">Manually Update </a>
-                    <div class="tooltip">
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        <span class="tooltiptext">Cron job runs at 2:20 am CT</span>
-                    </div>
-                </td>
-            </tr>
-            <?php
+				<tr>
+					<td bgColor="#e4e4e4" class="style12" colspan="2">
+						<a href="update_inventory_cronjob_warehouse_fullness.php">Manually Update </a>
+						<div class="tooltip">
+							<i class="fa fa-info-circle" aria-hidden="true"></i>
+							<span class="tooltiptext">Cron job runs at 2:20 am CT</span>
+						</div>
+					</td>
+				</tr>
+				<?php
 				$sql = "SELECT * FROM tblvariable where variablename = 'warehouse_fullness_run_time'";
 				db();
 				$result = db_query($sql);
 				while ($myrowsel = array_shift($result)) { ?>
-            <tr vAlign="center">
-                <td colspan="2" bgColor="#e4e4e4" class="style12" style="height: 16px">
-                    Last Update: <?php echo timeAgo($myrowsel["variablevalue"]); ?>
-                </td>
-            </tr>
-            <?php
+					<tr vAlign="center">
+						<td colspan="2" bgColor="#e4e4e4" class="style12" style="height: 16px">
+							Last Update: <?php echo timeAgo($myrowsel["variablevalue"]); ?>
+						</td>
+					</tr>
+				<?php
 				}
 				?>
-        </tbody>
-    </table>
+			</tbody>
+		</table>
 
-    <br><br>
-    <table cellSpacing="1" cellPadding="1" border="0" width="1200">
-        <tr align="middle">
-            <td colspan="12" class="style24" style="height: 16px"><strong>INVENTORY NOTES</strong> <a
-                    href="updateinventorynotes.php">Edit</a></td>
-        </tr>
-        <tr vAlign="left">
-            <td colspan=12>
-                <?php
+		<br><br>
+		<table cellSpacing="1" cellPadding="1" border="0" width="1200">
+			<tr align="middle">
+				<td colspan="12" class="style24" style="height: 16px"><strong>INVENTORY NOTES</strong> <a href="updateinventorynotes.php">Edit</a></td>
+			</tr>
+			<tr vAlign="left">
+				<td colspan=12>
+					<?php
 					$sql = "SELECT * FROM loop_inventory_notes ORDER BY dt DESC LIMIT 0,1";
 					db();
 					$res = db_query($sql);
 					$row = array_shift($res);
 					echo $row["notes"];
 					?>
-            </td>
-        </tr>
-        <tr align="middle">
-            <td colspan="12">
-                <img src="images/usa_map_territories.png" width="500px" height="350px" style="object-fit: cover;" />
-            </td>
-        </tr>
-    </table>
+				</td>
+			</tr>
+			<tr align="middle">
+				<td colspan="12">
+					<img src="images/usa_map_territories.png" width="500px" height="350px" style="object-fit: cover;" />
+				</td>
+			</tr>
+		</table>
 
-    <table width="1400">
-        <tr align="middle">
-            <div id="light" class="white_content"></div>
-            <div id="fade" class="black_overlay"></div>
-            <td colspan="16" class="display_maintitle" style="height: 18px"><strong>Urgent Boxes</strong></td>
-        </tr>
-        <tr>
-            <td colspan="16">
-                <?php
+		<table width="1400">
+			<tr align="middle">
+				<div id="light" class="white_content"></div>
+				<div id="fade" class="black_overlay"></div>
+				<td colspan="16" class="display_maintitle" style="height: 18px"><strong>Urgent Boxes</strong></td>
+			</tr>
+			<tr>
+				<td colspan="16">
+					<?php
 					$box_query = "SELECT *, inventory.id AS I, inventory.lengthInch AS L, inventory.widthInch AS W, inventory.depthInch AS D, inventory.notes AS N, inventory.date AS DT FROM inventory WHERE  inventory.Active LIKE 'A' AND  box_urgent=1 ORDER BY inventory.availability DESC";
 
 					//echo $box_query;
@@ -3383,7 +2667,7 @@ if ($_REQUEST["show"] == "search") {
 					//echo tep_db_num_rows($act_inv_res)."<br>";
 					if (tep_db_num_rows($act_inv_res) > 0) {
 					?>
-                <?php
+					<?php
 
 						$urgent_mgArray = array();
 						//$inv_id_list = "";
@@ -3818,8 +3102,8 @@ if ($_REQUEST["show"] == "search") {
 						} //End while $inv
 					}
 					?>
-                <table width="100%" border="0" cellspacing="1" cellpadding="1" class="basic_style">
-                    <?php
+					<table width="100%" border="0" cellspacing="1" cellpadding="1" class="basic_style">
+						<?php
 						$x = 0;
 						$boxtype_cnt = 0;
 						//
@@ -3839,154 +3123,57 @@ if ($_REQUEST["show"] == "search") {
 						if ($total_rec > 0) {
 							$boxtype_cnt = 0;
 						?>
-                    <tr>
-                        <td class="display_maintitle" align="center">Active Inventory Items - Urgent Boxes</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div id="ug_box">
-                                <table width="100%" cellspacing="1" cellpadding="2">
-                                    <tr>
-                                        <td class='display_title'>Qty Avail&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(1,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(1,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+							<tr>
+								<td class="display_maintitle" align="center">Active Inventory Items - Urgent Boxes</td>
+							</tr>
+							<tr>
+								<td>
+									<div id="ug_box">
+										<table width="100%" cellspacing="1" cellpadding="2">
+											<tr>
+												<td class='display_title'>Qty Avail&nbsp;<a href="javascript:void();" onclick="displayurgentbox(1,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(1,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title' width="80px">Buy Now, Load Can Ship In&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(2,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(2,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title' width="80px">Buy Now, Load Can Ship In&nbsp;<a href="javascript:void();" onclick="displayurgentbox(2,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(2,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Exp #<br>Loads/Mo&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(3,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(3,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Exp #<br>Loads/Mo&nbsp;<a href="javascript:void();" onclick="displayurgentbox(3,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(3,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Per<br>TL&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(4,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(4,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Per<br>TL&nbsp;<a href="javascript:void();" onclick="displayurgentbox(4,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(4,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Cost&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(19,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(19,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Cost&nbsp;<a href="javascript:void();" onclick="displayurgentbox(19,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(19,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>MIN FOB&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(5,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(5,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>MIN FOB&nbsp;<a href="javascript:void();" onclick="displayurgentbox(5,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(5,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>B2B ID&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(6,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(6,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>B2B ID&nbsp;<a href="javascript:void();" onclick="displayurgentbox(6,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(6,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Territory&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(7,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(7,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Territory&nbsp;<a href="javascript:void();" onclick="displayurgentbox(7,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(7,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>B2B Status&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(8,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(8,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>B2B Status&nbsp;<a href="javascript:void();" onclick="displayurgentbox(8,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(8,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td align="center" class='display_title'>L&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(9,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(9,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>L&nbsp;<a href="javascript:void();" onclick="displayurgentbox(9,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(9,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td align="center" class='display_title'>x</td>
+												<td align="center" class='display_title'>x</td>
 
-                                        <td align="center" class='display_title'>W&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(10,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(10,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>W&nbsp;<a href="javascript:void();" onclick="displayurgentbox(10,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(10,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td align="center" class='display_title'>x</td>
+												<td align="center" class='display_title'>x</td>
 
-                                        <td align="center" class='display_title'>H&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(11,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(11,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>H&nbsp;<a href="javascript:void();" onclick="displayurgentbox(11,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(11,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td align="center" class='display_title'>Walls&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(12,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(12,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>Walls&nbsp;<a href="javascript:void();" onclick="displayurgentbox(12,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(12,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Description&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(13,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(13,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Description&nbsp;<a href="javascript:void();" onclick="displayurgentbox(13,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(13,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Supplier&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(14,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(14,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Supplier&nbsp;<a href="javascript:void();" onclick="displayurgentbox(14,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(14,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title' width="72px">Ship From&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(15,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(15,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title' width="72px">Ship From&nbsp;<a href="javascript:void();" onclick="displayurgentbox(15,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(15,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title' width="70px">Rep&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(16,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(16,2,<?php echo isset($box_type_cnt); ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title' width="70px">Rep&nbsp;<a href="javascript:void();" onclick="displayurgentbox(16,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(16,2,<?php echo isset($box_type_cnt); ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Sales Team Notes&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(17,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(17,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Sales Team Notes&nbsp;<a href="javascript:void();" onclick="displayurgentbox(17,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(17,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Last Notes Date&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(18,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(18,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
-                                    </tr>
-                                    <?php
+												<td class='display_title'>Last Notes Date&nbsp;<a href="javascript:void();" onclick="displayurgentbox(18,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(18,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+											</tr>
+											<?php
 											$count_arry = 0;
 											$count = 0;
 											$row_cnt = 0;
@@ -4138,33 +3325,33 @@ if ($_REQUEST["show"] == "search") {
 												echo $tmpTDstr;
 											}
 											?>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td height="10px"></td>
-                    </tr>
-                    <?php
+										</table>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td height="10px"></td>
+							</tr>
+						<?php
 						}
 						?>
-                </table>
-                <!--End Urgent boxes table-->
-                <br>
-            </td>
-        </tr>
-    </table>
+					</table>
+					<!--End Urgent boxes table-->
+					<br>
+				</td>
+			</tr>
+		</table>
 
-    <!-- Box High Value Opportunity-->
-    <table width="1400">
-        <tr align="middle">
-            <div id="light" class="white_content"></div>
-            <div id="fade" class="black_overlay"></div>
-            <td colspan="16" class="display_maintitle" style="height: 18px"><strong>High Value Opportunity</strong></td>
-        </tr>
-        <tr>
-            <td colspan="16">
-                <?php
+		<!-- Box High Value Opportunity-->
+		<table width="1400">
+			<tr align="middle">
+				<div id="light" class="white_content"></div>
+				<div id="fade" class="black_overlay"></div>
+				<td colspan="16" class="display_maintitle" style="height: 18px"><strong>High Value Opportunity</strong></td>
+			</tr>
+			<tr>
+				<td colspan="16">
+					<?php
 					$box_query = "SELECT *, inventory.id AS I, inventory.lengthInch AS L, inventory.widthInch AS W, inventory.depthInch AS D, inventory.notes AS N, inventory.date AS DT FROM inventory 
 					WHERE  inventory.Active LIKE 'A' AND  high_value_target=1 ORDER BY inventory.availability DESC";
 					//echo $box_query;
@@ -4173,7 +3360,7 @@ if ($_REQUEST["show"] == "search") {
 					//echo tep_db_num_rows($act_inv_res)."<br>";
 					if (tep_db_num_rows($act_inv_res) > 0) {
 					?>
-                <?php
+					<?php
 						while ($inv = array_shift($act_inv_res)) {
 							$b2b_ulineDollar = round($inv["ulineDollar"]);
 							$b2b_ulineCents = $inv["ulineCents"];
@@ -4595,8 +3782,8 @@ if ($_REQUEST["show"] == "search") {
 						} //End while $inv
 					}
 					?>
-                <table width="100%" border="0" cellspacing="1" cellpadding="1" class="basic_style">
-                    <?php
+					<table width="100%" border="0" cellspacing="1" cellpadding="1" class="basic_style">
+						<?php
 						$x = 0;
 						$boxtype_cnt = 0;
 						//
@@ -4623,155 +3810,58 @@ if ($_REQUEST["show"] == "search") {
 						if ($total_rec > 0) {
 							$boxtype_cnt = 0;
 						?>
-                    <tr>
-                        <td class="display_maintitle" align="center">Active Inventory Items - High Value Opportunity
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div id="ug_box">
-                                <table width="100%" cellspacing="1" cellpadding="2">
-                                    <tr>
-                                        <td class='display_title'>Qty Avail&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(1,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(1,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+							<tr>
+								<td class="display_maintitle" align="center">Active Inventory Items - High Value Opportunity
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div id="ug_box">
+										<table width="100%" cellspacing="1" cellpadding="2">
+											<tr>
+												<td class='display_title'>Qty Avail&nbsp;<a href="javascript:void();" onclick="displayurgentbox(1,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(1,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title' width="80px">Buy Now, Load Can Ship In&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(2,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(2,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title' width="80px">Buy Now, Load Can Ship In&nbsp;<a href="javascript:void();" onclick="displayurgentbox(2,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(2,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Exp #<br>Loads/Mo&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(3,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(3,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Exp #<br>Loads/Mo&nbsp;<a href="javascript:void();" onclick="displayurgentbox(3,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(3,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Per<br>TL&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(4,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(4,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Per<br>TL&nbsp;<a href="javascript:void();" onclick="displayurgentbox(4,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(4,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Cost&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(19,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(19,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Cost&nbsp;<a href="javascript:void();" onclick="displayurgentbox(19,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(19,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>MIN FOB&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(5,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(5,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>MIN FOB&nbsp;<a href="javascript:void();" onclick="displayurgentbox(5,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(5,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>B2B ID&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(6,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(6,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>B2B ID&nbsp;<a href="javascript:void();" onclick="displayurgentbox(6,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(6,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Territory&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(7,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(7,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Territory&nbsp;<a href="javascript:void();" onclick="displayurgentbox(7,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(7,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>B2B Status&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(8,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(8,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>B2B Status&nbsp;<a href="javascript:void();" onclick="displayurgentbox(8,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(8,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td align="center" class='display_title'>L&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(9,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(9,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>L&nbsp;<a href="javascript:void();" onclick="displayurgentbox(9,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(9,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td align="center" class='display_title'>x</td>
+												<td align="center" class='display_title'>x</td>
 
-                                        <td align="center" class='display_title'>W&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(10,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(10,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>W&nbsp;<a href="javascript:void();" onclick="displayurgentbox(10,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(10,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td align="center" class='display_title'>x</td>
+												<td align="center" class='display_title'>x</td>
 
-                                        <td align="center" class='display_title'>H&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(11,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(11,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>H&nbsp;<a href="javascript:void();" onclick="displayurgentbox(11,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(11,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td align="center" class='display_title'>Walls&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(12,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(12,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>Walls&nbsp;<a href="javascript:void();" onclick="displayurgentbox(12,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(12,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Description&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(13,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(13,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Description&nbsp;<a href="javascript:void();" onclick="displayurgentbox(13,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(13,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Supplier&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(14,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(14,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Supplier&nbsp;<a href="javascript:void();" onclick="displayurgentbox(14,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(14,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title' width="72px">Ship From&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(15,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(15,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title' width="72px">Ship From&nbsp;<a href="javascript:void();" onclick="displayurgentbox(15,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(15,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title' width="70px">Rep&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(16,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(16,2,<?php echo isset($box_type_cnt); ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title' width="70px">Rep&nbsp;<a href="javascript:void();" onclick="displayurgentbox(16,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(16,2,<?php echo isset($box_type_cnt); ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Sales Team Notes&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(17,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(17,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Sales Team Notes&nbsp;<a href="javascript:void();" onclick="displayurgentbox(17,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(17,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                        <td class='display_title'>Last Notes Date&nbsp;<a href="javascript:void();"
-                                                onclick="displayurgentbox(18,1,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                                href="javascript:void();"
-                                                onclick="displayurgentbox(18,2,<?php echo $boxtype_cnt; ?>);"><img
-                                                    src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
-                                    </tr>
-                                    <?php
+												<td class='display_title'>Last Notes Date&nbsp;<a href="javascript:void();" onclick="displayurgentbox(18,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(18,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+											</tr>
+											<?php
 											$count_arry = 0;
 											$count = 0;
 											$row_cnt = 0;
@@ -4928,75 +4018,73 @@ if ($_REQUEST["show"] == "search") {
 											}
 
 											?>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td height="10px"></td>
-                    </tr>
-                    <?php
+										</table>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td height="10px"></td>
+							</tr>
+						<?php
 						}
 						?>
-                </table>
+					</table>
 
-                <br>
-            </td>
-        </tr>
-    </table>
-    <!-- Box High Value Opportunity -->
+					<br>
+				</td>
+			</tr>
+		</table>
+		<!-- Box High Value Opportunity -->
 
-    <link rel="stylesheet" type="text/css" href="css/newstylechange.css" />
-    <form>
-        <table class="basic_style" width="100%" cellspacing="2" cellpadding="2" border="0">
-            <tr>
-                <td class="display_maintitle" valign="middle">
-                    Timing : <select class="basic_style select_box_fix_width" name="g_timing" id="g_timing">
-                        <option value="1" <?php if ($g_timing == "1") {
+		<link rel="stylesheet" type="text/css" href="css/newstylechange.css" />
+		<form>
+			<table class="basic_style" width="100%" cellspacing="2" cellpadding="2" border="0">
+				<tr>
+					<td class="display_maintitle" valign="middle">
+						Timing : <select class="basic_style select_box_fix_width" name="g_timing" id="g_timing">
+							<option value="1" <?php if ($g_timing == "1") {
 													echo "selected";
 												} ?>>Rdy Now + Presell</option>
-                        <option value="2" <?php if ($g_timing == "2") {
+							<option value="2" <?php if ($g_timing == "2") {
 													echo "selected";
 												} ?>>FTL Rdy Now ONLY</option>
-                    </select>
-                    &nbsp;&nbsp;
-                    Status : <select class="basic_style select_box_fix_width" name="sort_g_tool" id="sort_g_tool">
-                        <option value="1" <?php if ($sort_g_tool == "2") {
+						</select>
+						&nbsp;&nbsp;
+						Status : <select class="basic_style select_box_fix_width" name="sort_g_tool" id="sort_g_tool">
+							<option value="1" <?php if ($sort_g_tool == "2") {
 													echo "selected";
 												} ?>>Available to Sell</option>
-                        <option value="2" <?php if ($sort_g_tool == "2") {
+							<option value="2" <?php if ($sort_g_tool == "2") {
 													echo "selected";
 												} ?>>Available to Sell + Potential to Get</option>
-                    </select>
-                    &nbsp;&nbsp;
-                    View: <select class="basic_style select_box_fix_width" name="sort_g_view" id="sort_g_view">
-                        <option value="1" <?php if ($sort_g_view == "2") {
+						</select>
+						&nbsp;&nbsp;
+						View: <select class="basic_style select_box_fix_width" name="sort_g_view" id="sort_g_view">
+							<option value="1" <?php if ($sort_g_view == "2") {
 													echo "selected";
 												} ?>>UCB View</option>
-                        <option value="2" <?php if ($sort_g_view == "2") {
+							<option value="2" <?php if ($sort_g_view == "2") {
 													echo "selected";
 												} ?>>Customer Facing View</option>
-                    </select>
-                    &nbsp;
-                    Subtypes:<select name="search_subtype[]" id="search_subtype" multiple size=4
-                        class="form_component select_box_fix_width">
-                        <?php
+						</select>
+						&nbsp;
+						Subtypes:<select name="search_subtype[]" id="search_subtype" multiple size=4 class="form_component select_box_fix_width">
+							<?php
 							$subtype_qry = "select * from loop_boxes_sub_type_master where active_flg=1 and box_type = 'Gaylord' order by display_order ASC";
 							db();
 							$subtype_res = db_query($subtype_qry);
 							$ssubtype = $_REQUEST["search_subtype"];
 							while ($subtype_row = array_shift($subtype_res)) {
 							?>
-                        <option <?php echo  in_array($subtype_row["unqid"], $ssubtype) ? 'selected' : '' ?>
-                            value="<?php echo $subtype_row["unqid"]; ?>"><?php echo $subtype_row["sub_type_name"]; ?>
-                        </option>
-                        <?php
+								<option <?php echo  in_array($subtype_row["unqid"], $ssubtype) ? 'selected' : '' ?> value="<?php echo $subtype_row["unqid"]; ?>"><?php echo $subtype_row["sub_type_name"]; ?>
+								</option>
+							<?php
 							}
 							?>
-                    </select>
-                    &nbsp;
+						</select>
+						&nbsp;
 
-                    <?php
+						<?php
 						$total_tag = tep_db_num_rows($_REQUEST["search_tag"]);
 						if ($total_tag > 1) {
 							$stag = $_REQUEST["search_tag"];
@@ -5007,21 +4095,19 @@ if ($_REQUEST["show"] == "search") {
 						//print_r($stag); 
 						?>
 
-                    Tag: <select name="search_tag[]" id="search_tag" multiple size=4
-                        class="form_component select_box_fix_width">
-                        <?php
+						Tag: <select name="search_tag[]" id="search_tag" multiple size=4 class="form_component select_box_fix_width">
+							<?php
 							$tagqry = "select * from loop_inv_tags order by freq_used desc";
 							db();
 							$tagres = db_query($tagqry);
 							while ($tagrow = array_shift($tagres)) {
 							?>
-                        <option <?php echo  in_array($tagrow["id"], isset($stag)) ? 'selected' : '' ?>
-                            value="<?php echo $tagrow["id"]; ?>"><?php echo $tagrow["tags"]; ?></option>
-                        <?php
+								<option <?php echo  in_array($tagrow["id"], isset($stag) ? (array)$stag : []) ? 'selected' : '' ?> value="<?php echo $tagrow["id"]; ?>"><?php echo $tagrow["tags"]; ?></option>
+							<?php
 							}
 							?>
-                    </select>
-                    <?php
+						</select>
+						<?php
 						$total_subtype = tep_db_num_rows($_REQUEST["search_subtype"]);
 						if ($total_subtype > 1) {
 							$ssubtype = $_REQUEST["search_subtype"];
@@ -5032,17 +4118,16 @@ if ($_REQUEST["show"] == "search") {
 						//print_r($stag); 
 						?>
 
-                    &nbsp;&nbsp;<input type="button" name="box_filter" id="box_filter" value="Filter"
-                        onClick="new_inventory_filter(); return false;">
-                </td>
-            </tr>
-            <?php
+						&nbsp;&nbsp;<input type="button" name="box_filter" id="box_filter" value="Filter" onClick="new_inventory_filter(); return false;">
+					</td>
+				</tr>
+				<?php
 
 				?>
-        </table>
-    </form>
-    <div id="new_inv">
-        <?php
+			</table>
+		</form>
+		<div id="new_inv">
+			<?php
 			//$main_box_types=array("Gaylord","Shipping Boxes", "Supersacks", "Pallets", "Drums/Barrels/IBCs" );
 			if (!isset($_REQUEST["sort"])) {
 				$gy = array();
@@ -5096,7 +4181,7 @@ if ($_REQUEST["show"] == "search") {
 					//echo tep_db_num_rows($act_inv_res)."<br>";
 					if (tep_db_num_rows($act_inv_res) > 0) {
 			?>
-        <?php
+			<?php
 						while ($inv = array_shift($act_inv_res)) {
 							$b2b_ulineDollar = round($inv["ulineDollar"]);
 							$b2b_ulineCents = $inv["ulineCents"];
@@ -5975,7 +5060,7 @@ if ($_REQUEST["show"] == "search") {
 										$gy[] = array('boxgoodvalue' => isset($boxgoodvalue), 'after_po_val' => $actual_po, 'pallet_val_afterpo' => $pallet_val_afterpo, 'boxes_per_trailer' => $boxes_per_trailer_tmp, 'preorder_txt2' => $preorder_txt2, 'estimated_next_load' => $estimated_next_load, 'expected_loads_per_mo' => $expected_loads_per_mo, 'b2b_fob' => $b2b_fob, 'b2bid' => $b2bid_tmp, 'territory' => isset($territory), 'b2bstatus_name' => $b2bstatus_nametmp, 'b2bstatuscolor' => isset($b2bstatuscolor), 'length' => $boxsize[0], 'width' => $boxsize[1], 'depth' => $boxsize[2], 'description' => "testN " . $dt_view_row["Description"], 'vendor_nm' => isset($vender_name), 'ship_from' => $ship_from_tmp, 'ship_from2' => $ship_from2_tmp, 'ownername' => isset($ownername), 'b2b_notes' => $inv_notes, 'b2b_notes_date' => $inv_notes_dt, 'box_wall' => isset($dt_view_row_inv["bwall"]), 'b_urgent' => $b_urgent, 'contracted' => $contracted, 'prepay' => $prepay, 'ship_ltl' => $ship_ltl, 'supplier_id' => isset($supplier_id), 'b2b_cost' => $b2b_cost, 'minfob' => $minfob,  'b2bcost' => $b2bcost, 'vendor_b2b_rescue_id' => $vendor_b2b_rescue_id, 'bpallet_qty' => $bpallet_qty_tmp, 'binv' => 'ucbown', 'territory_sort' => isset($territory_sort));
 									}
 									if ($box_type_cnt == 2) {
-										$sb[] = array('boxgoodvalue' => $boxgoodvalue, 'after_po_val' => $actual_po, 'pallet_val_afterpo' => $pallet_val_afterpo, 'boxes_per_trailer' => $boxes_per_trailer_tmp, 'preorder_txt2' => $preorder_txt2, 'estimated_next_load' => $estimated_next_load, 'expected_loads_per_mo' => $expected_loads_per_mo, 'b2b_fob' => $b2b_fob, 'b2bid' => $b2bid_tmp, 'territory' => isset($territory), 'b2bstatus_name' => $b2bstatus_nametmp, 'b2bstatuscolor' => isset($b2bstatuscolor), 'length' => $boxsize[0], 'width' => $boxsize[1], 'depth' => $boxsize[2], 'description' => "testN " . $dt_view_row["Description"], 'vendor_nm' => isset($vender_name), 'ship_from' => $ship_from_tmp, 'ship_from2' => $ship_from2_tmp, 'ownername' => isset($ownername), 'b2b_notes' => $inv_notes, 'b2b_notes_date' => $inv_notes_dt, 'box_wall' => isset($dt_view_row_inv["bwall"]), 'b_urgent' => $b_urgent, 'contracted' => $contracted, 'prepay' => $prepay, 'ship_ltl' => $ship_ltl, 'supplier_id' => isset($supplier_id), 'b2b_cost' => $b2b_cost, 'minfob' => $minfob,  'b2bcost' => $b2bcost, 'vendor_b2b_rescue_id' => $vendor_b2b_rescue_id, 'bpallet_qty' => $bpallet_qty_tmp, 'binv' => 'ucbown', 'territory_sort' => isset($territory_sort));
+										$sb[] = array('boxgoodvalue' => isset($boxgoodvalue), 'after_po_val' => $actual_po, 'pallet_val_afterpo' => $pallet_val_afterpo, 'boxes_per_trailer' => $boxes_per_trailer_tmp, 'preorder_txt2' => $preorder_txt2, 'estimated_next_load' => $estimated_next_load, 'expected_loads_per_mo' => $expected_loads_per_mo, 'b2b_fob' => $b2b_fob, 'b2bid' => $b2bid_tmp, 'territory' => isset($territory), 'b2bstatus_name' => $b2bstatus_nametmp, 'b2bstatuscolor' => isset($b2bstatuscolor), 'length' => $boxsize[0], 'width' => $boxsize[1], 'depth' => $boxsize[2], 'description' => "testN " . $dt_view_row["Description"], 'vendor_nm' => isset($vender_name), 'ship_from' => $ship_from_tmp, 'ship_from2' => $ship_from2_tmp, 'ownername' => isset($ownername), 'b2b_notes' => $inv_notes, 'b2b_notes_date' => $inv_notes_dt, 'box_wall' => isset($dt_view_row_inv["bwall"]), 'b_urgent' => $b_urgent, 'contracted' => $contracted, 'prepay' => $prepay, 'ship_ltl' => $ship_ltl, 'supplier_id' => isset($supplier_id), 'b2b_cost' => $b2b_cost, 'minfob' => $minfob,  'b2bcost' => $b2bcost, 'vendor_b2b_rescue_id' => $vendor_b2b_rescue_id, 'bpallet_qty' => $bpallet_qty_tmp, 'binv' => 'ucbown', 'territory_sort' => isset($territory_sort));
 									}
 									if ($box_type_cnt == 3) {
 										$pal[] = array('boxgoodvalue' => isset($boxgoodvalue), 'after_po_val' => $actual_po, 'pallet_val_afterpo' => $pallet_val_afterpo, 'boxes_per_trailer' => $boxes_per_trailer_tmp, 'preorder_txt2' => $preorder_txt2, 'estimated_next_load' => $estimated_next_load, 'expected_loads_per_mo' => $expected_loads_per_mo, 'b2b_fob' => $b2b_fob, 'b2bid' => $b2bid_tmp, 'territory' => isset($territory), 'b2bstatus_name' => $b2bstatus_nametmp, 'b2bstatuscolor' => isset($b2bstatuscolor), 'length' => $boxsize[0], 'width' => $boxsize[1], 'depth' => $boxsize[2], 'description' => "testN " . $dt_view_row["Description"], 'vendor_nm' => isset($vender_name), 'ship_from' => $ship_from_tmp, 'ship_from2' => $ship_from2_tmp, 'ownername' => isset($ownername), 'b2b_notes' => $inv_notes, 'b2b_notes_date' => $inv_notes_dt, 'box_wall' => isset($dt_view_row_inv["bwall"]), 'b_urgent' => $b_urgent, 'contracted' => $contracted, 'prepay' => $prepay, 'ship_ltl' => $ship_ltl, 'supplier_id' => isset($supplier_id), 'b2b_cost' => $b2b_cost, 'minfob' => $minfob,  'b2bcost' => $b2bcost, 'vendor_b2b_rescue_id' => $vendor_b2b_rescue_id, 'bpallet_qty' => $bpallet_qty_tmp, 'binv' => 'ucbown', 'territory_sort' => isset($territory_sort));
@@ -6005,8 +5090,8 @@ if ($_REQUEST["show"] == "search") {
 			}
 			//
 			?>
-        <table width="100%" border="0" cellspacing="1" cellpadding="1" class="basic_style">
-            <?php
+			<table width="100%" border="0" cellspacing="1" cellpadding="1" class="basic_style">
+				<?php
 				$x = 0;
 				$boxtype_cnt = 0;
 				$sorturl = "dashboardnew.php?show=inventory_new&sort_g_view=" . $sort_g_view . "&sort_g_tool=" . $sort_g_tool . "&g_timing=" . $g_timing;
@@ -6052,267 +5137,100 @@ if ($_REQUEST["show"] == "search") {
 					if ($total_rec > 0) {
 
 				?>
-            <tr>
-                <td class="display_maintitle" align="center">Active Inventory Items - <?php echo isset($boxtype); ?>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div id="btype<?php echo $boxtype_cnt; ?>">
-                        <table width="100%" cellspacing="1" cellpadding="2">
-                            <?php if ((isset($sort_g_view)) && ($sort_g_view == "1")) { ?>
-                            <tr>
-                                <td class='display_title'>Qty Avail&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(1,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(1,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+						<tr>
+							<td class="display_maintitle" align="center">Active Inventory Items - <?php echo isset($boxtype); ?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div id="btype<?php echo $boxtype_cnt; ?>">
+									<table width="100%" cellspacing="1" cellpadding="2">
+										<?php if ((isset($sort_g_view)) && ($sort_g_view == "1")) { ?>
+											<tr>
+												<td class='display_title'>Qty Avail&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(1,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(1,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title' width="80px">Buy Now, Load Can Ship In&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(2,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(2,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title' width="80px">Buy Now, Load Can Ship In&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(2,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(2,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Exp #<br>Loads/Mo&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(3,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(3,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Exp #<br>Loads/Mo&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(3,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(3,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Per<br>TL&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(4,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(4,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Per<br>TL&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(4,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(4,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Cost&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(19,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(19,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Cost&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(19,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(19,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>MIN FOB&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(5,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(5,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>MIN FOB&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(5,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(5,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>B2B ID&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(6,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(6,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>B2B ID&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(6,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(6,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Territory&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(7,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(7,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Territory&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(7,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(7,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>B2B Status&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(8,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(8,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>B2B Status&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(8,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(8,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td align="center" class='display_title'>L&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(9,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(9,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>L&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(9,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(9,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td align="center" class='display_title'>x</td>
+												<td align="center" class='display_title'>x</td>
 
-                                <td align="center" class='display_title'>W&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(10,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(10,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>W&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(10,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(10,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td align="center" class='display_title'>x</td>
+												<td align="center" class='display_title'>x</td>
 
-                                <td align="center" class='display_title'>H&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(11,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(11,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>H&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(11,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(11,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td align="center" class='display_title'>Walls&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(12,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(12,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>Walls&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(12,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(12,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Description&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(13,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(13,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Description&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(13,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(13,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Supplier&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(14,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(14,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Supplier&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(14,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(14,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title' width="72px">Ship From&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(15,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(15,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title' width="72px">Ship From&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(15,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(15,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title' width="70px">Rep&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(16,1,<?php echo isset($boxtype_cnt); ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(16,2,<?php echo $box_type_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title' width="70px">Rep&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(16,1,<?php echo isset($boxtype_cnt); ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(16,2,<?php echo $box_type_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Sales Team Notes&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(17,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(17,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Sales Team Notes&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(17,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(17,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Last Notes Date&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(18,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(18,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
-                            </tr>
-                            <?php
+												<td class='display_title'>Last Notes Date&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(18,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(18,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+											</tr>
+										<?php
 										}
 										if ((isset($sort_g_view)) && ($sort_g_view == "2")) {
 										?>
-                            <tr>
-                                <td class='display_title'>Qty Avail<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(1,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(1,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+											<tr>
+												<td class='display_title'>Qty Avail<a href="javascript:void();" onclick="displayboxdata_invnew(1,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(1,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title' width="80px">Buy Now, Load Can Ship In&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(2,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(2,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title' width="80px">Buy Now, Load Can Ship In&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(2,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(2,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Exp #<br>Loads/Mo&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(3,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(3,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Exp #<br>Loads/Mo&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(3,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(3,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Per<br>TL&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(4,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(4,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Per<br>TL&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(4,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(4,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Cost&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(19,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(19,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Cost&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(19,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(19,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>FOB Origin Price/Unit&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(5,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(5,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>FOB Origin Price/Unit&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(5,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(5,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>B2B ID&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(6,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(6,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>B2B ID&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(6,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(6,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Territory&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(7,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(7,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Territory&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(7,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(7,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td align="center" class='display_title'>L&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(9,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(9,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>L&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(9,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(9,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td align="center" class='display_title'>x</td>
+												<td align="center" class='display_title'>x</td>
 
-                                <td align="center" class='display_title'>W&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(10,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(10,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>W&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(10,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(10,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td align="center" class='display_title'>x</td>
+												<td align="center" class='display_title'>x</td>
 
-                                <td align="center" class='display_title'>H&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(11,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(11,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>H&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(11,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(11,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td align="center" class='display_title'>Walls&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(12,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(12,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td align="center" class='display_title'>Walls&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(12,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(12,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Description&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(13,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(13,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+												<td class='display_title'>Description&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(13,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(13,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
 
-                                <td class='display_title'>Ship From&nbsp;<a href="javascript:void();"
-                                        onclick="displayboxdata_invnew(15,1,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                        href="javascript:void();"
-                                        onclick="displayboxdata_invnew(15,2,<?php echo $boxtype_cnt; ?>);"><img
-                                            src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
-                            </tr>
+												<td class='display_title'>Ship From&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(15,1,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayboxdata_invnew(15,2,<?php echo $boxtype_cnt; ?>);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></td>
+											</tr>
 
-                            <?php
+										<?php
 										}
 										?>
-                            <?php
+										<?php
 										$count_arry = 0;
 										$count = 0;
 										$row_cnt = 0;
@@ -6519,26 +5437,26 @@ if ($_REQUEST["show"] == "search") {
 											echo isset($tmpTDstr);
 										}
 										?>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td height="10px"></td>
-            </tr>
-            <?php
+									</table>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td height="10px"></td>
+						</tr>
+				<?php
 					}
 				}
 				?>
-        </table>
-    </div>
-    <?php
+			</table>
+		</div>
+	<?php
 		//
 	}
 	//End New match inventory
 	//-----------------------------------------------------------------------------
 	?>
-    <?php
+	<?php
 	function showinventory_fordashboard_invnew(int $warehouseid_selected): void
 	{
 
@@ -6572,788 +5490,373 @@ if ($_REQUEST["show"] == "search") {
 
 		echo "</script>";
 	?>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <style type="text/css">
-    .black_overlay {
-        display: none;
-        position: absolute;
-        top: 0%;
-        left: 0%;
-        width: 100%;
-        height: 100%;
-        background-color: gray;
-        z-index: 1001;
-        -moz-opacity: 0.8;
-        opacity: .80;
-        filter: alpha(opacity=80);
-    }
-
-    .white_content {
-        display: none;
-        position: absolute;
-        top: 5%;
-        left: 10%;
-        width: 60%;
-        height: 90%;
-        padding: 16px;
-        border: 1px solid gray;
-        background-color: white;
-        z-index: 1002;
-        overflow: auto;
-    }
-
-    .popup_qty {
-        text-decoration: underline;
-        cursor: pointer;
-    }
-    </style>
-    <!--New Inventory Search option Jquery-->
-    <script>
-    function add_product_fun() {
-        var cnt = document.getElementById("prod_cnt").value;
-        var chkcondition = document.getElementById("filter_andorcondition" + cnt).value;
-        var filtercol = document.getElementById("filter_column" + cnt).value;
-        if (filtercol != "-" && chkcondition == "") {
-            alert("Please select Condition");
-            return false;
-        }
-        cnt = Number(cnt) + 1;
-
-        var sstr = "";
-        sstr = "<table style='font-size:8pt;' id='inv_child_div" + cnt +
-            "'><tr><td>Select table column:</td><td><select style='font-size:8pt;' name='filter_column[]' id='filter_column" +
-            cnt + "' onChange='showfilter_option(" + cnt +
-            ")'><option value=''>Select Option</option><option value='Box Type'>Box Type</option><option value='State'>Location State</option><option value='No. of Wall'>No. of Wall</option><option value='ucbwarehouse'>Warehouse</option><option value='Actual'>Actual</option><option value='After PO'>After PO</option><option value='Last Month Quantity'>Last Month Quantity</option><option value='Availability'>Availability</option><option value='Vendor'>Vendor</option><option value='Ship From'>Ship From</option><option value='Length'>Box Length</option><option value='Width'>Box Width</option><option value='Height'>Box Height</option><option value='Description'>Description</option><option value='SKU'>SKU</option><option value='Per Pallet'>Per Pallet</option><option value='Per Trailer'>Per Trailer</option><option value='Min FOB'>Min FOB</option><option value='Cost'>Cost</option></select></td><td><select style='font-size:8pt;' id='filter_compare_condition" +
-            cnt +
-            "' name='filter_compare_condition[]'><option value='='>=</option><option value='>'>></option><option value='<'><</option></select></td><td><div id='filter_sub_option" +
-            cnt +
-            "'><input style='font-size:8pt;' type='input' id='filter_inp' value='' /></div></td><td><select style='font-size:8pt;' id='filter_andorcondition" +
-            cnt +
-            "' name='filter_andorcondition[]'><option value=''>Select</option><option value='And'>And</option><option value='Or'>Or</option></select><input style='font-size:8pt;' type='button' name='btn_remove' value='X' onclick='remove_product_fun(" +
-            cnt + ")'></td></tr></table></div></div>";
-
-        var divctl = document.getElementById("inv_main_div");
-        divctl.insertAdjacentHTML('beforeend', sstr);
-
-        document.getElementById("prod_cnt").value = cnt;
-    }
-
-    function remove_product_fun(cnt) {
-        document.getElementById("inv_child_div" + cnt).innerHTML = "";
-    }
-
-    function showfilter_option(cnt) {
-        // 
-        var str = document.getElementById("filter_column" + cnt).value;
-
-        if (str.length == 0) {
-            //document.getElementById("filter_sub_option").innerHTML = "";
-            return;
-        } else {
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById("filter_sub_option" + cnt).innerHTML = this.responseText;
-                }
-            };
-            xmlhttp.open("POST", "getfilter_sub_options.php?op=" + str + "&cnt=" + cnt, true);
-            xmlhttp.send();
-        }
-    }
-    </script>
-    <script src="jQuery/jquery-2.1.3.min.js" type="text/javascript"></script>
-    <script>
-    function dynamic_Select(sort) {
-        var skillsSelect = document.getElementById('dropdown');
-        var selectedText = skillsSelect.options[skillsSelect.selectedIndex].value;
-        document.getElementById("temp").value = selectedText;
-    }
-
-    function displaynonucbgaylord(colid, sortflg) {
-        document.getElementById("div_noninv_gaylord").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("div_noninv_gaylord").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displaynonucbgaylord.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function displayurgentbox(colid, sortflg) {
-        document.getElementById("div_urgent_box").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        //alert(colid);
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("div_urgent_box").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displayurgentbox.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function displayucbinv(colid, sortflg) {
-        document.getElementById("div_ucbinv").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("div_ucbinv").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displayucbinv.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function displaynonucbshipping(colid, sortflg) {
-        document.getElementById("div_noninv_shipping").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("div_noninv_shipping").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displaynonucbshipping.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function displaynonucbsupersack(colid, sortflg) {
-        document.getElementById("div_noninv_supersack").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("div_noninv_supersack").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displaynonucbsupersack.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function displaynonucbdrumBarrel(colid, sortflg) {
-        document.getElementById("div_noninv_drumBarrel").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("div_noninv_drumBarrel").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displaynonucbdrumBarrel.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function displaynonucbpallets(colid, sortflg) {
-        document.getElementById("div_noninv_pallets").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("div_noninv_pallets").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_displaynonucbpallets.php?colid=" + colid + "&sortflg=" + sortflg, true);
-        xmlhttp.send();
-    }
-
-    function sort_Select(warehouseid) {
-        var Selectval = document.getElementById('sort_by_order');
-        var order_type = Selectval.options[Selectval.selectedIndex].text;
-
-
-        if (document.getElementById("dropdown").value == "") {
-            alert("Please Select the field.");
-        } else {
-            document.getElementById("tempval_focus").focus();
-
-            document.getElementById("tempval").style.display = "none";
-            document.getElementById("tempval1").innerHTML =
-                "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-            if (window.XMLHttpRequest) {
-                xmlhttp = new XMLHttpRequest();
-            } else {
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-
-            xmlhttp.onreadystatechange = function() {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    if (order_type != "") {
-                        document.getElementById("tempval1").innerHTML = xmlhttp.responseText;
-                    }
-                }
-            }
-
-            xmlhttp.open("GET", "pre_order_sort.php?warehouseid=" + warehouseid + "&selectedgrpid_inedit=" + document
-                .getElementById("temp").value + "&sort_order=" + order_type, true);
-            xmlhttp.send();
-        }
-    }
-
-    function f_getPosition(e_elemRef, s_coord) {
-        var n_pos = 0,
-            n_offset,
-            e_elem = e_elemRef;
-
-        while (e_elem) {
-            n_offset = e_elem["offset" + s_coord];
-            n_pos += n_offset;
-            e_elem = e_elem.offsetParent;
-        }
-
-        e_elem = e_elemRef;
-        while (e_elem != document.body) {
-            n_offset = e_elem["scroll" + s_coord];
-            if (n_offset && e_elem.style.overflow == 'scroll')
-                n_pos -= n_offset;
-            e_elem = e_elem.parentNode;
-        }
-        return n_pos;
-    }
-
-    function displayafterpo(boxid) {
-        document.getElementById("light").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("after_pos" + boxid);
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_left = n_left - 250;
-        n_top = n_top - 100;
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 20 + 'px';
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("light").innerHTML =
-                    "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
-                    xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_showafterpo.php?id=" + boxid, true);
-        xmlhttp.send();
-    }
-
-    function displaymap() {
-        document.getElementById("light").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("show_map1");
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_left = n_left - 50;
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 20 + 'px';
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("light").innerHTML =
-                    "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
-                    xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inventory_showmap.php", true);
-        xmlhttp.send();
-    }
-
-
-    function displayflyer(boxid, flyernm) {
-        document.getElementById("light").innerHTML =
-            "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr><embed src='boxpics/" +
-            flyernm + "' width='700' height='800'>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("box_fly_div" + boxid);
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_left = n_left - 350;
-        n_top = n_top - 200;
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 'px';
-
-    }
-
-    function displayflyer_main(boxid, flyernm) {
-        document.getElementById("light").innerHTML =
-            "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr><embed src='boxpics/" +
-            flyernm + "' width='700' height='800'>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("box_fly_div_main" + boxid);
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_left = n_left - 350;
-        n_top = n_top - 200;
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 20 + 'px';
-
-    }
-
-    function displayactualpallet(boxid) {
-        document.getElementById("light").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("actual_pos" + boxid);
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_top = n_top - 200;
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 20 + 'px';
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("light").innerHTML =
-                    "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
-                    xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "report_inventory.php?inventory_id=" + boxid + "&action=run", true);
-        xmlhttp.send();
-    }
-
-    function displayboxdata(boxid) {
-        document.getElementById("light").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("box_div" + boxid);
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_left = n_left - 350;
-        n_top = n_top - 200;
-
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 20 + 'px';
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("light").innerHTML =
-                    "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
-                    xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "manage_box_b2bloop.php?id=" + boxid + "&proc=View&", true);
-        xmlhttp.send();
-    }
-
-    function displayboxdata_main(boxid) {
-        document.getElementById("light").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-        document.getElementById('light').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-
-        var selectobject = document.getElementById("box_div_main" + boxid);
-        var n_left = f_getPosition(selectobject, 'Left');
-        var n_top = f_getPosition(selectobject, 'Top');
-        n_left = n_left - 350;
-        n_top = n_top - 200;
-
-        document.getElementById('light').style.left = n_left + 'px';
-        document.getElementById('light').style.top = n_top + 20 + 'px';
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("light").innerHTML =
-                    "<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
-                    xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "manage_box_b2bloop.php?id=" + boxid + "&proc=View&", true);
-        xmlhttp.send();
-    }
-
-    function display_orders_data(tmpcnt, box_id, wid) {
-        if (document.getElementById('inventory_preord_top_' + tmpcnt).style.display == 'table-row') {
-            document.getElementById('inventory_preord_top_' + tmpcnt).style.display = 'none';
-        } else {
-            document.getElementById('inventory_preord_top_' + tmpcnt).style.display = 'table-row';
-        }
-
-        document.getElementById("inventory_preord_middle_div_" + tmpcnt).innerHTML =
-            "<br><br>Loading .....<img src='images/wait_animated.gif' />";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("inventory_preord_middle_div_" + tmpcnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "gaylordstatus_childtable.php?box_id=" + box_id + "&wid=" + wid + "&tmpcnt=" + tmpcnt,
-            true);
-        xmlhttp.send();
-    }
-
-
-    function savetranslog(warehouse_id, transid, tmpcnt, box_id) {
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                alert("Data saved.");
-                document.getElementById("inventory_preord_middle_div_" + tmpcnt).innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        logdetail = document.getElementById("trans_notes" + transid + tmpcnt).value;
-        opsdate = document.getElementById("ops_delivery_date" + transid + tmpcnt).value;
-
-        xmlhttp.open("GET", "gaylordstatus_savetranslog.php?box_id=" + box_id + "&tmpcnt=" + tmpcnt + "&warehouse_id=" +
-            warehouse_id + "&transid=" + transid + "&logdetail=" + logdetail + "&opsdate=" + opsdate, true);
-        xmlhttp.send();
-    }
-
-    function inv_warehouse_list() {
-        var chklist_sel = document.getElementById('inv_warehouse');
-        var inv_warehouse = "";
-        var opts = [],
-            opt;
-        len = chklist_sel.options.length;
-        for (var i = 0; i < len; i++) {
-            opt = chklist_sel.options[i];
-            if (opt.selected) {
-                inv_warehouse = inv_warehouse + opt.value + ",";
-            }
-        }
-
-        if (inv_warehouse != "") {
-            inv_warehouse = inv_warehouse.substring(0, inv_warehouse.length - 1);
-        }
-
-        var opts = [],
-            opt;
-        var inv_boxtype = "";
-        var chklist_sel = document.getElementById('inv_boxtype');
-        len = chklist_sel.options.length;
-        for (var i = 0; i < len; i++) {
-            opt = chklist_sel.options[i];
-            if (opt.selected) {
-                inv_boxtype = inv_boxtype + opt.value + ",";
-            }
-        }
-
-        if (inv_boxtype != "") {
-            inv_boxtype = inv_boxtype.substring(0, inv_boxtype.length - 1);
-        }
-
-        document.getElementById("tempval_focus").focus();
-
-        document.getElementById("tempval").style.display = "none";
-        document.getElementById("tempval1").innerHTML =
-            "<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
-
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("tempval1").innerHTML = xmlhttp.responseText;
-            }
-        }
-
-        xmlhttp.open("GET", "inv_warehouse_lst.php?warehouse_id_lst=" + inv_warehouse + "&boxtype_lst=" + inv_boxtype,
-            true);
-        xmlhttp.send();
-
-    }
-    </script>
-
-    <style>
-    .style12_new {
-        font-size: x-small;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .style12 {
-        font-size: x-small;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-    </style>
-    <?php
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<style type="text/css">
+			.black_overlay {
+				display: none;
+				position: absolute;
+				top: 0%;
+				left: 0%;
+				width: 100%;
+				height: 100%;
+				background-color: gray;
+				z-index: 1001;
+				-moz-opacity: 0.8;
+				opacity: .80;
+				filter: alpha(opacity=80);
+			}
+
+			.white_content {
+				display: none;
+				position: absolute;
+				top: 5%;
+				left: 10%;
+				width: 60%;
+				height: 90%;
+				padding: 16px;
+				border: 1px solid gray;
+				background-color: white;
+				z-index: 1002;
+				overflow: auto;
+			}
+
+			.popup_qty {
+				text-decoration: underline;
+				cursor: pointer;
+			}
+		</style>
+		<!--New Inventory Search option Jquery-->
+		<script>
+			function add_product_fun() {
+				var cnt = document.getElementById("prod_cnt").value;
+				var chkcondition = document.getElementById("filter_andorcondition" + cnt).value;
+				var filtercol = document.getElementById("filter_column" + cnt).value;
+				if (filtercol != "-" && chkcondition == "") {
+					alert("Please select Condition");
+					return false;
+				}
+				cnt = Number(cnt) + 1;
+
+				var sstr = "";
+				sstr = "<table style='font-size:8pt;' id='inv_child_div" + cnt +
+					"'><tr><td>Select table column:</td><td><select style='font-size:8pt;' name='filter_column[]' id='filter_column" +
+					cnt + "' onChange='showfilter_option(" + cnt +
+					")'><option value=''>Select Option</option><option value='Box Type'>Box Type</option><option value='State'>Location State</option><option value='No. of Wall'>No. of Wall</option><option value='ucbwarehouse'>Warehouse</option><option value='Actual'>Actual</option><option value='After PO'>After PO</option><option value='Last Month Quantity'>Last Month Quantity</option><option value='Availability'>Availability</option><option value='Vendor'>Vendor</option><option value='Ship From'>Ship From</option><option value='Length'>Box Length</option><option value='Width'>Box Width</option><option value='Height'>Box Height</option><option value='Description'>Description</option><option value='SKU'>SKU</option><option value='Per Pallet'>Per Pallet</option><option value='Per Trailer'>Per Trailer</option><option value='Min FOB'>Min FOB</option><option value='Cost'>Cost</option></select></td><td><select style='font-size:8pt;' id='filter_compare_condition" +
+					cnt +
+					"' name='filter_compare_condition[]'><option value='='>=</option><option value='>'>></option><option value='<'><</option></select></td><td><div id='filter_sub_option" +
+					cnt +
+					"'><input style='font-size:8pt;' type='input' id='filter_inp' value='' /></div></td><td><select style='font-size:8pt;' id='filter_andorcondition" +
+					cnt +
+					"' name='filter_andorcondition[]'><option value=''>Select</option><option value='And'>And</option><option value='Or'>Or</option></select><input style='font-size:8pt;' type='button' name='btn_remove' value='X' onclick='remove_product_fun(" +
+					cnt + ")'></td></tr></table></div></div>";
+
+				var divctl = document.getElementById("inv_main_div");
+				divctl.insertAdjacentHTML('beforeend', sstr);
+
+				document.getElementById("prod_cnt").value = cnt;
+			}
+		</script>
+		<script src="jQuery/jquery-2.1.3.min.js" type="text/javascript"></script>
+		<script>
+			function displayurgentbox(colid, sortflg) {
+				document.getElementById("div_urgent_box").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+				//alert(colid);
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("div_urgent_box").innerHTML = xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "inventory_displayurgentbox.php?colid=" + colid + "&sortflg=" + sortflg, true);
+				xmlhttp.send();
+			}
+
+
+
+
+
+
+
+
+
+			function displayflyer(boxid, flyernm) {
+				document.getElementById("light").innerHTML =
+					"<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr><embed src='boxpics/" +
+					flyernm + "' width='700' height='800'>";
+				document.getElementById('light').style.display = 'block';
+				document.getElementById('fade').style.display = 'block';
+
+				var selectobject = document.getElementById("box_fly_div" + boxid);
+				var n_left = f_getPosition(selectobject, 'Left');
+				var n_top = f_getPosition(selectobject, 'Top');
+				n_left = n_left - 350;
+				n_top = n_top - 200;
+				document.getElementById('light').style.left = n_left + 'px';
+				document.getElementById('light').style.top = n_top + 'px';
+
+			}
+
+			function displayflyer_main(boxid, flyernm) {
+				document.getElementById("light").innerHTML =
+					"<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr><embed src='boxpics/" +
+					flyernm + "' width='700' height='800'>";
+				document.getElementById('light').style.display = 'block';
+				document.getElementById('fade').style.display = 'block';
+
+				var selectobject = document.getElementById("box_fly_div_main" + boxid);
+				var n_left = f_getPosition(selectobject, 'Left');
+				var n_top = f_getPosition(selectobject, 'Top');
+				n_left = n_left - 350;
+				n_top = n_top - 200;
+				document.getElementById('light').style.left = n_left + 'px';
+				document.getElementById('light').style.top = n_top + 20 + 'px';
+
+			}
+
+			function displayactualpallet(boxid) {
+				document.getElementById("light").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+				document.getElementById('light').style.display = 'block';
+				document.getElementById('fade').style.display = 'block';
+
+				var selectobject = document.getElementById("actual_pos" + boxid);
+				var n_left = f_getPosition(selectobject, 'Left');
+				var n_top = f_getPosition(selectobject, 'Top');
+				n_top = n_top - 200;
+				document.getElementById('light').style.left = n_left + 'px';
+				document.getElementById('light').style.top = n_top + 20 + 'px';
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("light").innerHTML =
+							"<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
+							xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "report_inventory.php?inventory_id=" + boxid + "&action=run", true);
+				xmlhttp.send();
+			}
+
+			function displayboxdata(boxid) {
+				document.getElementById("light").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+				document.getElementById('light').style.display = 'block';
+				document.getElementById('fade').style.display = 'block';
+
+				var selectobject = document.getElementById("box_div" + boxid);
+				var n_left = f_getPosition(selectobject, 'Left');
+				var n_top = f_getPosition(selectobject, 'Top');
+				n_left = n_left - 350;
+				n_top = n_top - 200;
+
+				document.getElementById('light').style.left = n_left + 'px';
+				document.getElementById('light').style.top = n_top + 20 + 'px';
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("light").innerHTML =
+							"<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
+							xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "manage_box_b2bloop.php?id=" + boxid + "&proc=View&", true);
+				xmlhttp.send();
+			}
+
+			function displayboxdata_main(boxid) {
+				document.getElementById("light").innerHTML =
+					"<br/><div style='text-align: center;'>Loading .....<img src='images/wait_animated.gif' /></div>";
+				document.getElementById('light').style.display = 'block';
+				document.getElementById('fade').style.display = 'block';
+
+				var selectobject = document.getElementById("box_div_main" + boxid);
+				var n_left = f_getPosition(selectobject, 'Left');
+				var n_top = f_getPosition(selectobject, 'Top');
+				n_left = n_left - 350;
+				n_top = n_top - 200;
+
+				document.getElementById('light').style.left = n_left + 'px';
+				document.getElementById('light').style.top = n_top + 20 + 'px';
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("light").innerHTML =
+							"<a href='javascript:void(0)' onclick=document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'>Close</a> <br><hr>" +
+							xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "manage_box_b2bloop.php?id=" + boxid + "&proc=View&", true);
+				xmlhttp.send();
+			}
+
+			function display_orders_data(tmpcnt, box_id, wid) {
+				if (document.getElementById('inventory_preord_top_' + tmpcnt).style.display == 'table-row') {
+					document.getElementById('inventory_preord_top_' + tmpcnt).style.display = 'none';
+				} else {
+					document.getElementById('inventory_preord_top_' + tmpcnt).style.display = 'table-row';
+				}
+
+				document.getElementById("inventory_preord_middle_div_" + tmpcnt).innerHTML =
+					"<br><br>Loading .....<img src='images/wait_animated.gif' />";
+
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						document.getElementById("inventory_preord_middle_div_" + tmpcnt).innerHTML = xmlhttp.responseText;
+					}
+				}
+
+				xmlhttp.open("GET", "gaylordstatus_childtable.php?box_id=" + box_id + "&wid=" + wid + "&tmpcnt=" + tmpcnt,
+					true);
+				xmlhttp.send();
+			}
+		</script>
+
+		<style>
+			.style12_new {
+				font-size: x-small;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			.style12 {
+				font-size: x-small;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+		</style>
+		<?php
 
 		/////////////////////////////////////////// NEW INVENTORY SALES ORDER VALUES
 		?>
-    <!--------------------------NEW INVENTORY ---------------------------------------------->
-    <script language="JavaScript" SRC="inc/CalendarPopup.js"></script>
-    <script language="JavaScript" SRC="inc/general.js"></script>
-    <script language="JavaScript">
-    document.write(getCalendarStyles());
-    </script>
-    <script language="JavaScript">
-    var cal1xx = new CalendarPopup("listdiv");
-    cal1xx.showNavigationDropdowns();
-    </script>
+		<!--------------------------NEW INVENTORY ---------------------------------------------->
+		<script language="JavaScript" SRC="inc/CalendarPopup.js"></script>
+		<script language="JavaScript" SRC="inc/general.js"></script>
+		<script language="JavaScript">
+			document.write(getCalendarStyles());
+		</script>
+		<script language="JavaScript">
+			var cal1xx = new CalendarPopup("listdiv");
+			cal1xx.showNavigationDropdowns();
+		</script>
 
-    <div ID="listdiv" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;">
-    </div>
+		<div ID="listdiv" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;">
+		</div>
 
-    <a href='dashboardnew.php?show=inventory'>Go Back to Old Inventory Version</a><br />
-    <a href='dashboardnew.php?show=inventory_filter'>Inventory For Sales Rep</a><br />
-    <a href='javascript:void();' id='show_map1' onclick="displaymap()">Show Map with Boxes</a><br />
-    <a target="_blank" href='report_inbound_inventory_summary.php?warehouse_id=0'>Inbound Inventory Summary</a><br />
-    <a target="_blank" href='report_inventory_types.php'>Inventory Report</a><br /><br />
+		<a href='dashboardnew.php?show=inventory'>Go Back to Old Inventory Version</a><br />
+		<a href='dashboardnew.php?show=inventory_filter'>Inventory For Sales Rep</a><br />
+		<a href='javascript:void();' id='show_map1' onclick="displaymap()">Show Map with Boxes</a><br />
+		<a target="_blank" href='report_inbound_inventory_summary.php?warehouse_id=0'>Inbound Inventory Summary</a><br />
+		<a target="_blank" href='report_inventory_types.php'>Inventory Report</a><br /><br />
 
-    <table cellSpacing="1" cellPadding="1" border="0" width="1200">
-        <tr align="middle">
-            <td colspan="12" class="style24" style="height: 16px"><strong>INVENTORY NOTES</strong> <a
-                    href="updateinventorynotes.php">Edit</a></td>
-        </tr>
-        <tr vAlign="left">
-            <td colspan=12>
-                <?php
+		<table cellSpacing="1" cellPadding="1" border="0" width="1200">
+			<tr align="middle">
+				<td colspan="12" class="style24" style="height: 16px"><strong>INVENTORY NOTES</strong> <a href="updateinventorynotes.php">Edit</a></td>
+			</tr>
+			<tr vAlign="left">
+				<td colspan=12>
+					<?php
 					$sql = "SELECT * FROM loop_inventory_notes ORDER BY dt DESC LIMIT 0,1";
 					db();
 					$res = db_query($sql);
 					$row = array_shift($res);
 					echo $row["notes"];
 					?>
-                <br />
-            </td>
-        </tr>
+					<br />
+				</td>
+			</tr>
 
-        <?php
+			<?php
 
 			$no_of_urgent_load = 0;
 			$no_of_urgent_load_str = "";
 			$no_of_urgent_load_val = 0;
 			?>
-        <tr>
-            <td>
-                <table width="1400">
-                    <tr align="middle">
-                        <div id="light" class="white_content"></div>
-                        <div id="fade" class="black_overlay"></div>
-                        <td colspan="16" class="style24" style="height: 18px"><strong>Urgent Boxes</strong></td>
-                    </tr>
-                    <tr>
-                        <td colspan="16">
-                            <div id="div_urgent_box" name="div_urgent_box">
-                                <table cellSpacing="1" cellPadding="1" border="0" width="1200">
-                                    <tr vAlign="left">
+			<tr>
+				<td>
+					<table width="1400">
+						<tr align="middle">
+							<div id="light" class="white_content"></div>
+							<div id="fade" class="black_overlay"></div>
+							<td colspan="16" class="style24" style="height: 18px"><strong>Urgent Boxes</strong></td>
+						</tr>
+						<tr>
+							<td colspan="16">
+								<div id="div_urgent_box" name="div_urgent_box">
+									<table cellSpacing="1" cellPadding="1" border="0" width="1200">
+										<tr vAlign="left">
 
-                                        <td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a
-                                                    href="javascript:void();" onclick="displayurgentbox(2,1);"><img
-                                                        src="images/sort_asc.jpg" width="5px;"
-                                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                    onclick="displayurgentbox(2,2);"><img src="images/sort_desc.jpg"
-                                                        width="5px;" height="10px;"></a></b></td>
+											<td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a href="javascript:void();" onclick="displayurgentbox(2,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(2,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                        <td bgColor="#e4e4e4" class="style12"><b>Loads/Mo&nbsp;<a
-                                                    href="javascript:void();" onclick="displayurgentbox(3,1);"><img
-                                                        src="images/sort_asc.jpg" width="5px;"
-                                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                    onclick="displayurgentbox(3,2);"><img src="images/sort_desc.jpg"
-                                                        width="5px;" height="10px;"></a></b></td>
+											<td bgColor="#e4e4e4" class="style12"><b>Loads/Mo&nbsp;<a href="javascript:void();" onclick="displayurgentbox(3,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(3,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                        <td bgColor="#e4e4e4" class="style12"><b>Availability&nbsp;<a
-                                                    href="javascript:void();" onclick="displayurgentbox(4,1);"><img
-                                                        src="images/sort_asc.jpg" width="5px;"
-                                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                    onclick="displayurgentbox(4,2);"><img src="images/sort_desc.jpg"
-                                                        width="5px;" height="10px;"></a></b></td>
+											<td bgColor="#e4e4e4" class="style12"><b>Availability&nbsp;<a href="javascript:void();" onclick="displayurgentbox(4,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(4,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                        <td bgColor="#e4e4e4" class="style12"><b>B2B Status&nbsp;<a
-                                                    href="javascript:void();" onclick="displayurgentbox(16,1);"><img
-                                                        src="images/sort_asc.jpg" width="5px;"
-                                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                    onclick="displayurgentbox(16,2);"><img src="images/sort_desc.jpg"
-                                                        width="5px;" height="10px;"></a></b></td>
+											<td bgColor="#e4e4e4" class="style12"><b>B2B Status&nbsp;<a href="javascript:void();" onclick="displayurgentbox(16,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(16,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                        <td bgColor="#e4e4e4" class="style12">
-                                            <font size=1><b>Account Owner&nbsp;<a href="javascript:void();"
-                                                        onclick="displayurgentbox(17,1);"><img src="images/sort_asc.jpg"
-                                                            width="5px;" height="10px;"></a>&nbsp;<a
-                                                        href="javascript:void();" onclick="displayurgentbox(17,2);"><img
-                                                            src="images/sort_desc.jpg" width="5px;"
-                                                            height="10px;"></a></b></font>
-                                        </td>
+											<td bgColor="#e4e4e4" class="style12">
+												<font size=1><b>Account Owner&nbsp;<a href="javascript:void();" onclick="displayurgentbox(17,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(17,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+											</td>
 
-                                        <td bgColor="#e4e4e4" class="style12">
-                                            <font size=1><b>Supplier&nbsp;<a href="javascript:void();"
-                                                        onclick="displayurgentbox(5,1);"><img src="images/sort_asc.jpg"
-                                                            width="5px;" height="10px;"></a>&nbsp;<a
-                                                        href="javascript:void();" onclick="displayurgentbox(5,2);"><img
-                                                            src="images/sort_desc.jpg" width="5px;"
-                                                            height="10px;"></a></b></font>
-                                        </td>
+											<td bgColor="#e4e4e4" class="style12">
+												<font size=1><b>Supplier&nbsp;<a href="javascript:void();" onclick="displayurgentbox(5,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(5,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+											</td>
 
-                                        <td bgColor="#e4e4e4" class="style12">
-                                            <font size=1><b>Ship From&nbsp;<a href="javascript:void();"
-                                                        onclick="displayurgentbox(15,1);"><img src="images/sort_asc.jpg"
-                                                            width="5px;" height="10px;"></a>&nbsp;<a
-                                                        href="javascript:void();" onclick="displayurgentbox(15,2);"><img
-                                                            src="images/sort_desc.jpg" width="5px;"
-                                                            height="10px;"></a></b></font>
-                                        </td>
+											<td bgColor="#e4e4e4" class="style12">
+												<font size=1><b>Ship From&nbsp;<a href="javascript:void();" onclick="displayurgentbox(15,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(15,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+											</td>
 
-                                        <td bgColor="#e4e4e4" class="style12" width="100px;"><b>LxWxH&nbsp;<a
-                                                    href="javascript:void();" onclick="displayurgentbox(6,1);"><img
-                                                        src="images/sort_asc.jpg" width="5px;"
-                                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                    onclick="displayurgentbox(6,2);"><img src="images/sort_desc.jpg"
-                                                        width="5px;" height="10px;"></a></b></font>
-                                        </td>
+											<td bgColor="#e4e4e4" class="style12" width="100px;"><b>LxWxH&nbsp;<a href="javascript:void();" onclick="displayurgentbox(6,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(6,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+											</td>
 
-                                        <td bgColor="#e4e4e4" class="style12left"><b>Description&nbsp;<a
-                                                    href="javascript:void();" onclick="displayurgentbox(7,1);"><img
-                                                        src="images/sort_asc.jpg" width="5px;"
-                                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                    onclick="displayurgentbox(7,2);"><img src="images/sort_desc.jpg"
-                                                        width="5px;" height="10px;"></a></b></font>
-                                        </td>
+											<td bgColor="#e4e4e4" class="style12left"><b>Description&nbsp;<a href="javascript:void();" onclick="displayurgentbox(7,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(7,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+											</td>
 
-                                        <td bgColor="#e4e4e4" class="style12"><b>Per Pallet&nbsp;<a
-                                                    href="javascript:void();" onclick="displayurgentbox(9,1);"><img
-                                                        src="images/sort_asc.jpg" width="5px;"
-                                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                    onclick="displayurgentbox(9,2);"><img src="images/sort_desc.jpg"
-                                                        width="5px;" height="10px;"></a></b></td>
+											<td bgColor="#e4e4e4" class="style12"><b>Per Pallet&nbsp;<a href="javascript:void();" onclick="displayurgentbox(9,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(9,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                        <td bgColor="#e4e4e4" class="style12"><b>Per Trailer&nbsp;<a
-                                                    href="javascript:void();" onclick="displayurgentbox(10,1);"><img
-                                                        src="images/sort_asc.jpg" width="5px;"
-                                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                    onclick="displayurgentbox(10,2);"><img src="images/sort_desc.jpg"
-                                                        width="5px;" height="10px;"></a></b></td>
+											<td bgColor="#e4e4e4" class="style12"><b>Per Trailer&nbsp;<a href="javascript:void();" onclick="displayurgentbox(10,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(10,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                        <td bgColor="#e4e4e4" class="style12" width="70px;"><b>Min FOB&nbsp;<a
-                                                    href="javascript:void();" onclick="displayurgentbox(11,1);"><img
-                                                        src="images/sort_asc.jpg" width="5px;"
-                                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                    onclick="displayurgentbox(11,2);"><img src="images/sort_desc.jpg"
-                                                        width="5px;" height="10px;"></a></b></td>
+											<td bgColor="#e4e4e4" class="style12" width="70px;"><b>Min FOB&nbsp;<a href="javascript:void();" onclick="displayurgentbox(11,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(11,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                        <td bgColor="#e4e4e4" class="style12" width="70px;"><b>Cost&nbsp;<a
-                                                    href="javascript:void();" onclick="displayurgentbox(12,1);"><img
-                                                        src="images/sort_asc.jpg" width="5px;"
-                                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                    onclick="displayurgentbox(12,2);"><img src="images/sort_desc.jpg"
-                                                        width="5px;" height="10px;"></a></b></td>
+											<td bgColor="#e4e4e4" class="style12" width="70px;"><b>Cost&nbsp;<a href="javascript:void();" onclick="displayurgentbox(12,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(12,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                        <td bgColor="#e4e4e4" class="style12"><b>Update&nbsp;<a
-                                                    href="javascript:void();" onclick="displayurgentbox(13,1);"><img
-                                                        src="images/sort_asc.jpg" width="5px;"
-                                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                    onclick="displayurgentbox(13,2);"><img src="images/sort_desc.jpg"
-                                                        width="5px;" height="10px;"></a></b></td>
+											<td bgColor="#e4e4e4" class="style12"><b>Update&nbsp;<a href="javascript:void();" onclick="displayurgentbox(13,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(13,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                        <td bgColor="#e4e4e4" class="style12left"><b>Notes&nbsp;<a
-                                                    href="javascript:void();" onclick="displayurgentbox(14,1);"><img
-                                                        src="images/sort_asc.jpg" width="5px;"
-                                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                    onclick="displayurgentbox(14,2);"><img src="images/sort_desc.jpg"
-                                                        width="5px;" height="10px;"></a></b></td>
-                                    </tr>
-                                    <br>
-                                    <!--Urgent Boxes table here-->
-                                    <?php
+											<td bgColor="#e4e4e4" class="style12left"><b>Notes&nbsp;<a href="javascript:void();" onclick="displayurgentbox(14,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayurgentbox(14,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
+										</tr>
+										<br>
+										<!--Urgent Boxes table here-->
+										<?php
 										$sql = "SELECT *, inventory.id AS I, inventory.lengthInch AS L, inventory.widthInch AS W, inventory.depthInch AS D, inventory.notes AS N, inventory.date AS DT, inventory.vendor AS V FROM inventory WHERE  inventory.Active LIKE 'A' AND  box_urgent=1 ORDER BY inventory.availability DESC";
 										//AND inventory.availability != 0 AND inventory.availability != -4 AND inventory.availability != -2 AND inventory.availability != -3.5
 										//echo $sql . "<br>";
@@ -7466,7 +5969,7 @@ if ($_REQUEST["show"] == "search") {
 												$tipStr = $tipStr . ", Vents";
 										?>
 
-                                    <?php
+											<?php
 											$b2b_status = "";
 											db();
 											$dt_res_so_item1 = db_query("select * from b2b_box_status where status_key='" . $inv["b2b_status"] . "'");
@@ -7508,98 +6011,92 @@ if ($_REQUEST["show"] == "search") {
 												}
 											}
 											?>
-                                    <tr vAlign="center">
-                                        <?php if ($sales_order_qty_new > 0) { ?>
-                                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                                            <font color='blue' size=1>
-                                                <div
-                                                    onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $inv["loops_id"]; ?>, <?php echo $inv["vendor_b2b_rescue"]; ?>)">
-                                                    <u><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?></u>
-                                                </div>
-                                            </font>
-                                        </td>
-                                        <?php } else { ?>
-                                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                                            <font size=1>
-                                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?>
-                                            </font>
-                                        </td>
-                                        <?php } ?>
+											<tr vAlign="center">
+												<?php if ($sales_order_qty_new > 0) { ?>
+													<td bgColor="<?php echo $bg; ?>" class="style12">
+														<font color='blue' size=1>
+															<div onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $inv["loops_id"]; ?>, <?php echo $inv["vendor_b2b_rescue"]; ?>)">
+																<u><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?></u>
+															</div>
+														</font>
+													</td>
+												<?php } else { ?>
+													<td bgColor="<?php echo $bg; ?>" class="style12">
+														<font size=1>
+															<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?>
+														</font>
+													</td>
+												<?php } ?>
 
-                                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                                            <font size=1>
-                                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["expected_loads_per_mo"]; ?>
-                                            </font>
-                                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<font size=1>
+														<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["expected_loads_per_mo"]; ?>
+													</font>
+												</td>
 
-                                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                                            <?php if ($inv["availability"] == "3") echo "<b>"; ?>
-                                            <?php if ($inv["availability"] == "3") echo "Available Now & Urgent"; ?>
-                                            <?php if ($inv["availability"] == "2") echo "Available Now"; ?>
-                                            <?php if ($inv["availability"] == "1") echo "Available Soon"; ?>
-                                            <?php if ($inv["availability"] == "2.5") echo "Available >= 1TL"; ?>
-                                            <?php if ($inv["availability"] == "2.15") echo "Available < 1TL"; ?>
-                                            <?php if ($inv["availability"] == "-1") echo "Presell"; ?>
-                                            <?php if ($inv["availability"] == "-2") echo "Active by Unavailable"; ?>
-                                            <?php if ($inv["availability"] == "-3") echo "Potential"; ?>
-                                            <?php if ($inv["availability"] == "-3.5") echo "Check Loops"; ?>
-                                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<?php if ($inv["availability"] == "3") echo "<b>"; ?>
+													<?php if ($inv["availability"] == "3") echo "Available Now & Urgent"; ?>
+													<?php if ($inv["availability"] == "2") echo "Available Now"; ?>
+													<?php if ($inv["availability"] == "1") echo "Available Soon"; ?>
+													<?php if ($inv["availability"] == "2.5") echo "Available >= 1TL"; ?>
+													<?php if ($inv["availability"] == "2.15") echo "Available < 1TL"; ?>
+													<?php if ($inv["availability"] == "-1") echo "Presell"; ?>
+													<?php if ($inv["availability"] == "-2") echo "Active by Unavailable"; ?>
+													<?php if ($inv["availability"] == "-3") echo "Potential"; ?>
+													<?php if ($inv["availability"] == "-3.5") echo "Check Loops"; ?>
+												</td>
 
-                                        <td bgColor="<?php echo $bg; ?>" class="style12"><?php echo $b2b_status; ?></td>
+												<td bgColor="<?php echo $bg; ?>" class="style12"><?php echo $b2b_status; ?></td>
 
-                                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                                            <font size=1><?php echo isset($ownername); ?></font>
-                                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12left">
+													<font size=1><?php echo isset($ownername); ?></font>
+												</td>
 
-                                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                                            <font size=1>
-                                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $vendor_name; ?></a>
-                                            </font>
-                                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12left">
+													<font size=1>
+														<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $vendor_name; ?></a>
+													</font>
+												</td>
 
-                                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                                            <font size=1>
-                                                <?php echo $inv["location_city"] . ", " . $inv["location_state"] . " " . $inv["location_zip"]; ?>
-                                            </font>
-                                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12left">
+													<font size=1>
+														<?php echo $inv["location_city"] . ", " . $inv["location_state"] . " " . $inv["location_zip"]; ?>
+													</font>
+												</td>
 
-                                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                                            <font size=1>
-                                                <?php echo $inv["L"] . " x " . $inv["W"] . " x " . $inv["D"]; ?></font>
-                                        </td>
-                                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                                            <font size=1>
-                                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><a
-                                                    target="_blank"
-                                                    href='manage_box_b2bloop.php?id=<?php echo $loop["id"]; ?>&proc=View'
-                                                    id='box_div<?php echo $loop["id"]; ?>'><?php echo $inv["description"]; ?></a>
-                                            </font>
-                                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<font size=1>
+														<?php echo $inv["L"] . " x " . $inv["W"] . " x " . $inv["D"]; ?></font>
+												</td>
+												<td bgColor="<?php echo $bg; ?>" class="style12left">
+													<font size=1>
+														<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><a target="_blank" href='manage_box_b2bloop.php?id=<?php echo $loop["id"]; ?>&proc=View' id='box_div<?php echo $loop["id"]; ?>'><?php echo $inv["description"]; ?></a>
+													</font>
+												</td>
 
-                                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                                            <font size=1><?php echo $bpallet_qty; ?></font>
-                                        </td>
-                                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                                            <font size=1><?php echo number_format($boxes_per_trailer, 0); ?></font>
-                                        </td>
-                                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                                            <font size=1><?php echo "$" . $b2b_fob; ?></font>
-                                        </td>
-                                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                                            <font size=1><?php echo "$" . $b2b_cost; ?></font>
-                                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<font size=1><?php echo $bpallet_qty; ?></font>
+												</td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<font size=1><?php echo number_format($boxes_per_trailer, 0); ?></font>
+												</td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<font size=1><?php echo "$" . $b2b_fob; ?></font>
+												</td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<font size=1><?php echo "$" . $b2b_cost; ?></font>
+												</td>
 
-                                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                                            <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["DT"] != "") echo timestamp_to_date($inv["DT"]); ?>
-                                        </td>
-                                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                                            <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($loop["id"] < 0) { ?><a
-                                                href='javascript:void();' id='box_div<?php echo $loop["id"]; ?>'
-                                                onclick="displayboxdata(<?php echo $loop["id"]; ?>);"><?php echo $inv["N"]; ?></a><?php } else { ?><?php echo $inv["N"]; ?></a>
-                                            <?php } ?></td>
-                                    </tr>
+												<td bgColor="<?php echo $bg; ?>" class="style12left">
+													<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["DT"] != "") echo timestamp_to_date($inv["DT"]); ?>
+												</td>
+												<td bgColor="<?php echo $bg; ?>" class="style12left">
+													<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($loop["id"] < 0) { ?><a href='javascript:void();' id='box_div<?php echo $loop["id"]; ?>' onclick="displayboxdata(<?php echo $loop["id"]; ?>);"><?php echo $inv["N"]; ?></a><?php } else { ?><?php echo $inv["N"]; ?></a>
+												<?php } ?></td>
+											</tr>
 
-                                    <?php
+											<?php
 											$inv_row = "<tr vAlign='center'><td bgColor='$bg' class='style12'><font size=1 >";
 											if ($inv['availability'] == '3') $inv_row .= "<b>";
 											$inv_row .= $inv['actual_inventory'] . "</font></td>";
@@ -7701,39 +6198,37 @@ if ($_REQUEST["show"] == "search") {
 												$no_of_inv_item_note_date_str .= $inv_row;
 											}
 											?>
-                                    <tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle"
-                                        style="display:none;">
-                                        <td>&nbsp;</td>
-                                        <td>&nbsp;</td>
-                                        <td colspan="14"
-                                            style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
-                                            <div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
-                                        </td>
-                                    </tr>
+											<tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle" style="display:none;">
+												<td>&nbsp;</td>
+												<td>&nbsp;</td>
+												<td colspan="14" style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
+													<div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
+												</td>
+											</tr>
 
-                                    <?php
+										<?php
 											$count_arry = $count_arry + 1;
 										}
 										?>
 
-                                </table>
-                            </div>
-                            <!--End Urgent boxes table-->
-                            <br>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <?php $prod_cnt = 1; ?>
-        <tr align="middle">
-            <td colspan="12" class="style24" style="height: 16px">
-                <form action="dashboardnew.php" name="frmnewinventory" id="frmnewinventory">
-                    <input type="hidden" value="inventory_cron" name="show" id="show" />
-                    <table>
-                        <tr>
-                            <td>
-                                <?php if ($_REQUEST["filter_btn"] == "Apply Filter") {
+									</table>
+								</div>
+								<!--End Urgent boxes table-->
+								<br>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<?php $prod_cnt = 1; ?>
+			<tr align="middle">
+				<td colspan="12" class="style24" style="height: 16px">
+					<form action="dashboardnew.php" name="frmnewinventory" id="frmnewinventory">
+						<input type="hidden" value="inventory_cron" name="show" id="show" />
+						<table>
+							<tr>
+								<td>
+									<?php if ($_REQUEST["filter_btn"] == "Apply Filter") {
 										$filter_type = $_REQUEST["filter_type"];
 										$filter_availability = $_REQUEST["filter_availability"];
 										$min_height = $_REQUEST["min_height"];
@@ -7744,324 +6239,290 @@ if ($_REQUEST["show"] == "search") {
 										$min_fob = $_REQUEST["min_fob"];
 										$chkterritory = $_REQUEST["chkterritory"];
 									?>
-                                <table id="inv_child_div" width="300px" style="font-size:8pt;">
-                                    <tr>
-                                        <td>Type:</td>
-                                        <td width="5px;">&nbsp;</td>
-                                        <td colspan="3">
-                                            <select style="font-size:8pt;" name="filter_type" id="filter_type">
-                                                <option value="All">All types</option>
-                                                <option value="Gaylords" <?php if ($filter_type == "Gaylords") {
+										<table id="inv_child_div" width="300px" style="font-size:8pt;">
+											<tr>
+												<td>Type:</td>
+												<td width="5px;">&nbsp;</td>
+												<td colspan="3">
+													<select style="font-size:8pt;" name="filter_type" id="filter_type">
+														<option value="All">All types</option>
+														<option value="Gaylords" <?php if ($filter_type == "Gaylords") {
 																						echo " selected ";
 																					} ?>>Gaylords</option>
-                                                <option value="Shipping Boxes" <?php if ($filter_type == "Shipping Boxes") {
+														<option value="Shipping Boxes" <?php if ($filter_type == "Shipping Boxes") {
 																							echo " selected ";
 																						} ?>>Shipping Boxes</option>
-                                                <option value="Supersacks" <?php if ($filter_type == "Supersacks") {
+														<option value="Supersacks" <?php if ($filter_type == "Supersacks") {
 																						echo " selected ";
 																					} ?>>Supersacks</option>
-                                                <option value="DrumsBarrelsIBCs" <?php if ($filter_type == "DrumsBarrelsIBCs") {
+														<option value="DrumsBarrelsIBCs" <?php if ($filter_type == "DrumsBarrelsIBCs") {
 																								echo " selected ";
 																							} ?>>Drums/Barrels/IBCs</option>
-                                                <option value="Pallets" <?php if ($filter_type == "Pallets") {
+														<option value="Pallets" <?php if ($filter_type == "Pallets") {
 																					echo " selected ";
 																				} ?>>Pallets</option>
-                                                <option value="Recycling" <?php if ($filter_type == "Recycling") {
+														<option value="Recycling" <?php if ($filter_type == "Recycling") {
 																						echo " selected ";
 																					} ?>>Recycling</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Availability:</td>
-                                        <td width="5px;">&nbsp;</td>
-                                        <td colspan="3">
-                                            <select style="font-size:8pt;" name="filter_availability"
-                                                id="filter_availability">
-                                                <option value="All">All</option>
-                                                <option value="truckloadonly" <?php if ($_REQUEST["filter_availability"] == "truckloadonly") {
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<td>Availability:</td>
+												<td width="5px;">&nbsp;</td>
+												<td colspan="3">
+													<select style="font-size:8pt;" name="filter_availability" id="filter_availability">
+														<option value="All">All</option>
+														<option value="truckloadonly" <?php if ($_REQUEST["filter_availability"] == "truckloadonly") {
 																							echo " selected ";
 																						} ?>>>= Truckload Only</option>
-                                                <option value="anyavailableboxes" <?php if ($_REQUEST["filter_availability"] == "anyavailableboxes") {
+														<option value="anyavailableboxes" <?php if ($_REQUEST["filter_availability"] == "anyavailableboxes") {
 																								echo " selected ";
 																							} ?>>Any Available Boxes Only</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Height:</td>
-                                        <td width="5px;">&nbsp;</td>
-                                        <td>
-                                            <input type="input" id="min_height" name="min_height"
-                                                value="<?php echo $min_height; ?>" style="font-size:8pt;" />
-                                        </td>
-                                        <td>
-                                            To
-                                        </td>
-                                        <td>
-                                            <input type="input" id="max_height" name="max_height"
-                                                value="<?php echo $max_height; ?>" style="font-size:8pt;" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Min Thickness:</td>
-                                        <td width="5px;">&nbsp;</td>
-                                        <td colspan="3">
-                                            <select style="font-size:8pt;" name="min_thickness" id="min_thickness">
-                                                <option value="Any" <?php if ($min_thickness == "Any") {
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<td>Height:</td>
+												<td width="5px;">&nbsp;</td>
+												<td>
+													<input type="input" id="min_height" name="min_height" value="<?php echo $min_height; ?>" style="font-size:8pt;" />
+												</td>
+												<td>
+													To
+												</td>
+												<td>
+													<input type="input" id="max_height" name="max_height" value="<?php echo $max_height; ?>" style="font-size:8pt;" />
+												</td>
+											</tr>
+											<tr>
+												<td>Min Thickness:</td>
+												<td width="5px;">&nbsp;</td>
+												<td colspan="3">
+													<select style="font-size:8pt;" name="min_thickness" id="min_thickness">
+														<option value="Any" <?php if ($min_thickness == "Any") {
 																				echo " selected ";
 																			} ?>>Any</option>
-                                                <option value="2ply" <?php if ($min_thickness == "2ply") {
+														<option value="2ply" <?php if ($min_thickness == "2ply") {
 																					echo " selected ";
 																				} ?>>2ply or more</option>
-                                                <option value="3ply" <?php if ($min_thickness == "3ply") {
+														<option value="3ply" <?php if ($min_thickness == "3ply") {
 																					echo " selected ";
 																				} ?>>3ply or more</option>
-                                                <option value="4ply" <?php if ($min_thickness == "4ply") {
+														<option value="4ply" <?php if ($min_thickness == "4ply") {
 																					echo " selected ";
 																				} ?>>4ply or more</option>
-                                                <option value="5ply" <?php if ($min_thickness == "5ply") {
+														<option value="5ply" <?php if ($min_thickness == "5ply") {
 																					echo " selected ";
 																				} ?>>5ply or more</option>
-                                                <option value="6ply" <?php if ($min_thickness == "6ply") {
+														<option value="6ply" <?php if ($min_thickness == "6ply") {
 																					echo " selected ";
 																				} ?>>6ply or more</option>
-                                                <option value="7ply" <?php if ($min_thickness == "7ply") {
+														<option value="7ply" <?php if ($min_thickness == "7ply") {
 																					echo " selected ";
 																				} ?>>7ply or more</option>
-                                                <option value="8ply" <?php if ($min_thickness == "8ply") {
+														<option value="8ply" <?php if ($min_thickness == "8ply") {
 																					echo " selected ";
 																				} ?>>8ply or more</option>
-                                                <option value="9ply" <?php if ($min_thickness == "9ply") {
+														<option value="9ply" <?php if ($min_thickness == "9ply") {
 																					echo " selected ";
 																				} ?>>9ply or more</option>
-                                                <option value="10ply" <?php if ($min_thickness == "10ply") {
+														<option value="10ply" <?php if ($min_thickness == "10ply") {
 																					echo " selected ";
 																				} ?>>10ply or more</option>
-                                            </select>
-                                        </td>
-                                    </tr>
+													</select>
+												</td>
+											</tr>
 
-                                    <tr>
-                                        <td>Max FOB:</td>
-                                        <td width="5px;">$</td>
-                                        <td colspan="3">
-                                            <input type="input" id="min_fob" name="min_fob"
-                                                value="<?php echo $min_fob; ?>" style="font-size:8pt;" />
-                                        </td>
-                                    </tr>
-                                </table>
+											<tr>
+												<td>Max FOB:</td>
+												<td width="5px;">$</td>
+												<td colspan="3">
+													<input type="input" id="min_fob" name="min_fob" value="<?php echo $min_fob; ?>" style="font-size:8pt;" />
+												</td>
+											</tr>
+										</table>
 
-                                <table width="" style="font-size:8pt;">
-                                    <!-- Mexico<input type="checkbox" id="_REQUEST["chkterritory"]" name="_REQUEST["chkterritory"]" value="mexico_reg" <?php if ($_REQUEST["chkterritory"] == "mexico_reg") {
+										<table width="" style="font-size:8pt;">
+											<!-- Mexico<input type="checkbox" id="_REQUEST["chkterritory"]" name="_REQUEST["chkterritory"]" value="mexico_reg" <?php if ($_REQUEST["chkterritory"] == "mexico_reg") {
 																																									echo " checked ";
 																																								} ?>/> -->
-                                    <tr>
-                                        <td>Territory:</td>
-                                        <td width="5px;">&nbsp;</td>
-                                        <td colspan="3">
-                                            <input type="checkbox" id="chkterritory_canada_east"
-                                                name="chkterritory_canada_east" value="canada_east" <?php if ($_REQUEST["chkterritory_canada_east"] == "canada_east") {
+											<tr>
+												<td>Territory:</td>
+												<td width="5px;">&nbsp;</td>
+												<td colspan="3">
+													<input type="checkbox" id="chkterritory_canada_east" name="chkterritory_canada_east" value="canada_east" <?php if ($_REQUEST["chkterritory_canada_east"] == "canada_east") {
 																																									echo " checked ";
 																																								} ?> />Canada East
-                                            <input type="checkbox" id="chkterritoryeast_reg" name="chkterritoryeast_reg"
-                                                value="east_reg" <?php if ($_REQUEST["chkterritoryeast_reg"] == "east_reg") {
+													<input type="checkbox" id="chkterritoryeast_reg" name="chkterritoryeast_reg" value="east_reg" <?php if ($_REQUEST["chkterritoryeast_reg"] == "east_reg") {
 																																						echo " checked ";
 																																					} ?> />East
-                                            <input type="checkbox" id="chkterritorysouth_reg"
-                                                name="chkterritorysouth_reg" value="south_reg" <?php if ($_REQUEST["chkterritorysouth_reg"] == "south_reg") {
+													<input type="checkbox" id="chkterritorysouth_reg" name="chkterritorysouth_reg" value="south_reg" <?php if ($_REQUEST["chkterritorysouth_reg"] == "south_reg") {
 																																							echo " checked ";
 																																						} ?> />South
-                                            <input type="checkbox" id="chkterritorymidwest_reg"
-                                                name="chkterritorymidwest_reg" value="midwest_reg" <?php if ($_REQUEST["chkterritorymidwest_reg"] == "midwest_reg") {
+													<input type="checkbox" id="chkterritorymidwest_reg" name="chkterritorymidwest_reg" value="midwest_reg" <?php if ($_REQUEST["chkterritorymidwest_reg"] == "midwest_reg") {
 																																								echo " checked ";
 																																							} ?> />Midwest
-                                            <input type="checkbox" id="chkterritorynorthcenteral_reg"
-                                                name="chkterritorynorthcenteral_reg" value="northcenteral_reg" <?php if ($_REQUEST["chkterritorynorthcenteral_reg"] == "northcenteral_reg") {
+													<input type="checkbox" id="chkterritorynorthcenteral_reg" name="chkterritorynorthcenteral_reg" value="northcenteral_reg" <?php if ($_REQUEST["chkterritorynorthcenteral_reg"] == "northcenteral_reg") {
 																																													echo " checked ";
 																																												} ?> />North Central
-                                            <input type="checkbox" id="chkterritorysouthcenteral_reg"
-                                                name="chkterritorysouthcenteral_reg" value="southcenteral_reg" <?php if ($_REQUEST["chkterritorysouthcenteral_reg"] == "southcenteral_reg") {
+													<input type="checkbox" id="chkterritorysouthcenteral_reg" name="chkterritorysouthcenteral_reg" value="southcenteral_reg" <?php if ($_REQUEST["chkterritorysouthcenteral_reg"] == "southcenteral_reg") {
 																																													echo " checked ";
 																																												} ?> />South Central
 
-                                            <input type="checkbox" id="chkterritory_canada_west"
-                                                name="chkterritory_canada_west" value="canada_west" <?php if ($_REQUEST["chkterritory_canada_west"] == "canada_west") {
+													<input type="checkbox" id="chkterritory_canada_west" name="chkterritory_canada_west" value="canada_west" <?php if ($_REQUEST["chkterritory_canada_west"] == "canada_west") {
 																																									echo " checked ";
 																																								} ?> />Canada West
 
-                                            <input type="checkbox" id="chkterritorypacific_reg"
-                                                name="chkterritorypacific_reg" value="pacific_reg" <?php if ($_REQUEST["chkterritorypacific_reg"] == "pacific_reg") {
+													<input type="checkbox" id="chkterritorypacific_reg" name="chkterritorypacific_reg" value="pacific_reg" <?php if ($_REQUEST["chkterritorypacific_reg"] == "pacific_reg") {
 																																								echo " checked ";
 																																							} ?> />Pacific Northwest
-                                            <input type="checkbox" id="chkterritorywestern_reg"
-                                                name="chkterritorywestern_reg" value="western_reg" <?php if ($_REQUEST["chkterritorywestern_reg"] == "western_reg") {
+													<input type="checkbox" id="chkterritorywestern_reg" name="chkterritorywestern_reg" value="western_reg" <?php if ($_REQUEST["chkterritorywestern_reg"] == "western_reg") {
 																																								echo " checked ";
 																																							} ?> />Western
 
-                                            <input type="checkbox" id="chkterritorymexico_reg"
-                                                name="chkterritorymexico_reg" value="mexico_reg" <?php if ($_REQUEST["chkterritorymexico_reg"] == "mexico_reg") {
+													<input type="checkbox" id="chkterritorymexico_reg" name="chkterritorymexico_reg" value="mexico_reg" <?php if ($_REQUEST["chkterritorymexico_reg"] == "mexico_reg") {
 																																							echo " checked ";
 																																						} ?> />Mexico
 
-                                            <!-- <input type="checkbox" id="chkterritoryother_reg" name="chkterritoryother_reg" value="other_reg" <?php if ($_REQUEST["chkterritoryother_reg"] == "other_reg") {
+													<!-- <input type="checkbox" id="chkterritoryother_reg" name="chkterritoryother_reg" value="other_reg" <?php if ($_REQUEST["chkterritoryother_reg"] == "other_reg") {
 																																								echo " checked ";
 																																							} ?>/>Other -->
 
-                                            <input type="hidden" name="prod_cnt" id="prod_cnt"
-                                                value="<?php echo $prod_cnt; ?>">
-                                            <input type="submit" id="filter_btn" name="filter_btn"
-                                                style="font-size:8pt;" value="Apply Filter" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>&nbsp;</td>
-                                        <td width="5px;">&nbsp;</td>
-                                        <td colspan="3">
-                                            <a target="_blank" href="gaylordstatus.php">Edit Non-Inventory</a>
-                                        </td>
-                                    </tr>
-                                </table>
+													<input type="hidden" name="prod_cnt" id="prod_cnt" value="<?php echo $prod_cnt; ?>">
+													<input type="submit" id="filter_btn" name="filter_btn" style="font-size:8pt;" value="Apply Filter" />
+												</td>
+											</tr>
+											<tr>
+												<td>&nbsp;</td>
+												<td width="5px;">&nbsp;</td>
+												<td colspan="3">
+													<a target="_blank" href="gaylordstatus.php">Edit Non-Inventory</a>
+												</td>
+											</tr>
+										</table>
 
-                                <?php
+										<?php
 										$prod_cnt = 0; ?>
-                                <div id="inv_main_div">
-                                </div>
-                                <?php } else { ?>
-                                <div id="inv_main_div">
-                                    <table id="inv_child_div" width="300px" style="font-size:8pt;">
-                                        <tr>
-                                            <td>Type:</td>
-                                            <td width="5px;">&nbsp;</td>
-                                            <td colspan="3">
-                                                <select style="font-size:8pt;" name="filter_type" id="filter_type">
-                                                    <option value="All">All types</option>
-                                                    <option value="Gaylords">Gaylords</option>
-                                                    <option value="Shipping Boxes">Shipping Boxes</option>
-                                                    <option value="Supersacks">Supersacks</option>
-                                                    <option value="DrumsBarrelsIBCs">Drums/Barrels/IBCs</option>
-                                                    <option value="Pallets">Pallets</option>
-                                                    <option value="Recycling">Recycling</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Availability:</td>
-                                            <td width="5px;">&nbsp;</td>
-                                            <td colspan="3">
-                                                <select style="font-size:8pt;" name="filter_availability"
-                                                    id="filter_availability">
-                                                    <option value="All">All</option>
-                                                    <option value="truckloadonly">>= Truckload Only</option>
-                                                    <option value="anyavailableboxes">Any Available Boxes Only</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Height:</td>
-                                            <td width="5px;">&nbsp;</td>
-                                            <td>
-                                                <input type="input" id="min_height" name="min_height" value="0"
-                                                    style="font-size:8pt;" />
-                                            </td>
-                                            <td>
-                                                To
-                                            </td>
-                                            <td>
-                                                <input type="input" id="max_height" name="max_height" value="100"
-                                                    style="font-size:8pt;" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Min Thickness:</td>
-                                            <td width="5px;">&nbsp;</td>
-                                            <td colspan="3">
-                                                <select style="font-size:8pt;" name="min_thickness" id="min_thickness">
-                                                    <option value="Any">Any</option>
-                                                    <option value="2ply">2ply or more</option>
-                                                    <option value="3ply">3ply or more</option>
-                                                    <option value="4ply">4ply or more</option>
-                                                    <option value="5ply">5ply or more</option>
-                                                    <option value="6ply">6ply or more</option>
-                                                    <option value="7ply">7ply or more</option>
-                                                    <option value="8ply">8ply or more</option>
-                                                    <option value="9ply">9ply or more</option>
-                                                    <option value="10ply">10ply or more</option>
-                                                </select>
-                                            </td>
-                                        </tr>
+										<div id="inv_main_div">
+										</div>
+									<?php } else { ?>
+										<div id="inv_main_div">
+											<table id="inv_child_div" width="300px" style="font-size:8pt;">
+												<tr>
+													<td>Type:</td>
+													<td width="5px;">&nbsp;</td>
+													<td colspan="3">
+														<select style="font-size:8pt;" name="filter_type" id="filter_type">
+															<option value="All">All types</option>
+															<option value="Gaylords">Gaylords</option>
+															<option value="Shipping Boxes">Shipping Boxes</option>
+															<option value="Supersacks">Supersacks</option>
+															<option value="DrumsBarrelsIBCs">Drums/Barrels/IBCs</option>
+															<option value="Pallets">Pallets</option>
+															<option value="Recycling">Recycling</option>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<td>Availability:</td>
+													<td width="5px;">&nbsp;</td>
+													<td colspan="3">
+														<select style="font-size:8pt;" name="filter_availability" id="filter_availability">
+															<option value="All">All</option>
+															<option value="truckloadonly">>= Truckload Only</option>
+															<option value="anyavailableboxes">Any Available Boxes Only</option>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<td>Height:</td>
+													<td width="5px;">&nbsp;</td>
+													<td>
+														<input type="input" id="min_height" name="min_height" value="0" style="font-size:8pt;" />
+													</td>
+													<td>
+														To
+													</td>
+													<td>
+														<input type="input" id="max_height" name="max_height" value="100" style="font-size:8pt;" />
+													</td>
+												</tr>
+												<tr>
+													<td>Min Thickness:</td>
+													<td width="5px;">&nbsp;</td>
+													<td colspan="3">
+														<select style="font-size:8pt;" name="min_thickness" id="min_thickness">
+															<option value="Any">Any</option>
+															<option value="2ply">2ply or more</option>
+															<option value="3ply">3ply or more</option>
+															<option value="4ply">4ply or more</option>
+															<option value="5ply">5ply or more</option>
+															<option value="6ply">6ply or more</option>
+															<option value="7ply">7ply or more</option>
+															<option value="8ply">8ply or more</option>
+															<option value="9ply">9ply or more</option>
+															<option value="10ply">10ply or more</option>
+														</select>
+													</td>
+												</tr>
 
-                                        <tr>
-                                            <td>Max FOB:</td>
-                                            <td width="5px;">$</td>
-                                            <td colspan="3">
-                                                <input type="input" id="min_fob" name="min_fob" value="100.00"
-                                                    style="font-size:8pt;" />
-                                            </td>
-                                        </tr>
-                                    </table>
+												<tr>
+													<td>Max FOB:</td>
+													<td width="5px;">$</td>
+													<td colspan="3">
+														<input type="input" id="min_fob" name="min_fob" value="100.00" style="font-size:8pt;" />
+													</td>
+												</tr>
+											</table>
 
-                                    <table width="" style="font-size:8pt;">
-                                        <tr>
-                                            <td>Territory:</td>
-                                            <td width="5px;">&nbsp;</td>
-                                            <td colspan="3">
-                                                <input type="checkbox" id="chkterritory_canada_east"
-                                                    name="chkterritory_canada_east" value="canada_east" checked />Canada
-                                                East
-                                                <input type="checkbox" id="chkterritoryeast_reg"
-                                                    name="chkterritoryeast_reg" value="east_reg" checked />East
-                                                <input type="checkbox" id="chkterritorysouth_reg"
-                                                    name="chkterritorysouth_reg" value="south_reg" checked />South
-                                                <input type="checkbox" id="chkterritorymidwest_reg"
-                                                    name="chkterritorymidwest_reg" value="midwest_reg" checked />Midwest
-                                                <input type="checkbox" id="chkterritorynorthcenteral_reg"
-                                                    name="chkterritorynorthcenteral_reg" value="northcenteral_reg"
-                                                    checked />North Central
-                                                <input type="checkbox" id="chkterritorysouthcenteral_reg"
-                                                    name="chkterritorysouthcenteral_reg" value="southcenteral_reg"
-                                                    checked />South Central
+											<table width="" style="font-size:8pt;">
+												<tr>
+													<td>Territory:</td>
+													<td width="5px;">&nbsp;</td>
+													<td colspan="3">
+														<input type="checkbox" id="chkterritory_canada_east" name="chkterritory_canada_east" value="canada_east" checked />Canada
+														East
+														<input type="checkbox" id="chkterritoryeast_reg" name="chkterritoryeast_reg" value="east_reg" checked />East
+														<input type="checkbox" id="chkterritorysouth_reg" name="chkterritorysouth_reg" value="south_reg" checked />South
+														<input type="checkbox" id="chkterritorymidwest_reg" name="chkterritorymidwest_reg" value="midwest_reg" checked />Midwest
+														<input type="checkbox" id="chkterritorynorthcenteral_reg" name="chkterritorynorthcenteral_reg" value="northcenteral_reg" checked />North Central
+														<input type="checkbox" id="chkterritorysouthcenteral_reg" name="chkterritorysouthcenteral_reg" value="southcenteral_reg" checked />South Central
 
-                                                <input type="checkbox" id="chkterritory_canada_west"
-                                                    name="chkterritory_canada_west" value="canada_west" checked />Canada
-                                                West
+														<input type="checkbox" id="chkterritory_canada_west" name="chkterritory_canada_west" value="canada_west" checked />Canada
+														West
 
-                                                <input type="checkbox" id="chkterritorypacific_reg"
-                                                    name="chkterritorypacific_reg" value="pacific_reg" checked />Pacific
-                                                Northwest
-                                                <input type="checkbox" id="chkterritorywestern_reg"
-                                                    name="chkterritorywestern_reg" value="western_reg" checked />Western
+														<input type="checkbox" id="chkterritorypacific_reg" name="chkterritorypacific_reg" value="pacific_reg" checked />Pacific
+														Northwest
+														<input type="checkbox" id="chkterritorywestern_reg" name="chkterritorywestern_reg" value="western_reg" checked />Western
 
-                                                <input type="checkbox" id="chkterritorymexico_reg"
-                                                    name="chkterritorymexico_reg" value="mexico_reg" checked />Mexico
+														<input type="checkbox" id="chkterritorymexico_reg" name="chkterritorymexico_reg" value="mexico_reg" checked />Mexico
 
-                                                <!-- <input type="checkbox" id="chkterritoryother_reg" name="chkterritoryother_reg" value="other_reg" checked />Other -->
+														<!-- <input type="checkbox" id="chkterritoryother_reg" name="chkterritoryother_reg" value="other_reg" checked />Other -->
 
-                                                <input type="hidden" name="prod_cnt" id="prod_cnt"
-                                                    value="<?php echo $prod_cnt; ?>">
-                                                <input type="submit" id="filter_btn" name="filter_btn"
-                                                    style="font-size:8pt;" value="Apply Filter" />
+														<input type="hidden" name="prod_cnt" id="prod_cnt" value="<?php echo $prod_cnt; ?>">
+														<input type="submit" id="filter_btn" name="filter_btn" style="font-size:8pt;" value="Apply Filter" />
 
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>&nbsp;</td>
-                                            <td width="5px;">&nbsp;</td>
-                                            <td colspan="3">
-                                                <a target="_blank" href="gaylordstatus.php">Edit Non-Inventory</a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                        </tr>
-                        </div>
-                        <?php } ?>
-            </td>
-        </tr>
-    </table>
-    </form>
-    </td>
-    </tr>
-    <?php
+													</td>
+												</tr>
+												<tr>
+													<td>&nbsp;</td>
+													<td width="5px;">&nbsp;</td>
+													<td colspan="3">
+														<a target="_blank" href="gaylordstatus.php">Edit Non-Inventory</a>
+													</td>
+												</tr>
+											</table>
+							</tr>
+							</div>
+						<?php } ?>
+				</td>
+			</tr>
+		</table>
+		</form>
+		</td>
+		</tr>
+		<?php
 
 		//To chk the condition
 		if ($_REQUEST["filter_btn"] == "Apply Filter") {
@@ -8358,12 +6819,12 @@ if ($_REQUEST["show"] == "search") {
 			*/
 		}
 		?>
-    <tr align="middle">
-        <td colspan="12" style="height: 16px">&nbsp;</td>
-    </tr>
+		<tr align="middle">
+			<td colspan="12" style="height: 16px">&nbsp;</td>
+		</tr>
 
 
-    <?php
+		<?php
 		$top_head_flg = "no";
 		$top_head_flg_output = "no";
 		$x = 0;
@@ -8616,7 +7077,7 @@ if ($_REQUEST["show"] == "search") {
 
 		?>
 
-    <?php
+			<?php
 			$bpallet_qty = 0;
 			$boxes_per_trailer = 0;
 			$qry = "select sku, bpallet_qty, boxes_per_trailer from loop_boxes where id=" . $loop["id"];
@@ -8681,210 +7142,144 @@ if ($_REQUEST["show"] == "search") {
 					$top_head_flg = "yes";
 			?>
 
-    <tr align="middle">
-        <div id="light" class="white_content"></div>
-        <div id="fade" class="black_overlay"></div>
-        <td colspan="12" class="style24" style="height: 16px"><strong>Non-UCB Gaylord Totes Inventory</strong></td>
-    </tr>
+					<tr align="middle">
+						<div id="light" class="white_content"></div>
+						<div id="fade" class="black_overlay"></div>
+						<td colspan="12" class="style24" style="height: 16px"><strong>Non-UCB Gaylord Totes Inventory</strong></td>
+					</tr>
 
-    <tr>
-        <td colspan="14">
-            <div id="div_noninv_gaylord" name="div_noninv_gaylord">
-                <table cellSpacing="1" cellPadding="1" border="0" width="1200">
-                    <tr vAlign="left">
+					<tr>
+						<td colspan="14">
+							<div id="div_noninv_gaylord" name="div_noninv_gaylord">
+								<table cellSpacing="1" cellPadding="1" border="0" width="1200">
+									<tr vAlign="left">
 
-                        <td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(2,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(2,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+										<td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(2,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(2,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Loads/Mo&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(3,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(3,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+										<td bgColor="#e4e4e4" class="style12"><b>Loads/Mo&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(3,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(3,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Availability&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(4,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(4,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+										<td bgColor="#e4e4e4" class="style12"><b>Availability&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(4,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(4,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>B2B Status&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(16,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(16,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+										<td bgColor="#e4e4e4" class="style12"><b>B2B Status&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(16,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(16,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Account Owner&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbgaylord(17,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbgaylord(17,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+										<td bgColor="#e4e4e4" class="style12">
+											<font size=1><b>Account Owner&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(17,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(17,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+										</td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Supplier&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbgaylord(5,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                            height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbgaylord(5,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+										<td bgColor="#e4e4e4" class="style12">
+											<font size=1><b>Supplier&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(5,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(5,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+										</td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Ship From&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbgaylord(15,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbgaylord(15,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+										<td bgColor="#e4e4e4" class="style12">
+											<font size=1><b>Ship From&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(15,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(15,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+										</td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="100px;"><b>LxWxH&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(6,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(6,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></font>
-                        </td>
+										<td bgColor="#e4e4e4" class="style12" width="100px;"><b>LxWxH&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(6,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(6,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+										</td>
 
-                        <td bgColor="#e4e4e4" class="style12left"><b>Description&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(7,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(7,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></font>
-                        </td>
+										<td bgColor="#e4e4e4" class="style12left"><b>Description&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(7,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(7,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+										</td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Per Pallet&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(9,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(9,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+										<td bgColor="#e4e4e4" class="style12"><b>Per Pallet&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(9,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(9,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Per Trailer&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(10,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(10,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+										<td bgColor="#e4e4e4" class="style12"><b>Per Trailer&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(10,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(10,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="70px;"><b>Min FOB&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(11,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(11,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+										<td bgColor="#e4e4e4" class="style12" width="70px;"><b>Min FOB&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(11,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(11,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="70px;"><b>Cost&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(12,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(12,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+										<td bgColor="#e4e4e4" class="style12" width="70px;"><b>Cost&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(12,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(12,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Update&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(13,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(13,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+										<td bgColor="#e4e4e4" class="style12"><b>Update&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(13,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(13,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12left"><b>Notes&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(14,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbgaylord(14,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
-                    </tr>
-                    <?php } ?>
+										<td bgColor="#e4e4e4" class="style12left"><b>Notes&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(14,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbgaylord(14,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
+									</tr>
+								<?php } ?>
 
 
-                    <tr vAlign="center">
+								<tr vAlign="center">
 
-                        <?php if ($sales_order_qty_new > 0) { ?>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font color='blue' size=1>
-                                <div
-                                    onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $inv["loops_id"]; ?>, <?php echo $inv["vendor_b2b_rescue"]; ?>)">
-                                    <u><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?></u>
-                                </div>
-                            </font>
-                        </td>
-                        <?php } else { ?>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?>
-                            </font>
-                        </td>
-                        <?php } ?>
+									<?php if ($sales_order_qty_new > 0) { ?>
+										<td bgColor="<?php echo $bg; ?>" class="style12">
+											<font color='blue' size=1>
+												<div onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $inv["loops_id"]; ?>, <?php echo $inv["vendor_b2b_rescue"]; ?>)">
+													<u><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?></u>
+												</div>
+											</font>
+										</td>
+									<?php } else { ?>
+										<td bgColor="<?php echo $bg; ?>" class="style12">
+											<font size=1>
+												<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?>
+											</font>
+										</td>
+									<?php } ?>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["expected_loads_per_mo"]; ?>
-                            </font>
-                        </td>
+									<td bgColor="<?php echo $bg; ?>" class="style12">
+										<font size=1>
+											<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["expected_loads_per_mo"]; ?>
+										</font>
+									</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?>
-                            <?php if ($inv["availability"] == "3") echo "Available Now & Urgent"; ?>
-                            <?php if ($inv["availability"] == "2") echo "Available Now"; ?>
-                            <?php if ($inv["availability"] == "1") echo "Available Soon"; ?>
-                            <?php if ($inv["availability"] == "2.5") echo "Available >= 1TL"; ?>
-                            <?php if ($inv["availability"] == "2.15") echo "Available < 1TL"; ?>
-                            <?php if ($inv["availability"] == "-1") echo "Presell"; ?>
-                            <?php if ($inv["availability"] == "-2") echo "Active by Unavailable"; ?>
-                            <?php if ($inv["availability"] == "-3") echo "Potential"; ?>
-                            <?php if ($inv["availability"] == "-3.5") echo "Check Loops"; ?>
-                        </td>
+									<td bgColor="<?php echo $bg; ?>" class="style12">
+										<?php if ($inv["availability"] == "3") echo "<b>"; ?>
+										<?php if ($inv["availability"] == "3") echo "Available Now & Urgent"; ?>
+										<?php if ($inv["availability"] == "2") echo "Available Now"; ?>
+										<?php if ($inv["availability"] == "1") echo "Available Soon"; ?>
+										<?php if ($inv["availability"] == "2.5") echo "Available >= 1TL"; ?>
+										<?php if ($inv["availability"] == "2.15") echo "Available < 1TL"; ?>
+										<?php if ($inv["availability"] == "-1") echo "Presell"; ?>
+										<?php if ($inv["availability"] == "-2") echo "Active by Unavailable"; ?>
+										<?php if ($inv["availability"] == "-3") echo "Potential"; ?>
+										<?php if ($inv["availability"] == "-3.5") echo "Check Loops"; ?>
+									</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12"><?php echo $b2b_status; ?></td>
+									<td bgColor="<?php echo $bg; ?>" class="style12"><?php echo $b2b_status; ?></td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1><?php echo isset($ownername); ?></font>
-                        </td>
+									<td bgColor="<?php echo $bg; ?>" class="style12left">
+										<font size=1><?php echo isset($ownername); ?></font>
+									</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $vendor_name; ?></a>
-                            </font>
-                        </td>
+									<td bgColor="<?php echo $bg; ?>" class="style12left">
+										<font size=1>
+											<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $vendor_name; ?></a>
+										</font>
+									</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php echo $inv["location_city"] . ", " . $inv["location_state"] . " " . $inv["location_zip"]; ?>
-                            </font>
-                        </td>
+									<td bgColor="<?php echo $bg; ?>" class="style12left">
+										<font size=1>
+											<?php echo $inv["location_city"] . ", " . $inv["location_state"] . " " . $inv["location_zip"]; ?>
+										</font>
+									</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $inv["L"] . " x " . $inv["W"] . " x " . $inv["D"]; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><a
-                                    target="_blank"
-                                    href='manage_box_b2bloop.php?id=<?php echo $loop["id"]; ?>&proc=View'
-                                    id='box_div<?php echo $loop["id"]; ?>'><?php echo $inv["description"]; ?></a></font>
-                        </td>
+									<td bgColor="<?php echo $bg; ?>" class="style12">
+										<font size=1><?php echo $inv["L"] . " x " . $inv["W"] . " x " . $inv["D"]; ?></font>
+									</td>
+									<td bgColor="<?php echo $bg; ?>" class="style12left">
+										<font size=1>
+											<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><a target="_blank" href='manage_box_b2bloop.php?id=<?php echo $loop["id"]; ?>&proc=View' id='box_div<?php echo $loop["id"]; ?>'><?php echo $inv["description"]; ?></a></font>
+									</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $bpallet_qty; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo number_format($boxes_per_trailer, 0); ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo "$" . $b2b_fob; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo "$" . $b2b_cost; ?></font>
-                        </td>
+									<td bgColor="<?php echo $bg; ?>" class="style12">
+										<font size=1><?php echo $bpallet_qty; ?></font>
+									</td>
+									<td bgColor="<?php echo $bg; ?>" class="style12">
+										<font size=1><?php echo number_format($boxes_per_trailer, 0); ?></font>
+									</td>
+									<td bgColor="<?php echo $bg; ?>" class="style12">
+										<font size=1><?php echo "$" . $b2b_fob; ?></font>
+									</td>
+									<td bgColor="<?php echo $bg; ?>" class="style12">
+										<font size=1><?php echo "$" . $b2b_cost; ?></font>
+									</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["DT"] != "") echo timestamp_to_date($inv["DT"]); ?>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($loop["id"] < 0) { ?><a
-                                href='javascript:void();' id='box_div<?php echo $loop["id"]; ?>'
-                                onclick="displayboxdata(<?php echo $loop["id"]; ?>);"><?php echo $inv["N"]; ?></a><?php } else { ?><?php echo $inv["N"]; ?></a>
-                            <?php } ?></td>
-                    </tr>
+									<td bgColor="<?php echo $bg; ?>" class="style12left">
+										<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["DT"] != "") echo timestamp_to_date($inv["DT"]); ?>
+									</td>
+									<td bgColor="<?php echo $bg; ?>" class="style12left">
+										<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($loop["id"] < 0) { ?><a href='javascript:void();' id='box_div<?php echo $loop["id"]; ?>' onclick="displayboxdata(<?php echo $loop["id"]; ?>);"><?php echo $inv["N"]; ?></a><?php } else { ?><?php echo $inv["N"]; ?></a>
+									<?php } ?></td>
+								</tr>
 
-                    <?php
+								<?php
 								$inv_row = "<tr vAlign='center'><td bgColor='$bg' class='style12'><font size=1 >";
 								if ($inv['availability'] == '3') $inv_row .= "<b>";
 								$inv_row .= $inv['actual_inventory'] . "</font></td>";
@@ -9008,36 +7403,35 @@ if ($_REQUEST["show"] == "search") {
 								}
 
 								?>
-                    <tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle" style="display:none;">
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td colspan="14"
-                            style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
-                            <div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
-                        </td>
-                    </tr>
+								<tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle" style="display:none;">
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td colspan="14" style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
+										<div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
+									</td>
+								</tr>
 
-                    <?php
+							<?php
 							$count_arry = $count_arry + 1;
 						}
 					}
 
 					if ($top_head_flg_output == "yes") {
 							?>
-                </table>
-            </div>
-        </td>
-    </tr>
+								</table>
+							</div>
+						</td>
+					</tr>
 
-    <tr align="middle">
-        <td>&nbsp;</td>
-    </tr>
-    <?php } ?>
+					<tr align="middle">
+						<td>&nbsp;</td>
+					</tr>
+				<?php } ?>
 
-    <?php $top_head_flg = "no";
+				<?php $top_head_flg = "no";
 				$top_head_flg_output = "no"; ?>
 
-    <?php
+				<?php
 				$x = 0;
 
 				//$sql = "SELECT *, inventory.id AS I, inventory.lengthInch AS L, inventory.widthInch AS W, inventory.depthInch AS D, inventory.notes AS N, inventory.date AS DT, vendors.name AS VN, inventory.vendor AS V FROM inventory INNER JOIN vendors ON inventory.vendor = vendors.id WHERE inventory.box_type = 'Boxnonucb' AND inventory.Active LIKE 'A' AND inventory.availability != 0 AND inventory.availability != -4 AND inventory.availability != -2 AND inventory.availability != -3.5 $main_new_where_condition ORDER BY inventory.availability DESC, vendors.name ASC";
@@ -9149,7 +7543,7 @@ if ($_REQUEST["show"] == "search") {
 						$tipStr = $tipStr . ", Vents";
 				?>
 
-    <?php
+					<?php
 					$bpallet_qty = 0;
 					$boxes_per_trailer = 0;
 					$work_as_kit_box = 0;
@@ -9216,229 +7610,158 @@ if ($_REQUEST["show"] == "search") {
 
 							$top_head_flg = "yes";
 					?>
-    <tr align="middle">
-        <td colspan="13" class="style24" style="height: 16px"><strong>Non-UCB Shipping Boxes Inventory</strong></td>
-    </tr>
-    <tr>
-        <td colspan="13">
-            <div id="div_noninv_shipping" name="div_noninv_shipping">
-                <table cellSpacing="1" cellPadding="1" border="0" width="1200">
-                    <tr vAlign="left">
+							<tr align="middle">
+								<td colspan="13" class="style24" style="height: 16px"><strong>Non-UCB Shipping Boxes Inventory</strong></td>
+							</tr>
+							<tr>
+								<td colspan="13">
+									<div id="div_noninv_shipping" name="div_noninv_shipping">
+										<table cellSpacing="1" cellPadding="1" border="0" width="1200">
+											<tr vAlign="left">
 
 
-                        <td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(2,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(2,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+												<td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(2,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(2,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Loads/Mo&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(3,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(3,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+												<td bgColor="#e4e4e4" class="style12"><b>Loads/Mo&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(3,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(3,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Availability&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(4,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(4,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+												<td bgColor="#e4e4e4" class="style12"><b>Availability&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(4,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(4,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>B2B Status&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(16,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(16,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+												<td bgColor="#e4e4e4" class="style12"><b>B2B Status&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(16,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(16,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Account Owner&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbshipping(17,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbshipping(17,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+												<td bgColor="#e4e4e4" class="style12">
+													<font size=1><b>Account Owner&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(17,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(17,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+												</td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Supplier&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbshipping(5,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbshipping(5,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+												<td bgColor="#e4e4e4" class="style12">
+													<font size=1><b>Supplier&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(5,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(5,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+												</td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Ship From&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbshipping(15,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbshipping(15,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+												<td bgColor="#e4e4e4" class="style12">
+													<font size=1><b>Ship From&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(15,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(15,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+												</td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Work as a Kit box?&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbshipping(16,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbshipping(16,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+												<td bgColor="#e4e4e4" class="style12">
+													<font size=1><b>Work as a Kit box?&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(16,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(16,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+												</td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="100px;"><b>LxWxH&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(6,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(6,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></font>
-                        </td>
+												<td bgColor="#e4e4e4" class="style12" width="100px;"><b>LxWxH&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(6,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(6,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+												</td>
 
-                        <td bgColor="#e4e4e4" class="style12left"><b>Description&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(7,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(7,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></font>
-                        </td>
+												<td bgColor="#e4e4e4" class="style12left"><b>Description&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(7,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(7,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+												</td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Per Pallet&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(9,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(9,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+												<td bgColor="#e4e4e4" class="style12"><b>Per Pallet&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(9,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(9,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Per Trailer&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(10,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(10,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+												<td bgColor="#e4e4e4" class="style12"><b>Per Trailer&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(10,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(10,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="70px;"><b>Min FOB&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(11,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(11,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+												<td bgColor="#e4e4e4" class="style12" width="70px;"><b>Min FOB&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(11,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(11,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="70px;"><b>Cost&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(12,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(12,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+												<td bgColor="#e4e4e4" class="style12" width="70px;"><b>Cost&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(12,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(12,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Update&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(13,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(13,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+												<td bgColor="#e4e4e4" class="style12"><b>Update&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(13,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(13,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12left"><b>Notes&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(14,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbshipping(14,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
-                    </tr>
+												<td bgColor="#e4e4e4" class="style12left"><b>Notes&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(14,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbshipping(14,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
+											</tr>
 
-                    <tr vAlign="left">
-                        <td colspan=15>
-                            <?php } ?>
+											<tr vAlign="left">
+												<td colspan=15>
+												<?php } ?>
 
-                    <tr vAlign="center">
+											<tr vAlign="center">
 
-                        <?php if ($sales_order_qty_new > 0) { ?>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font color='blue' size=1>
-                                <div
-                                    onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $inv["loops_id"]; ?>, <?php echo $inv["vendor_b2b_rescue"]; ?>)">
-                                    <u><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?></u>
-                                </div>
-                            </font>
-                        </td>
-                        <?php } else { ?>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?>
-                            </font>
-                        </td>
-                        <?php } ?>
+												<?php if ($sales_order_qty_new > 0) { ?>
+													<td bgColor="<?php echo $bg; ?>" class="style12">
+														<font color='blue' size=1>
+															<div onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $inv["loops_id"]; ?>, <?php echo $inv["vendor_b2b_rescue"]; ?>)">
+																<u><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?></u>
+															</div>
+														</font>
+													</td>
+												<?php } else { ?>
+													<td bgColor="<?php echo $bg; ?>" class="style12">
+														<font size=1>
+															<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?>
+														</font>
+													</td>
+												<?php } ?>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["expected_loads_per_mo"]; ?>
-                            </font>
-                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<font size=1>
+														<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["expected_loads_per_mo"]; ?>
+													</font>
+												</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?>
-                            <?php if ($inv["availability"] == "3") echo "Available Now & Urgent"; ?>
-                            <?php if ($inv["availability"] == "2") echo "Available Now"; ?>
-                            <?php if ($inv["availability"] == "1") echo "Available Soon"; ?>
-                            <?php if ($inv["availability"] == "2.5") echo "Available >= 1TL"; ?>
-                            <?php if ($inv["availability"] == "2.15") echo "Available < 1TL"; ?>
-                            <?php if ($inv["availability"] == "-1") echo "Presell"; ?>
-                            <?php if ($inv["availability"] == "-2") echo "Active by Unavailable"; ?>
-                            <?php if ($inv["availability"] == "-3") echo "Potential"; ?>
-                            <?php if ($inv["availability"] == "-3.5") echo "Check Loops"; ?>
-                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<?php if ($inv["availability"] == "3") echo "<b>"; ?>
+													<?php if ($inv["availability"] == "3") echo "Available Now & Urgent"; ?>
+													<?php if ($inv["availability"] == "2") echo "Available Now"; ?>
+													<?php if ($inv["availability"] == "1") echo "Available Soon"; ?>
+													<?php if ($inv["availability"] == "2.5") echo "Available >= 1TL"; ?>
+													<?php if ($inv["availability"] == "2.15") echo "Available < 1TL"; ?>
+													<?php if ($inv["availability"] == "-1") echo "Presell"; ?>
+													<?php if ($inv["availability"] == "-2") echo "Active by Unavailable"; ?>
+													<?php if ($inv["availability"] == "-3") echo "Potential"; ?>
+													<?php if ($inv["availability"] == "-3.5") echo "Check Loops"; ?>
+												</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12"><?php echo $b2b_status; ?></td>
+												<td bgColor="<?php echo $bg; ?>" class="style12"><?php echo $b2b_status; ?></td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1><?php echo isset($ownername); ?></font>
-                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12left">
+													<font size=1><?php echo isset($ownername); ?></font>
+												</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $vendor_name; ?></a>
-                            </font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php echo $inv["location_city"] . ", " . $inv["location_state"] . " " . $inv["location_zip"]; ?>
-                            </font>
-                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12left">
+													<font size=1>
+														<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $vendor_name; ?></a>
+													</font>
+												</td>
+												<td bgColor="<?php echo $bg; ?>" class="style12left">
+													<font size=1>
+														<?php echo $inv["location_city"] . ", " . $inv["location_state"] . " " . $inv["location_zip"]; ?>
+													</font>
+												</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $work_as_kit_box; ?></font>
-                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<font size=1><?php echo $work_as_kit_box; ?></font>
+												</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $inv["L"] . " x " . $inv["W"] . " x " . $inv["D"]; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><a
-                                    target="_blank"
-                                    href='manage_box_b2bloop.php?id=<?php echo $loop["id"]; ?>&proc=View'
-                                    id='box_div<?php echo $loop["id"]; ?>'><?php echo $inv["description"]; ?></a></font>
-                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<font size=1><?php echo $inv["L"] . " x " . $inv["W"] . " x " . $inv["D"]; ?></font>
+												</td>
+												<td bgColor="<?php echo $bg; ?>" class="style12left">
+													<font size=1>
+														<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><a target="_blank" href='manage_box_b2bloop.php?id=<?php echo $loop["id"]; ?>&proc=View' id='box_div<?php echo $loop["id"]; ?>'><?php echo $inv["description"]; ?></a></font>
+												</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $bpallet_qty; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo number_format($boxes_per_trailer, 0); ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $b2b_fob; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $b2b_cost; ?></font>
-                        </td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<font size=1><?php echo $bpallet_qty; ?></font>
+												</td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<font size=1><?php echo number_format($boxes_per_trailer, 0); ?></font>
+												</td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<font size=1><?php echo $b2b_fob; ?></font>
+												</td>
+												<td bgColor="<?php echo $bg; ?>" class="style12">
+													<font size=1><?php echo $b2b_cost; ?></font>
+												</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["DT"] != "") echo timestamp_to_date($inv["DT"]); ?>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($loop["id"] < 0) { ?><a
-                                href='javascript:void();' id='box_div<?php echo $loop["id"]; ?>'
-                                onclick="displayboxdata(<?php echo $loop["id"]; ?>);"><?php echo $inv["N"]; ?></a><?php } else { ?><?php echo $inv["N"]; ?></a>
-                            <?php } ?></td>
+												<td bgColor="<?php echo $bg; ?>" class="style12left">
+													<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["DT"] != "") echo timestamp_to_date($inv["DT"]); ?>
+												</td>
+												<td bgColor="<?php echo $bg; ?>" class="style12left">
+													<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($loop["id"] < 0) { ?><a href='javascript:void();' id='box_div<?php echo $loop["id"]; ?>' onclick="displayboxdata(<?php echo $loop["id"]; ?>);"><?php echo $inv["N"]; ?></a><?php } else { ?><?php echo $inv["N"]; ?></a>
+												<?php } ?></td>
 
-                    <tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle" style="display:none;">
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td colspan="14"
-                            style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
-                            <div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
-                        </td>
-                    </tr>
+											<tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle" style="display:none;">
+												<td>&nbsp;</td>
+												<td>&nbsp;</td>
+												<td colspan="14" style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
+													<div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
+												</td>
+											</tr>
 
-                    <?php
+											<?php
 											$inv_row = "<tr vAlign='center'><td bgColor='$bg' class='style12'><font size=1 >";
 											if ($inv['availability'] == '3') $inv_row .= "<b>";
 											$inv_row .= $inv['actual_inventory'] . "</font></td>";
@@ -9562,27 +7885,27 @@ if ($_REQUEST["show"] == "search") {
 											}
 											?>
 
-                    <?php
+										<?php
 										$count_arry = $count_arry + 1;
 									}
 								}
 
 								if ($top_head_flg_output == "yes") {
 										?>
-                </table>
-            </div>
-        </td>
-    </tr>
+										</table>
+									</div>
+								</td>
+							</tr>
 
-    <tr align="middle">
-        <td>&nbsp;</td>
-    </tr>
-    <?php }
+							<tr align="middle">
+								<td>&nbsp;</td>
+							</tr>
+						<?php }
 								$top_head_flg = "no";
 								$top_head_flg_output = "no";
 						?>
 
-    <?php
+						<?php
 						$x = 0;
 
 						//$sql = "SELECT *, inventory.id AS I, inventory.lengthInch AS L, inventory.widthInch AS W, inventory.depthInch AS D, inventory.notes AS N, inventory.date AS DT, vendors.name AS VN, inventory.vendor AS V FROM inventory INNER JOIN vendors ON inventory.vendor = vendors.id WHERE inventory.box_type = 'SupersacknonUCB' AND inventory.Active LIKE 'A' AND inventory.availability != 0 AND inventory.availability != -4 AND inventory.availability != -2 AND inventory.availability != -3.5 $main_new_where_condition ORDER BY inventory.availability DESC, vendors.name ASC";
@@ -9700,7 +8023,7 @@ if ($_REQUEST["show"] == "search") {
 								$tipStr = $tipStr . ", Vents";
 						?>
 
-    <?php
+							<?php
 							$bpallet_qty = 0;
 							$boxes_per_trailer = 0;
 							$qry = "select sku, bpallet_qty, boxes_per_trailer from loop_boxes where id=" . $loop["id"];
@@ -9765,215 +8088,148 @@ if ($_REQUEST["show"] == "search") {
 
 									$top_head_flg = "yes";
 							?>
-    <tr align="middle">
-        <td colspan="13" class="style24" style="height: 16px"><strong>Non-UCB Supersack Inventory</strong></td>
-    </tr>
-    <tr>
-        <td colspan="13">
-            <div id="div_noninv_supersack" name="div_noninv_supersack">
-                <table cellSpacing="1" cellPadding="1" border="0" width="1200">
-                    <tr vAlign="left">
-                        <td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(2,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(2,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+									<tr align="middle">
+										<td colspan="13" class="style24" style="height: 16px"><strong>Non-UCB Supersack Inventory</strong></td>
+									</tr>
+									<tr>
+										<td colspan="13">
+											<div id="div_noninv_supersack" name="div_noninv_supersack">
+												<table cellSpacing="1" cellPadding="1" border="0" width="1200">
+													<tr vAlign="left">
+														<td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(2,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(2,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Loads/Mo&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(3,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(3,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+														<td bgColor="#e4e4e4" class="style12"><b>Loads/Mo&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(3,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(3,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Availability&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(4,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(4,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+														<td bgColor="#e4e4e4" class="style12"><b>Availability&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(4,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(4,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>B2B Status&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(16,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(16,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+														<td bgColor="#e4e4e4" class="style12"><b>B2B Status&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(16,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(16,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Account Owner&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbsupersack(17,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbsupersack(17,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+														<td bgColor="#e4e4e4" class="style12">
+															<font size=1><b>Account Owner&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(17,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(17,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+														</td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Supplier&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbsupersack(5,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbsupersack(5,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+														<td bgColor="#e4e4e4" class="style12">
+															<font size=1><b>Supplier&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(5,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(5,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+														</td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Ship From&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbsupersack(15,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbsupersack(15,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+														<td bgColor="#e4e4e4" class="style12">
+															<font size=1><b>Ship From&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(15,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(15,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+														</td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="100px;"><b>LxWxH&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(6,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(6,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></font>
-                        </td>
+														<td bgColor="#e4e4e4" class="style12" width="100px;"><b>LxWxH&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(6,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(6,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+														</td>
 
-                        <td bgColor="#e4e4e4" class="style12left"><b>Description&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(7,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(7,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></font>
-                        </td>
+														<td bgColor="#e4e4e4" class="style12left"><b>Description&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(7,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(7,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+														</td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Per Pallet&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(9,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(9,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+														<td bgColor="#e4e4e4" class="style12"><b>Per Pallet&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(9,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(9,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Per Trailer&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(10,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(10,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+														<td bgColor="#e4e4e4" class="style12"><b>Per Trailer&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(10,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(10,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="70px;"><b>Min FOB&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(11,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(11,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+														<td bgColor="#e4e4e4" class="style12" width="70px;"><b>Min FOB&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(11,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(11,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="70px;"><b>Cost&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(12,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(12,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+														<td bgColor="#e4e4e4" class="style12" width="70px;"><b>Cost&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(12,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(12,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Update&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(13,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(13,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+														<td bgColor="#e4e4e4" class="style12"><b>Update&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(13,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(13,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12left"><b>Notes&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(14,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbsupersack(14,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
-                    </tr>
+														<td bgColor="#e4e4e4" class="style12left"><b>Notes&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(14,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbsupersack(14,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
+													</tr>
 
-                    <tr vAlign="left">
-                        <td colspan=15>
-                            <?php } ?>
+													<tr vAlign="left">
+														<td colspan=15>
+														<?php } ?>
 
-                    <tr vAlign="center">
+													<tr vAlign="center">
 
-                        <?php if ($sales_order_qty_new > 0) { ?>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font color='blue' size=1>
-                                <div
-                                    onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $inv["loops_id"]; ?>, <?php echo $inv["vendor_b2b_rescue"]; ?>)">
-                                    <u><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?></u>
-                                </div>
-                            </font>
-                        </td>
-                        <?php } else { ?>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?>
-                            </font>
-                        </td>
-                        <?php } ?>
+														<?php if ($sales_order_qty_new > 0) { ?>
+															<td bgColor="<?php echo $bg; ?>" class="style12">
+																<font color='blue' size=1>
+																	<div onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $inv["loops_id"]; ?>, <?php echo $inv["vendor_b2b_rescue"]; ?>)">
+																		<u><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?></u>
+																	</div>
+																</font>
+															</td>
+														<?php } else { ?>
+															<td bgColor="<?php echo $bg; ?>" class="style12">
+																<font size=1>
+																	<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?>
+																</font>
+															</td>
+														<?php } ?>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["expected_loads_per_mo"]; ?></a>
-                            </font>
-                        </td>
+														<td bgColor="<?php echo $bg; ?>" class="style12">
+															<font size=1>
+																<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["expected_loads_per_mo"]; ?></a>
+															</font>
+														</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?>
-                            <?php if ($inv["availability"] == "3") echo "Available Now & Urgent"; ?>
-                            <?php if ($inv["availability"] == "2") echo "Available Now"; ?>
-                            <?php if ($inv["availability"] == "1") echo "Available Soon"; ?>
-                            <?php if ($inv["availability"] == "2.5") echo "Available >= 1TL"; ?>
-                            <?php if ($inv["availability"] == "2.15") echo "Available < 1TL"; ?>
-                            <?php if ($inv["availability"] == "-1") echo "Presell"; ?>
-                            <?php if ($inv["availability"] == "-2") echo "Active by Unavailable"; ?>
-                            <?php if ($inv["availability"] == "-3") echo "Potential"; ?>
-                            <?php if ($inv["availability"] == "-3.5") echo "Check Loops"; ?>
-                        </td>
+														<td bgColor="<?php echo $bg; ?>" class="style12">
+															<?php if ($inv["availability"] == "3") echo "<b>"; ?>
+															<?php if ($inv["availability"] == "3") echo "Available Now & Urgent"; ?>
+															<?php if ($inv["availability"] == "2") echo "Available Now"; ?>
+															<?php if ($inv["availability"] == "1") echo "Available Soon"; ?>
+															<?php if ($inv["availability"] == "2.5") echo "Available >= 1TL"; ?>
+															<?php if ($inv["availability"] == "2.15") echo "Available < 1TL"; ?>
+															<?php if ($inv["availability"] == "-1") echo "Presell"; ?>
+															<?php if ($inv["availability"] == "-2") echo "Active by Unavailable"; ?>
+															<?php if ($inv["availability"] == "-3") echo "Potential"; ?>
+															<?php if ($inv["availability"] == "-3.5") echo "Check Loops"; ?>
+														</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12"><?php echo $b2b_status; ?></td>
+														<td bgColor="<?php echo $bg; ?>" class="style12"><?php echo $b2b_status; ?></td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1><?php echo isset($ownername); ?></font>
-                        </td>
+														<td bgColor="<?php echo $bg; ?>" class="style12left">
+															<font size=1><?php echo isset($ownername); ?></font>
+														</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $vendor_name; ?></a>
-                            </font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php echo $inv["location_city"] . ", " . $inv["location_state"] . " " . $inv["location_zip"]; ?>
-                            </font>
-                        </td>
+														<td bgColor="<?php echo $bg; ?>" class="style12left">
+															<font size=1>
+																<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $vendor_name; ?></a>
+															</font>
+														</td>
+														<td bgColor="<?php echo $bg; ?>" class="style12left">
+															<font size=1>
+																<?php echo $inv["location_city"] . ", " . $inv["location_state"] . " " . $inv["location_zip"]; ?>
+															</font>
+														</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $inv["L"] . " x " . $inv["W"] . " x " . $inv["D"]; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><a
-                                    target="_blank"
-                                    href='manage_box_b2bloop.php?id=<?php echo $loop["id"]; ?>&proc=View'
-                                    id='box_div<?php echo $loop["id"]; ?>'><?php echo $inv["description"]; ?></a></font>
-                        </td>
+														<td bgColor="<?php echo $bg; ?>" class="style12">
+															<font size=1><?php echo $inv["L"] . " x " . $inv["W"] . " x " . $inv["D"]; ?></font>
+														</td>
+														<td bgColor="<?php echo $bg; ?>" class="style12left">
+															<font size=1>
+																<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><a target="_blank" href='manage_box_b2bloop.php?id=<?php echo $loop["id"]; ?>&proc=View' id='box_div<?php echo $loop["id"]; ?>'><?php echo $inv["description"]; ?></a></font>
+														</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $bpallet_qty; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo number_format($boxes_per_trailer, 0); ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $b2b_fob; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $b2b_cost; ?></font>
-                        </td>
+														<td bgColor="<?php echo $bg; ?>" class="style12">
+															<font size=1><?php echo $bpallet_qty; ?></font>
+														</td>
+														<td bgColor="<?php echo $bg; ?>" class="style12">
+															<font size=1><?php echo number_format($boxes_per_trailer, 0); ?></font>
+														</td>
+														<td bgColor="<?php echo $bg; ?>" class="style12">
+															<font size=1><?php echo $b2b_fob; ?></font>
+														</td>
+														<td bgColor="<?php echo $bg; ?>" class="style12">
+															<font size=1><?php echo $b2b_cost; ?></font>
+														</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["DT"] != "") echo timestamp_to_date($inv["DT"]); ?>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($loop["id"] < 0) { ?><a
-                                href='javascript:void();' id='box_div<?php echo $loop["id"]; ?>'
-                                onclick="displayboxdata(<?php echo $loop["id"]; ?>);"><?php echo $inv["N"]; ?></a><?php } else { ?><?php echo $inv["N"]; ?></a>
-                            <?php } ?></td>
+														<td bgColor="<?php echo $bg; ?>" class="style12left">
+															<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["DT"] != "") echo timestamp_to_date($inv["DT"]); ?>
+														</td>
+														<td bgColor="<?php echo $bg; ?>" class="style12left">
+															<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($loop["id"] < 0) { ?><a href='javascript:void();' id='box_div<?php echo $loop["id"]; ?>' onclick="displayboxdata(<?php echo $loop["id"]; ?>);"><?php echo $inv["N"]; ?></a><?php } else { ?><?php echo $inv["N"]; ?></a>
+														<?php } ?></td>
 
-                    <tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle" style="display:none;">
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td colspan="14"
-                            style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
-                            <div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
-                        </td>
-                    </tr>
+													<tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle" style="display:none;">
+														<td>&nbsp;</td>
+														<td>&nbsp;</td>
+														<td colspan="14" style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
+															<div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
+														</td>
+													</tr>
 
-                    <?php
+													<?php
 													$inv_row = "<tr vAlign='center'><td bgColor='$bg' class='style12'><font size=1 >";
 													if ($inv['availability'] == '3') $inv_row .= "<b>";
 													$inv_row .= $inv['actual_inventory'] . "</font></td>";
@@ -10096,29 +8352,29 @@ if ($_REQUEST["show"] == "search") {
 														$no_of_inv_item_note_date_str .= $inv_row;
 													}
 													?>
-                    <?php
+												<?php
 												$count_arry = $count_arry + 1;
 											}
 										}
 
 										if ($top_head_flg_output == "yes") {
 												?>
-                </table>
-            </div>
-        </td>
-    </tr>
+												</table>
+											</div>
+										</td>
+									</tr>
 
-    <tr align="middle">
-        <td>&nbsp;</td>
-    </tr>
-    <?php }
+									<tr align="middle">
+										<td>&nbsp;</td>
+									</tr>
+								<?php }
 
 										$top_head_flg = "no";
 										$top_head_flg_output = "no";
 								?>
 
 
-    <?php
+								<?php
 								$x = 0;
 
 								//$sql = "SELECT *, inventory.id AS I, inventory.lengthInch AS L, inventory.widthInch AS W, inventory.depthInch AS D, inventory.notes AS N, inventory.date AS DT, vendors.name AS VN, inventory.vendor AS V FROM inventory INNER JOIN vendors ON inventory.vendor = vendors.id WHERE inventory.box_type = 'DrumBarrelnonUCB' AND inventory.Active LIKE 'A' AND inventory.availability != 0 AND inventory.availability != -4 AND inventory.availability != -2 AND inventory.availability != -3.5 $main_new_where_condition ORDER BY inventory.availability DESC, vendors.name ASC";
@@ -10234,7 +8490,7 @@ if ($_REQUEST["show"] == "search") {
 										$tipStr = $tipStr . ", Vents";
 								?>
 
-    <?php
+									<?php
 									$bpallet_qty = 0;
 									$boxes_per_trailer = 0;
 									$qry = "select sku, bpallet_qty, boxes_per_trailer from loop_boxes where id=" . $loop["id"];
@@ -10300,217 +8556,150 @@ if ($_REQUEST["show"] == "search") {
 											$top_head_flg = "yes";
 									?>
 
-    <tr align="middle">
-        <td colspan="13" class="style24" style="height: 16px"><strong>Non-UCB Drum/Barrel Inventory</strong></td>
-    </tr>
-    <tr>
-        <td colspan="13">
-            <div id="div_noninv_drumBarrel" name="div_noninv_drumBarrel">
-                <table cellSpacing="1" cellPadding="1" border="0" width="1200">
-                    <tr vAlign="left">
+											<tr align="middle">
+												<td colspan="13" class="style24" style="height: 16px"><strong>Non-UCB Drum/Barrel Inventory</strong></td>
+											</tr>
+											<tr>
+												<td colspan="13">
+													<div id="div_noninv_drumBarrel" name="div_noninv_drumBarrel">
+														<table cellSpacing="1" cellPadding="1" border="0" width="1200">
+															<tr vAlign="left">
 
-                        <td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(2,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(2,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+																<td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(2,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(2,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Loads/Mo&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(3,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(3,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+																<td bgColor="#e4e4e4" class="style12"><b>Loads/Mo&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(3,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(3,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Availability&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(4,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(4,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+																<td bgColor="#e4e4e4" class="style12"><b>Availability&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(4,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(4,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>B2B Status&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(16,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(16,2);"><img src="images/sort_desc.jpg"
-                                        width="5px;" height="10px;"></a></b></td>
+																<td bgColor="#e4e4e4" class="style12"><b>B2B Status&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(16,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(16,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Account Owner&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbdrumBarrel(17,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbdrumBarrel(17,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+																<td bgColor="#e4e4e4" class="style12">
+																	<font size=1><b>Account Owner&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(17,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(17,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																</td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Supplier&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbdrumBarrel(5,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbdrumBarrel(5,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+																<td bgColor="#e4e4e4" class="style12">
+																	<font size=1><b>Supplier&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(5,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(5,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																</td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Ship From&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbdrumBarrel(15,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbdrumBarrel(15,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+																<td bgColor="#e4e4e4" class="style12">
+																	<font size=1><b>Ship From&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(15,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(15,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																</td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="100px;"><b>LxWxH&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(6,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(6,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></font>
-                        </td>
+																<td bgColor="#e4e4e4" class="style12" width="100px;"><b>LxWxH&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(6,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(6,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																</td>
 
-                        <td bgColor="#e4e4e4" class="style12left"><b>Description&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(7,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(7,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></font>
-                        </td>
+																<td bgColor="#e4e4e4" class="style12left"><b>Description&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(7,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(7,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																</td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Per Pallet&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(9,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(9,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+																<td bgColor="#e4e4e4" class="style12"><b>Per Pallet&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(9,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(9,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Per Trailer&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(10,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(10,2);"><img src="images/sort_desc.jpg"
-                                        width="5px;" height="10px;"></a></b></td>
+																<td bgColor="#e4e4e4" class="style12"><b>Per Trailer&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(10,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(10,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="70px;"><b>Min FOB&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(11,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(11,2);"><img src="images/sort_desc.jpg"
-                                        width="5px;" height="10px;"></a></b></td>
+																<td bgColor="#e4e4e4" class="style12" width="70px;"><b>Min FOB&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(11,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(11,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="70px;"><b>Cost&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(12,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(12,2);"><img src="images/sort_desc.jpg"
-                                        width="5px;" height="10px;"></a></b></td>
+																<td bgColor="#e4e4e4" class="style12" width="70px;"><b>Cost&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(12,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(12,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Update&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(13,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(13,2);"><img src="images/sort_desc.jpg"
-                                        width="5px;" height="10px;"></a></b></td>
+																<td bgColor="#e4e4e4" class="style12"><b>Update&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(13,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(13,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12left"><b>Notes&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(14,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbdrumBarrel(14,2);"><img src="images/sort_desc.jpg"
-                                        width="5px;" height="10px;"></a></b></td>
-                    </tr>
+																<td bgColor="#e4e4e4" class="style12left"><b>Notes&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(14,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbdrumBarrel(14,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
+															</tr>
 
-                    <tr vAlign="left">
-                        <td colspan=15>
-                            <?php } ?>
+															<tr vAlign="left">
+																<td colspan=15>
+																<?php } ?>
 
-                    <tr vAlign="center">
+															<tr vAlign="center">
 
 
-                        <?php if ($sales_order_qty_new > 0) { ?>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font color='blue' size=1>
-                                <div
-                                    onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $inv["loops_id"]; ?>, <?php echo $inv["vendor_b2b_rescue"]; ?>)">
-                                    <u><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?></u>
-                                </div>
-                            </font>
-                        </td>
-                        <?php } else { ?>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?>
-                            </font>
-                        </td>
-                        <?php } ?>
+																<?php if ($sales_order_qty_new > 0) { ?>
+																	<td bgColor="<?php echo $bg; ?>" class="style12">
+																		<font color='blue' size=1>
+																			<div onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $inv["loops_id"]; ?>, <?php echo $inv["vendor_b2b_rescue"]; ?>)">
+																				<u><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?></u>
+																			</div>
+																		</font>
+																	</td>
+																<?php } else { ?>
+																	<td bgColor="<?php echo $bg; ?>" class="style12">
+																		<font size=1>
+																			<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?>
+																		</font>
+																	</td>
+																<?php } ?>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["expected_loads_per_mo"]; ?>
-                            </font>
-                        </td>
+																<td bgColor="<?php echo $bg; ?>" class="style12">
+																	<font size=1>
+																		<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["expected_loads_per_mo"]; ?>
+																	</font>
+																</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?>
-                            <?php if ($inv["availability"] == "3") echo "Available Now & Urgent"; ?>
-                            <?php if ($inv["availability"] == "2") echo "Available Now"; ?>
-                            <?php if ($inv["availability"] == "1") echo "Available Soon"; ?>
-                            <?php if ($inv["availability"] == "2.5") echo "Available >= 1TL"; ?>
-                            <?php if ($inv["availability"] == "2.15") echo "Available < 1TL"; ?>
-                            <?php if ($inv["availability"] == "-1") echo "Presell"; ?>
-                            <?php if ($inv["availability"] == "-2") echo "Active by Unavailable"; ?>
-                            <?php if ($inv["availability"] == "-3") echo "Potential"; ?>
-                            <?php if ($inv["availability"] == "-3.5") echo "Check Loops"; ?>
-                        </td>
+																<td bgColor="<?php echo $bg; ?>" class="style12">
+																	<?php if ($inv["availability"] == "3") echo "<b>"; ?>
+																	<?php if ($inv["availability"] == "3") echo "Available Now & Urgent"; ?>
+																	<?php if ($inv["availability"] == "2") echo "Available Now"; ?>
+																	<?php if ($inv["availability"] == "1") echo "Available Soon"; ?>
+																	<?php if ($inv["availability"] == "2.5") echo "Available >= 1TL"; ?>
+																	<?php if ($inv["availability"] == "2.15") echo "Available < 1TL"; ?>
+																	<?php if ($inv["availability"] == "-1") echo "Presell"; ?>
+																	<?php if ($inv["availability"] == "-2") echo "Active by Unavailable"; ?>
+																	<?php if ($inv["availability"] == "-3") echo "Potential"; ?>
+																	<?php if ($inv["availability"] == "-3.5") echo "Check Loops"; ?>
+																</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12"><?php echo $b2b_status; ?></td>
+																<td bgColor="<?php echo $bg; ?>" class="style12"><?php echo $b2b_status; ?></td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1><?php echo isset($ownername); ?></font>
-                        </td>
+																<td bgColor="<?php echo $bg; ?>" class="style12left">
+																	<font size=1><?php echo isset($ownername); ?></font>
+																</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $vendor_name; ?></a>
-                            </font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php echo $inv["location_city"] . ", " . $inv["location_state"] . " " . $inv["location_zip"]; ?>
-                            </font>
-                        </td>
+																<td bgColor="<?php echo $bg; ?>" class="style12left">
+																	<font size=1>
+																		<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $vendor_name; ?></a>
+																	</font>
+																</td>
+																<td bgColor="<?php echo $bg; ?>" class="style12left">
+																	<font size=1>
+																		<?php echo $inv["location_city"] . ", " . $inv["location_state"] . " " . $inv["location_zip"]; ?>
+																	</font>
+																</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $inv["L"] . " x " . $inv["W"] . " x " . $inv["D"]; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><a
-                                    target="_blank"
-                                    href='manage_box_b2bloop.php?id=<?php echo $loop["id"]; ?>&proc=View'
-                                    id='box_div<?php echo $loop["id"]; ?>'><?php echo $inv["description"]; ?></a></font>
-                        </td>
+																<td bgColor="<?php echo $bg; ?>" class="style12">
+																	<font size=1><?php echo $inv["L"] . " x " . $inv["W"] . " x " . $inv["D"]; ?></font>
+																</td>
+																<td bgColor="<?php echo $bg; ?>" class="style12left">
+																	<font size=1>
+																		<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><a target="_blank" href='manage_box_b2bloop.php?id=<?php echo $loop["id"]; ?>&proc=View' id='box_div<?php echo $loop["id"]; ?>'><?php echo $inv["description"]; ?></a></font>
+																</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $bpallet_qty; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo number_format($boxes_per_trailer, 0); ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $b2b_fob; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $b2b_cost; ?></font>
-                        </td>
+																<td bgColor="<?php echo $bg; ?>" class="style12">
+																	<font size=1><?php echo $bpallet_qty; ?></font>
+																</td>
+																<td bgColor="<?php echo $bg; ?>" class="style12">
+																	<font size=1><?php echo number_format($boxes_per_trailer, 0); ?></font>
+																</td>
+																<td bgColor="<?php echo $bg; ?>" class="style12">
+																	<font size=1><?php echo $b2b_fob; ?></font>
+																</td>
+																<td bgColor="<?php echo $bg; ?>" class="style12">
+																	<font size=1><?php echo $b2b_cost; ?></font>
+																</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["DT"] != "") echo timestamp_to_date($inv["DT"]); ?>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($loop["id"] < 0) { ?><a
-                                href='javascript:void();' id='box_div<?php echo $loop["id"]; ?>'
-                                onclick="displayboxdata(<?php echo $loop["id"]; ?>);"><?php echo $inv["N"]; ?></a><?php } else { ?><?php echo $inv["N"]; ?></a>
-                            <?php } ?></td>
+																<td bgColor="<?php echo $bg; ?>" class="style12left">
+																	<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["DT"] != "") echo timestamp_to_date($inv["DT"]); ?>
+																</td>
+																<td bgColor="<?php echo $bg; ?>" class="style12left">
+																	<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($loop["id"] < 0) { ?><a href='javascript:void();' id='box_div<?php echo $loop["id"]; ?>' onclick="displayboxdata(<?php echo $loop["id"]; ?>);"><?php echo $inv["N"]; ?></a><?php } else { ?><?php echo $inv["N"]; ?></a>
+																<?php } ?></td>
 
-                    <tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle" style="display:none;">
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td colspan="14"
-                            style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
-                            <div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
-                        </td>
-                    </tr>
+															<tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle" style="display:none;">
+																<td>&nbsp;</td>
+																<td>&nbsp;</td>
+																<td colspan="14" style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
+																	<div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
+																</td>
+															</tr>
 
-                    <?php
+															<?php
 															$inv_row = "<tr vAlign='center'><td bgColor='$bg' class='style12'><font size=1 >";
 															if ($inv['availability'] == '3') $inv_row .= "<b>";
 															$inv_row .= $inv['actual_inventory'] . "</font></td>";
@@ -10635,26 +8824,26 @@ if ($_REQUEST["show"] == "search") {
 															}
 															?>
 
-                    <?php
+														<?php
 														$count_arry = $count_arry + 1;
 													}
 												}
 
 												if ($top_head_flg_output == "yes") {
 														?>
-                </table>
-            </div>
-        </td>
-    </tr>
+														</table>
+													</div>
+												</td>
+											</tr>
 
-    <tr align="middle">
-        <td>&nbsp;</td>
-    </tr>
-    <?php }
+											<tr align="middle">
+												<td>&nbsp;</td>
+											</tr>
+										<?php }
 												$top_head_flg = "no";
 												$top_head_flg_output = "no";
 										?>
-    <?php
+										<?php
 										$x = 0;
 
 										//$sql = "SELECT *, inventory.id AS I, inventory.lengthInch AS L, inventory.widthInch AS W, inventory.depthInch AS D, inventory.notes AS N, inventory.date AS DT, vendors.name AS VN, inventory.vendor AS V FROM inventory INNER JOIN vendors ON inventory.vendor = vendors.id WHERE inventory.box_type = 'PalletsnonUCB' AND inventory.Active LIKE 'A' AND inventory.availability != 0 AND inventory.availability != -4 AND inventory.availability != -2 AND inventory.availability != -3.5 $main_new_where_condition ORDER BY inventory.availability DESC, vendors.name ASC";
@@ -10773,7 +8962,7 @@ if ($_REQUEST["show"] == "search") {
 												$tipStr = $tipStr . ", Vents";
 										?>
 
-    <?php
+											<?php
 											$bpallet_qty = 0;
 											$boxes_per_trailer = 0;
 											$qry = "select sku, bpallet_qty, boxes_per_trailer from loop_boxes where id=" . $loop["id"];
@@ -10839,212 +9028,145 @@ if ($_REQUEST["show"] == "search") {
 													$top_head_flg = "yes";
 											?>
 
-    <tr align="middle">
-        <td colspan="13" class="style24" style="height: 16px"><strong>Non-UCB Pallets Inventory</strong></td>
-    </tr>
-    <tr>
-        <td colspan="13">
-            <div id="div_noninv_pallets" name="div_noninv_pallets">
-                <table cellSpacing="1" cellPadding="1" border="0" width="1200">
-                    <tr vAlign="left">
-                        <td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(2,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(2,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+													<tr align="middle">
+														<td colspan="13" class="style24" style="height: 16px"><strong>Non-UCB Pallets Inventory</strong></td>
+													</tr>
+													<tr>
+														<td colspan="13">
+															<div id="div_noninv_pallets" name="div_noninv_pallets">
+																<table cellSpacing="1" cellPadding="1" border="0" width="1200">
+																	<tr vAlign="left">
+																		<td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(2,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(2,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Last Month Quantity&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(3,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(3,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+																		<td bgColor="#e4e4e4" class="style12"><b>Last Month Quantity&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(3,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(3,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Availability&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(4,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(4,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+																		<td bgColor="#e4e4e4" class="style12"><b>Availability&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(4,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(4,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>B2B Status&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(16,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(16,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+																		<td bgColor="#e4e4e4" class="style12"><b>B2B Status&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(16,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(16,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Account Owner&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbpallets(17,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbpallets(17,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+																		<td bgColor="#e4e4e4" class="style12">
+																			<font size=1><b>Account Owner&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(17,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(17,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																		</td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Supplier&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbpallets(5,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                            height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbpallets(5,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+																		<td bgColor="#e4e4e4" class="style12">
+																			<font size=1><b>Supplier&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(5,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(5,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																		</td>
 
-                        <td bgColor="#e4e4e4" class="style12">
-                            <font size=1><b>Ship From&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbpallets(15,1);"><img src="images/sort_asc.jpg"
-                                            width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                        onclick="displaynonucbpallets(15,2);"><img src="images/sort_desc.jpg"
-                                            width="5px;" height="10px;"></a></b></font>
-                        </td>
+																		<td bgColor="#e4e4e4" class="style12">
+																			<font size=1><b>Ship From&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(15,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(15,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																		</td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="100px;"><b>LxWxH&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(6,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(6,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></font>
-                        </td>
+																		<td bgColor="#e4e4e4" class="style12" width="100px;"><b>LxWxH&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(6,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(6,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																		</td>
 
-                        <td bgColor="#e4e4e4" class="style12left"><b>Description&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(7,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(7,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></font>
-                        </td>
+																		<td bgColor="#e4e4e4" class="style12left"><b>Description&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(7,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(7,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																		</td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Per Pallet&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(9,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(9,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+																		<td bgColor="#e4e4e4" class="style12"><b>Per Pallet&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(9,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(9,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Per Trailer&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(10,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(10,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+																		<td bgColor="#e4e4e4" class="style12"><b>Per Trailer&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(10,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(10,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="70px;"><b>Min FOB&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(11,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(11,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+																		<td bgColor="#e4e4e4" class="style12" width="70px;"><b>Min FOB&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(11,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(11,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12" width="70px;"><b>Cost&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(12,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(12,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+																		<td bgColor="#e4e4e4" class="style12" width="70px;"><b>Cost&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(12,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(12,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12"><b>Update&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(13,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(13,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
+																		<td bgColor="#e4e4e4" class="style12"><b>Update&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(13,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(13,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                        <td bgColor="#e4e4e4" class="style12left"><b>Notes&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(14,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                        height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                    onclick="displaynonucbpallets(14,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                        height="10px;"></a></b></td>
-                    </tr>
+																		<td bgColor="#e4e4e4" class="style12left"><b>Notes&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(14,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displaynonucbpallets(14,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
+																	</tr>
 
-                    <tr vAlign="left">
-                        <td colspan=15>
-                            <?php } ?>
-                    <tr vAlign="center">
-                        <?php if ($sales_order_qty_new > 0) { ?>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font color='blue' size=1>
-                                <div
-                                    onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $inv["loops_id"]; ?>, <?php echo $inv["vendor_b2b_rescue"]; ?>)">
-                                    <u><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?></u>
-                                </div>
-                            </font>
-                        </td>
-                        <?php } else { ?>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?>
-                            </font>
-                        </td>
-                        <?php } ?>
+																	<tr vAlign="left">
+																		<td colspan=15>
+																		<?php } ?>
+																	<tr vAlign="center">
+																		<?php if ($sales_order_qty_new > 0) { ?>
+																			<td bgColor="<?php echo $bg; ?>" class="style12">
+																				<font color='blue' size=1>
+																					<div onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $inv["loops_id"]; ?>, <?php echo $inv["vendor_b2b_rescue"]; ?>)">
+																						<u><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?></u>
+																					</div>
+																				</font>
+																			</td>
+																		<?php } else { ?>
+																			<td bgColor="<?php echo $bg; ?>" class="style12">
+																				<font size=1>
+																					<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["after_actual_inventory"]; ?>
+																				</font>
+																			</td>
+																		<?php } ?>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["lastmonthqty"]; ?></a>
-                            </font>
-                        </td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12">
+																			<font size=1>
+																				<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $inv["lastmonthqty"]; ?></a>
+																			</font>
+																		</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?>
-                            <?php if ($inv["availability"] == "3") echo "Available Now & Urgent"; ?>
-                            <?php if ($inv["availability"] == "2") echo "Available Now"; ?>
-                            <?php if ($inv["availability"] == "1") echo "Available Soon"; ?>
-                            <?php if ($inv["availability"] == "2.5") echo "Available >= 1TL"; ?>
-                            <?php if ($inv["availability"] == "2.15") echo "Available < 1TL"; ?>
-                            <?php if ($inv["availability"] == "-1") echo "Presell"; ?>
-                            <?php if ($inv["availability"] == "-2") echo "Active by Unavailable"; ?>
-                            <?php if ($inv["availability"] == "-3") echo "Potential"; ?>
-                            <?php if ($inv["availability"] == "-3.5") echo "Check Loops"; ?>
-                        </td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12">
+																			<?php if ($inv["availability"] == "3") echo "<b>"; ?>
+																			<?php if ($inv["availability"] == "3") echo "Available Now & Urgent"; ?>
+																			<?php if ($inv["availability"] == "2") echo "Available Now"; ?>
+																			<?php if ($inv["availability"] == "1") echo "Available Soon"; ?>
+																			<?php if ($inv["availability"] == "2.5") echo "Available >= 1TL"; ?>
+																			<?php if ($inv["availability"] == "2.15") echo "Available < 1TL"; ?>
+																			<?php if ($inv["availability"] == "-1") echo "Presell"; ?>
+																			<?php if ($inv["availability"] == "-2") echo "Active by Unavailable"; ?>
+																			<?php if ($inv["availability"] == "-3") echo "Potential"; ?>
+																			<?php if ($inv["availability"] == "-3.5") echo "Check Loops"; ?>
+																		</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12"><?php echo $b2b_status; ?></td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12"><?php echo $b2b_status; ?></td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1><?php echo $ownername; ?></font>
-                        </td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12left">
+																			<font size=1><?php echo $ownername; ?></font>
+																		</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $vendor_name; ?></a>
-                            </font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php echo $inv["location_city"] . ", " . $inv["location_state"] . " " . $inv["location_zip"]; ?>
-                            </font>
-                        </td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12left">
+																			<font size=1>
+																				<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><?php echo $vendor_name; ?></a>
+																			</font>
+																		</td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12left">
+																			<font size=1>
+																				<?php echo $inv["location_city"] . ", " . $inv["location_state"] . " " . $inv["location_zip"]; ?>
+																			</font>
+																		</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $inv["L"] . " x " . $inv["W"] . " x " . $inv["D"]; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <font size=1>
-                                <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><a
-                                    target="_blank"
-                                    href='manage_box_b2bloop.php?id=<?php echo $loop["id"]; ?>&proc=View'
-                                    id='box_div<?php echo $loop["id"]; ?>'><?php echo $inv["description"]; ?></a></font>
-                        </td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12">
+																			<font size=1><?php echo $inv["L"] . " x " . $inv["W"] . " x " . $inv["D"]; ?></font>
+																		</td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12left">
+																			<font size=1>
+																				<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["availability"] == "3") echo "<b>"; ?><a target="_blank" href='manage_box_b2bloop.php?id=<?php echo $loop["id"]; ?>&proc=View' id='box_div<?php echo $loop["id"]; ?>'><?php echo $inv["description"]; ?></a></font>
+																		</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $bpallet_qty; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo number_format($boxes_per_trailer, 0); ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $b2b_fob; ?></font>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12">
-                            <font size=1><?php echo $b2b_cost; ?></font>
-                        </td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12">
+																			<font size=1><?php echo $bpallet_qty; ?></font>
+																		</td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12">
+																			<font size=1><?php echo number_format($boxes_per_trailer, 0); ?></font>
+																		</td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12">
+																			<font size=1><?php echo $b2b_fob; ?></font>
+																		</td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12">
+																			<font size=1><?php echo $b2b_cost; ?></font>
+																		</td>
 
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["DT"] != "") echo timestamp_to_date($inv["DT"]); ?>
-                        </td>
-                        <td bgColor="<?php echo $bg; ?>" class="style12left">
-                            <?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($loop["id"] < 0) { ?><a
-                                href='javascript:void();' id='box_div<?php echo $loop["id"]; ?>'
-                                onclick="displayboxdata(<?php echo $loop["id"]; ?>);"><?php echo $inv["N"]; ?></a><?php } else { ?><?php echo $inv["N"]; ?></a>
-                            <?php } ?></td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12left">
+																			<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($inv["DT"] != "") echo timestamp_to_date($inv["DT"]); ?>
+																		</td>
+																		<td bgColor="<?php echo $bg; ?>" class="style12left">
+																			<?php if ($inv["availability"] == "3") echo "<b>"; ?><?php if ($loop["id"] < 0) { ?><a href='javascript:void();' id='box_div<?php echo $loop["id"]; ?>' onclick="displayboxdata(<?php echo $loop["id"]; ?>);"><?php echo $inv["N"]; ?></a><?php } else { ?><?php echo $inv["N"]; ?></a>
+																		<?php } ?></td>
 
-                    <tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle" style="display:none;">
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td colspan="14"
-                            style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
-                            <div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
-                        </td>
-                    </tr>
-                    <?php
+																	<tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle" style="display:none;">
+																		<td>&nbsp;</td>
+																		<td>&nbsp;</td>
+																		<td colspan="14" style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
+																			<div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
+																		</td>
+																	</tr>
+																	<?php
 																	$inv_row = "<tr vAlign='center'><td bgColor='$bg' class='style12'><font size=1 >";
 																	if ($inv['availability'] == '3') $inv_row .= "<b>";
 																	$inv_row .= $inv['actual_inventory'] . "</font></td>";
@@ -11168,28 +9290,28 @@ if ($_REQUEST["show"] == "search") {
 																	}
 																	?>
 
-                    <?php
+																<?php
 																$count_arry = $count_arry + 1;
 															}
 														}
 
 														if ($top_head_flg_output == "yes") {
 																?>
-                </table>
-            </div>
-        </td>
-    </tr>
-    <?php } ?>
+																</table>
+															</div>
+														</td>
+													</tr>
+												<?php } ?>
 
-    </table>
+												</table>
 
-    <div id="tempval_focus" name="tempval_focus"></div>
-    <div id="tempval1" name="tempval1">
-    </div>
+												<div id="tempval_focus" name="tempval_focus"></div>
+												<div id="tempval1" name="tempval1">
+												</div>
 
-    <div id="tempval" name="tempval">
+												<div id="tempval" name="tempval">
 
-        <?php
+													<?php
 
 													$inv_row = "</table><br><br><table cellSpacing='1' cellPadding='1' border='0' width='1200' >
 													<tr vAlign='center'>
@@ -11232,111 +9354,55 @@ if ($_REQUEST["show"] == "search") {
 													$style12_val = "style12";
 													$style12left = "style12left";
 													?>
-        <table cellSpacing="1" cellPadding="1" border="0" width="1200">
-            <tr align="middle">
-                <td colspan="13" class="style24" style="height: 16px"><strong>UCB Owned Inventory</strong>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="13">
-                    <div id="div_ucbinv" name="div_ucbinv">
-                        <table cellSpacing="1" cellPadding="1" border="0" width="1200">
-                            <tr vAlign="center">
+													<table cellSpacing="1" cellPadding="1" border="0" width="1200">
+														<tr align="middle">
+															<td colspan="13" class="style24" style="height: 16px"><strong>UCB Owned Inventory</strong>
+															</td>
+														</tr>
+														<tr>
+															<td colspan="13">
+																<div id="div_ucbinv" name="div_ucbinv">
+																	<table cellSpacing="1" cellPadding="1" border="0" width="1200">
+																		<tr vAlign="center">
 
-                                <td bgColor="#e4e4e4" class="style12"><b>Actual&nbsp;<a href="javascript:void();"
-                                            onclick="displayucbinv(1,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                                height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                            onclick="displayucbinv(1,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                                height="10px;"></a></b></td>
+																			<td bgColor="#e4e4e4" class="style12"><b>Actual&nbsp;<a href="javascript:void();" onclick="displayucbinv(1,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(1,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                <td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a href="javascript:void();"
-                                            onclick="displayucbinv(2,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                                height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                            onclick="displayucbinv(2,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                                height="10px;"></a></b></td>
+																			<td bgColor="#e4e4e4" class="style12"><b>After PO&nbsp;<a href="javascript:void();" onclick="displayucbinv(2,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(2,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                <td bgColor="#e4e4e4" class="style12"><b>Loads/Mo&nbsp;<a href="javascript:void();"
-                                            onclick="displayucbinv(3,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                                height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                            onclick="displayucbinv(3,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                                height="10px;"></a></b></td>
+																			<td bgColor="#e4e4e4" class="style12"><b>Loads/Mo&nbsp;<a href="javascript:void();" onclick="displayucbinv(3,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(3,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                <td bgColor="#e4e4e4" class="style12"><b>Warehouse&nbsp;<a href="javascript:void();"
-                                            onclick="displayucbinv(4,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                                height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                            onclick="displayucbinv(4,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                                height="10px;"></a></b></td>
+																			<td bgColor="#e4e4e4" class="style12"><b>Warehouse&nbsp;<a href="javascript:void();" onclick="displayucbinv(4,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(4,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                <td bgColor="#e4e4e4" class="style12" width="100px">
-                                    <font size=1><b>Supplier&nbsp;<a href="javascript:void();"
-                                                onclick="displayucbinv(5,1);"><img src="images/sort_asc.jpg"
-                                                    width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                onclick="displayucbinv(5,2);"><img src="images/sort_desc.jpg"
-                                                    width="5px;" height="10px;"></a></b></font>
-                                </td>
+																			<td bgColor="#e4e4e4" class="style12" width="100px">
+																				<font size=1><b>Supplier&nbsp;<a href="javascript:void();" onclick="displayucbinv(5,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(5,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																			</td>
 
-                                <td bgColor="#e4e4e4" class="style12" width="100px">
-                                    <font size=1><b>Ship From&nbsp;<a href="javascript:void();"
-                                                onclick="displayucbinv(15,1);"><img src="images/sort_asc.jpg"
-                                                    width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                                onclick="displayucbinv(15,2);"><img src="images/sort_desc.jpg"
-                                                    width="5px;" height="10px;"></a></b></font>
-                                </td>
+																			<td bgColor="#e4e4e4" class="style12" width="100px">
+																				<font size=1><b>Ship From&nbsp;<a href="javascript:void();" onclick="displayucbinv(15,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(15,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																			</td>
 
-                                <td bgColor="#e4e4e4" class="style12" width="100px;"><b>Worked as a kit box?&nbsp;<a
-                                            href="javascript:void();" onclick="displayucbinv(16,1);"><img
-                                                src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                            href="javascript:void();" onclick="displayucbinv(16,2);"><img
-                                                src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
-                                </td>
+																			<td bgColor="#e4e4e4" class="style12" width="100px;"><b>Worked as a kit box?&nbsp;<a href="javascript:void();" onclick="displayucbinv(16,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(16,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																			</td>
 
-                                <td bgColor="#e4e4e4" class="style12" width="100px;"><b>Type&nbsp;<a
-                                            href="javascript:void();" onclick="displayucbinv(6,1);"><img
-                                                src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                            href="javascript:void();" onclick="displayucbinv(6,2);"><img
-                                                src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
-                                </td>
+																			<td bgColor="#e4e4e4" class="style12" width="100px;"><b>Type&nbsp;<a href="javascript:void();" onclick="displayucbinv(6,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(6,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																			</td>
 
-                                <td bgColor="#e4e4e4" class="style12left"><b>LxWxH&nbsp;<a href="javascript:void();"
-                                            onclick="displayucbinv(7,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                                height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                            onclick="displayucbinv(7,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                                height="10px;"></a></b></font>
-                                </td>
+																			<td bgColor="#e4e4e4" class="style12left"><b>LxWxH&nbsp;<a href="javascript:void();" onclick="displayucbinv(7,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(7,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																			</td>
 
-                                <td bgColor="#e4e4e4" class="style12" width="150px;"><b>Description&nbsp;<a
-                                            href="javascript:void();" onclick="displayucbinv(8,1);"><img
-                                                src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                            href="javascript:void();" onclick="displayucbinv(8,2);"><img
-                                                src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
-                                </td>
+																			<td bgColor="#e4e4e4" class="style12" width="150px;"><b>Description&nbsp;<a href="javascript:void();" onclick="displayucbinv(8,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(8,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></font>
+																			</td>
 
-                                <td bgColor="#e4e4e4" class="style12" width="70px"><b>Per Pallet&nbsp;<a
-                                            href="javascript:void();" onclick="displayucbinv(10,1);"><img
-                                                src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                            href="javascript:void();" onclick="displayucbinv(10,2);"><img
-                                                src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
+																			<td bgColor="#e4e4e4" class="style12" width="70px"><b>Per Pallet&nbsp;<a href="javascript:void();" onclick="displayucbinv(10,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(10,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                <td bgColor="#e4e4e4" class="style12" width="70px;"><b>Per Trailer&nbsp;<a
-                                            href="javascript:void();" onclick="displayucbinv(11,1);"><img
-                                                src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                            href="javascript:void();" onclick="displayucbinv(11,2);"><img
-                                                src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
+																			<td bgColor="#e4e4e4" class="style12" width="70px;"><b>Per Trailer&nbsp;<a href="javascript:void();" onclick="displayucbinv(11,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(11,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                <td bgColor="#e4e4e4" class="style12"><b>Min FOB&nbsp;<a href="javascript:void();"
-                                            onclick="displayucbinv(12,1);"><img src="images/sort_asc.jpg" width="5px;"
-                                                height="10px;"></a>&nbsp;<a href="javascript:void();"
-                                            onclick="displayucbinv(12,2);"><img src="images/sort_desc.jpg" width="5px;"
-                                                height="10px;"></a></b></td>
+																			<td bgColor="#e4e4e4" class="style12"><b>Min FOB&nbsp;<a href="javascript:void();" onclick="displayucbinv(12,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(12,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                                <td bgColor="#e4e4e4" class="style12" width="70px"><b>Cost&nbsp;<a
-                                            href="javascript:void();" onclick="displayucbinv(13,1);"><img
-                                                src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a
-                                            href="javascript:void();" onclick="displayucbinv(13,2);"><img
-                                                src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
+																			<td bgColor="#e4e4e4" class="style12" width="70px"><b>Cost&nbsp;<a href="javascript:void();" onclick="displayucbinv(13,1);"><img src="images/sort_asc.jpg" width="5px;" height="10px;"></a>&nbsp;<a href="javascript:void();" onclick="displayucbinv(13,2);"><img src="images/sort_desc.jpg" width="5px;" height="10px;"></a></b></td>
 
-                            </tr>
-                            <?php
+																		</tr>
+																		<?php
 
 																		$dt_view_qry = "SELECT * from tmp_inventory_list_set2 $main_new_where_condition_ucbq order by warehouse, type_ofbox, tmp_inventory_list_set2.Description";
 																		//echo $dt_view_qry . "<br>";
@@ -11430,9 +9496,9 @@ if ($_REQUEST["show"] == "search") {
 																			if ($newflg == "no") {
 																				$newflg = "yes";
 																		?><tr>
-                                <td colspan="13" align="center">Sync on:
-                                    <?php echo timeAgo($dt_view_row["updated_on"]); ?></td>
-                            </tr><?php
+																					<td colspan="13" align="center">Sync on:
+																						<?php echo timeAgo($dt_view_row["updated_on"]); ?></td>
+																				</tr><?php
 																					}
 
 																					$b2b_fob = $dt_view_row["min_fob"];
@@ -11530,11 +9596,10 @@ if ($_REQUEST["show"] == "search") {
 
 																							if ($ware_house_boxdraw != $dt_view_row["warehouse"]) {
 																						?><tr>
-                                <td colspan="13">
-                                    <hr
-                                        style="  border: 0; height: 1px;background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));">
-                                </td>
-                            </tr><?php
+																							<td colspan="13">
+																								<hr style="  border: 0; height: 1px;background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));">
+																							</td>
+																						</tr><?php
 																							}
 																							$ware_house_boxdraw = $dt_view_row["warehouse"];
 
@@ -11552,65 +9617,60 @@ if ($_REQUEST["show"] == "search") {
 																							}
 
 																								?>
-                            <tr vAlign="center">
-                                <td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
-                                    <a href='javascript:void();' id='actual_pos<?php echo $dt_view_row["trans_id"]; ?>'
-                                        onclick="displayactualpallet(<?php echo $dt_view_row["trans_id"]; ?>);">
-                                        <?php
+																					<tr vAlign="center">
+																						<td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
+																							<a href='javascript:void();' id='actual_pos<?php echo $dt_view_row["trans_id"]; ?>' onclick="displayactualpallet(<?php echo $dt_view_row["trans_id"]; ?>);">
+																								<?php
 																								if ($actual_qty_calculated < 0) { ?>
-                                        <font color="red"><?php echo $actual_qty_calculated . $pallet_val; ?></font>
-                                        <?php 	 } else { ?>
-                                        <font color="green"><?php echo $actual_qty_calculated . $pallet_val; ?></font>
-                                        <?php } ?>
-                                    </a>
-                                </td>
-                                <td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
-                                    <?php
+																									<font color="red"><?php echo $actual_qty_calculated . $pallet_val; ?></font>
+																								<?php 	 } else { ?>
+																									<font color="green"><?php echo $actual_qty_calculated . $pallet_val; ?></font>
+																								<?php } ?>
+																							</a>
+																						</td>
+																						<td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
+																							<?php
 																							if ($actual_po < 0) { ?>
-                                    <div onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $loops_id; ?>, <?php echo $vendor_b2b_rescue; ?>)"
-                                        style="FONT-WEIGHT: bold;FONT-SIZE: 8pt;COLOR: 006600; FONT-FAMILY: Arial">
-                                        <font color="blue"><?php echo $preorder_txt; ?><?php
+																								<div onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $loops_id; ?>, <?php echo $vendor_b2b_rescue; ?>)" style="FONT-WEIGHT: bold;FONT-SIZE: 8pt;COLOR: 006600; FONT-FAMILY: Arial">
+																									<font color="blue"><?php echo $preorder_txt; ?><?php
 																																					echo $actual_po . $pallet_val_afterpo; ?><?php echo $preorder_txt2; ?></font>
-                                    </div>
-                                    <?php 	} else { ?>
-                                    <div onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $loops_id; ?>, <?php echo $vendor_b2b_rescue; ?>)"
-                                        style="FONT-WEIGHT: bold;FONT-SIZE: 8pt;COLOR: 006600; FONT-FAMILY: Arial">
-                                        <font color="green"><?php echo $preorder_txt; ?><?php
+																								</div>
+																							<?php 	} else { ?>
+																								<div onclick="display_orders_data(<?php echo $count_arry; ?>, <?php echo $loops_id; ?>, <?php echo $vendor_b2b_rescue; ?>)" style="FONT-WEIGHT: bold;FONT-SIZE: 8pt;COLOR: 006600; FONT-FAMILY: Arial">
+																									<font color="green"><?php echo $preorder_txt; ?><?php
 																																					echo $actual_po . $pallet_val_afterpo;
 																																					?></font><?php echo $preorder_txt2; ?>
-                                    </div> <?php } ?>
-                                </td>
-                                <td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
-                                    <?php echo $expected_loads_per_mo; ?></td>
-                                <td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
-                                    <?php echo $dt_view_row["warehouse"]; ?></td>
-                                <td bgColor="<?php echo $bg; ?>" class="style12left"><?php echo $vendor_name; ?></td>
-                                <td bgColor="<?php echo $bg; ?>" class="style12left">
-                                    <?php echo $location_city . ", " . $location_state . " " . $location_zip; ?></td>
+																								</div> <?php } ?>
+																						</td>
+																						<td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
+																							<?php echo $expected_loads_per_mo; ?></td>
+																						<td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
+																							<?php echo $dt_view_row["warehouse"]; ?></td>
+																						<td bgColor="<?php echo $bg; ?>" class="style12left"><?php echo $vendor_name; ?></td>
+																						<td bgColor="<?php echo $bg; ?>" class="style12left">
+																							<?php echo $location_city . ", " . $location_state . " " . $location_zip; ?></td>
 
-                                <td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
-                                    <?php echo $work_as_kit_box; ?></td>
+																						<td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
+																							<?php echo $work_as_kit_box; ?></td>
 
-                                <td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
-                                    <?php echo $dt_view_row["type_ofbox"]; ?></td>
+																						<td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
+																							<?php echo $dt_view_row["type_ofbox"]; ?></td>
 
-                                <td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
-                                    <?php echo $dt_view_row["LWH"]; ?></td>
-                                <td bgColor="<?php echo $bg; ?>" class="style12left"><a target="_blank"
-                                        href='manage_box_b2bloop.php?id=<?php echo $dt_view_row["trans_id"]; ?>&proc=View'
-                                        id='box_div_main<?php echo $dt_view_row["trans_id"]; ?>'><?php echo $dt_view_row["Description"]; ?></a>
-                                </td>
+																						<td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
+																							<?php echo $dt_view_row["LWH"]; ?></td>
+																						<td bgColor="<?php echo $bg; ?>" class="style12left"><a target="_blank" href='manage_box_b2bloop.php?id=<?php echo $dt_view_row["trans_id"]; ?>&proc=View' id='box_div_main<?php echo $dt_view_row["trans_id"]; ?>'><?php echo $dt_view_row["Description"]; ?></a>
+																						</td>
 
-                                <td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
-                                    <?php echo $dt_view_row["per_pallet"]; ?></td>
-                                <td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
-                                    <?php echo number_format($dt_view_row["per_trailer"], 0); ?></td>
-                                <td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
-                                    $<?php echo  number_format($dt_view_row["min_fob"], 2); ?></td>
-                                <td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
-                                    $<?php echo  number_format($dt_view_row["cost"], 2); ?></td>
+																						<td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
+																							<?php echo $dt_view_row["per_pallet"]; ?></td>
+																						<td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
+																							<?php echo number_format($dt_view_row["per_trailer"], 0); ?></td>
+																						<td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
+																							$<?php echo  number_format($dt_view_row["min_fob"], 2); ?></td>
+																						<td bgColor="<?php echo $bg; ?>" class="<?php echo $style12_val; ?>">
+																							$<?php echo  number_format($dt_view_row["cost"], 2); ?></td>
 
-                                <?php
+																						<?php
 																							$inv_row = "<tr vAlign='center'><td bgColor='$bg' class='style12'>";
 																							$inv_row .= "<a href='javascript:void();' id='actual_pos" . $dt_view_row["trans_id"] . "' onclick='displayactualpallet(" . $dt_view_row["trans_id"] . ")'>";
 																							//. $pallet_val
@@ -11689,8 +9749,8 @@ if ($_REQUEST["show"] == "search") {
 
 																						?>
 
-                            </tr>
-                            <?php
+																					</tr>
+																					<?php
 																							if ($x == 0) {
 																								$x = 1;
 																								$bg = "#e4e4e4";
@@ -11700,30 +9760,26 @@ if ($_REQUEST["show"] == "search") {
 																							}
 
 																							if ($reccnt > 0) { ?>
-                            <tr id='inventory_preord_org_top_<?php echo $preordercnt; ?>' align="middle"
-                                style="display:none;">
-                                <td>&nbsp;</td>
-                                <td colspan="14"
-                                    style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
-                                    <div id="inventory_preord_org_middle_div_<?php echo $preordercnt; ?>"></div>
-                                </td>
-                            </tr>
+																						<tr id='inventory_preord_org_top_<?php echo $preordercnt; ?>' align="middle" style="display:none;">
+																							<td>&nbsp;</td>
+																							<td colspan="14" style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
+																								<div id="inventory_preord_org_middle_div_<?php echo $preordercnt; ?>"></div>
+																							</td>
+																						</tr>
 
-                            <?php 	 }
+																					<?php 	 }
 																					?>
 
-                            <tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle"
-                                style="display:none;">
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td colspan="14"
-                                    style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
-                                    <div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
-                                </td>
-                            </tr>
+																					<tr id='inventory_preord_top_<?php echo $count_arry; ?>' align="middle" style="display:none;">
+																						<td>&nbsp;</td>
+																						<td>&nbsp;</td>
+																						<td colspan="14" style="font-size:xx-small; font-family: Arial, Helvetica, sans-serif; background-color: #FAFCDF; height: 16px">
+																							<div id="inventory_preord_middle_div_<?php echo $count_arry; ?>"></div>
+																						</td>
+																					</tr>
 
-                            <?php if ($reccnt > 0) { ?>
-                            <?php
+																					<?php if ($reccnt > 0) { ?>
+																		<?php
 																								$preordercnt = $preordercnt + 1;
 																							}
 
@@ -11732,80 +9788,64 @@ if ($_REQUEST["show"] == "search") {
 																					}
 																				}
 																		?>
-                        </table>
-                        <div id="inv_summ_div"></div>
-                        <table cellspacing="1" cellpadding="1" border="0">
-                            <tr>
-                                <td class="style12_new_top" colspan="2">Inventory Summary
-                                    <input type="hidden" id="no_of_urgent_load_str" name="no_of_urgent_load_str"
-                                        value="<?php echo str_replace('"', "'", $no_of_urgent_load_str); ?>" />
-                                    <input type="hidden" id="no_of_full_load_str" name="no_of_full_load_str"
-                                        value="<?php echo str_replace('"', "'", $no_of_full_load_str); ?>" />
-                                    <input type="hidden" id="no_of_full_load_str_ucb_inv_str"
-                                        name="no_of_full_load_str_ucb_inv_str"
-                                        value="<?php echo str_replace('"', "'", $no_of_full_load_str_ucb_inv_str); ?>" />
-                                    <input type="hidden" id="no_of_full_load_str_ucb_inv_av_str"
-                                        name="no_of_full_load_str_ucb_inv_av_str"
-                                        value="<?php echo str_replace('"', "'", $no_of_full_load_str_ucb_inv_av_str); ?>" />
-                                    <input type="hidden" id="tot_load_available_str" name="tot_load_available_str"
-                                        value="<?php echo str_replace('"', "'", $tot_load_available_str); ?>" />
-                                    <input type="hidden" id="no_of_red_on_page_str" name="no_of_red_on_page_str"
-                                        value="<?php echo str_replace('"', "'", $no_of_red_on_page_str); ?>" />
-                                </td>
-                            </tr>
+																	</table>
+																	<div id="inv_summ_div"></div>
+																	<table cellspacing="1" cellpadding="1" border="0">
+																		<tr>
+																			<td class="style12_new_top" colspan="2">Inventory Summary
+																				<input type="hidden" id="no_of_urgent_load_str" name="no_of_urgent_load_str" value="<?php echo str_replace('"', "'", $no_of_urgent_load_str); ?>" />
+																				<input type="hidden" id="no_of_full_load_str" name="no_of_full_load_str" value="<?php echo str_replace('"', "'", $no_of_full_load_str); ?>" />
+																				<input type="hidden" id="no_of_full_load_str_ucb_inv_str" name="no_of_full_load_str_ucb_inv_str" value="<?php echo str_replace('"', "'", $no_of_full_load_str_ucb_inv_str); ?>" />
+																				<input type="hidden" id="no_of_full_load_str_ucb_inv_av_str" name="no_of_full_load_str_ucb_inv_av_str" value="<?php echo str_replace('"', "'", $no_of_full_load_str_ucb_inv_av_str); ?>" />
+																				<input type="hidden" id="tot_load_available_str" name="tot_load_available_str" value="<?php echo str_replace('"', "'", $tot_load_available_str); ?>" />
+																				<input type="hidden" id="no_of_red_on_page_str" name="no_of_red_on_page_str" value="<?php echo str_replace('"', "'", $no_of_red_on_page_str); ?>" />
+																			</td>
+																		</tr>
 
-                            <tr>
-                                <td class="style12_new1" bgcolor="#f4f4f4"># of Urgent Loads</td>
-                                <td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)"
-                                        onclick="return inv_summary('no_of_urgent_load_str', 1);"><?php echo $no_of_urgent_load_val; ?></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="style12_new1" bgcolor="#f4f4f4">Total # of Full Loads at UCB</td>
-                                <td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)"
-                                        onclick="return inv_summary('no_of_full_load_str', 1);"><?php echo $no_of_full_load; ?></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="style12_new1" bgcolor="#f4f4f4">Total Est. Value of Full Loads at UCB</td>
-                                <td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)"
-                                        onclick="return inv_summary('no_of_full_load_str', 1);">$<?php echo number_format($tot_value_full_load, 2); ?></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="style12_new1" bgcolor="#f4f4f4">Total Est. Value of ALL UCB Inventory</td>
-                                <td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)"
-                                        onclick="return inv_summary('no_of_full_load_str_ucb_inv_str', 1);">$<?php echo number_format($no_of_full_load_str_ucb_inv, 2); ?></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="style12_new1" bgcolor="#f4f4f4">Total # of Full Loads Available</td>
-                                <td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)"
-                                        onclick="return inv_summary('tot_load_available_str', 1);"><?php echo $tot_load_available; ?></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="style12_new1" bgcolor="#f4f4f4">Total Est. Value of Full Loads Available at
-                                    UCB</td>
-                                <td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)"
-                                        onclick="return inv_summary('tot_load_available_str', 1);">$<?php echo number_format($tot_load_available_val, 2); ?></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="style12_new1" bgcolor="#f4f4f4">Total Est. Value of ALL UCB Available
-                                    Inventory</td>
-                                <td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)"
-                                        onclick="return inv_summary('no_of_full_load_str_ucb_inv_av_str', 1);">$<?php echo number_format($no_of_full_load_str_ucb_inv_av, 2); ?></a>
-                                </td>
-                            </tr>
+																		<tr>
+																			<td class="style12_new1" bgcolor="#f4f4f4"># of Urgent Loads</td>
+																			<td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)" onclick="return inv_summary('no_of_urgent_load_str', 1);"><?php echo $no_of_urgent_load_val; ?></a>
+																			</td>
+																		</tr>
+																		<tr>
+																			<td class="style12_new1" bgcolor="#f4f4f4">Total # of Full Loads at UCB</td>
+																			<td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)" onclick="return inv_summary('no_of_full_load_str', 1);"><?php echo $no_of_full_load; ?></a>
+																			</td>
+																		</tr>
+																		<tr>
+																			<td class="style12_new1" bgcolor="#f4f4f4">Total Est. Value of Full Loads at UCB</td>
+																			<td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)" onclick="return inv_summary('no_of_full_load_str', 1);">$<?php echo number_format($tot_value_full_load, 2); ?></a>
+																			</td>
+																		</tr>
+																		<tr>
+																			<td class="style12_new1" bgcolor="#f4f4f4">Total Est. Value of ALL UCB Inventory</td>
+																			<td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)" onclick="return inv_summary('no_of_full_load_str_ucb_inv_str', 1);">$<?php echo number_format($no_of_full_load_str_ucb_inv, 2); ?></a>
+																			</td>
+																		</tr>
+																		<tr>
+																			<td class="style12_new1" bgcolor="#f4f4f4">Total # of Full Loads Available</td>
+																			<td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)" onclick="return inv_summary('tot_load_available_str', 1);"><?php echo $tot_load_available; ?></a>
+																			</td>
+																		</tr>
+																		<tr>
+																			<td class="style12_new1" bgcolor="#f4f4f4">Total Est. Value of Full Loads Available at
+																				UCB</td>
+																			<td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)" onclick="return inv_summary('tot_load_available_str', 1);">$<?php echo number_format($tot_load_available_val, 2); ?></a>
+																			</td>
+																		</tr>
+																		<tr>
+																			<td class="style12_new1" bgcolor="#f4f4f4">Total Est. Value of ALL UCB Available
+																				Inventory</td>
+																			<td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)" onclick="return inv_summary('no_of_full_load_str_ucb_inv_av_str', 1);">$<?php echo number_format($no_of_full_load_str_ucb_inv_av, 2); ?></a>
+																			</td>
+																		</tr>
 
-                            <tr>
-                                <td class="style12_new1" bgcolor="#f4f4f4"># of Red Numbers on Page</td>
-                                <td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)"
-                                        onclick="return inv_summary('no_of_red_on_page_str', 1);"><?php echo $no_of_red_on_page; ?></a>
-                                </td>
-                            </tr>
-                            <?php
+																		<tr>
+																			<td class="style12_new1" bgcolor="#f4f4f4"># of Red Numbers on Page</td>
+																			<td class="style12_new2" bgcolor="#f4f4f4"><a href="javascript:void(0)" onclick="return inv_summary('no_of_red_on_page_str', 1);"><?php echo $no_of_red_on_page; ?></a>
+																			</td>
+																		</tr>
+																		<?php
 																		$inv_row = "<tr vAlign='center'><td bgColor='$bg' colspan=2 class='style12'>";
 																		$inv_row .= "Transactions list where No Ops Delivery Date and which are not Shipped</td>";
 																		$inv_row .= "</tr>";
@@ -11833,17 +9873,14 @@ if ($_REQUEST["show"] == "search") {
 																			$no_of_trans_no_delv_date_str .= $inv_row;
 																		}
 																		?>
-                            <tr>
-                                <td class="style12_new1" bgcolor="#f4f4f4"># of transactions, No Ops Delivery Date</td>
-                                <td class="style12_new2" bgcolor="#f4f4f4">
-                                    <input type="hidden" id="no_of_trans_no_delv_date_str"
-                                        name="no_of_trans_no_delv_date_str"
-                                        value="<?php echo $no_of_trans_no_delv_date_str; ?>" />
-                                    <a href="javascript:void(0)"
-                                        onclick="return inv_summary('no_of_trans_no_delv_date_str', 0);"><?php echo $no_of_trans_no_delv_date; ?></a>
-                                </td>
-                            </tr>
-                            <?php
+																		<tr>
+																			<td class="style12_new1" bgcolor="#f4f4f4"># of transactions, No Ops Delivery Date</td>
+																			<td class="style12_new2" bgcolor="#f4f4f4">
+																				<input type="hidden" id="no_of_trans_no_delv_date_str" name="no_of_trans_no_delv_date_str" value="<?php echo $no_of_trans_no_delv_date_str; ?>" />
+																				<a href="javascript:void(0)" onclick="return inv_summary('no_of_trans_no_delv_date_str', 0);"><?php echo $no_of_trans_no_delv_date; ?></a>
+																			</td>
+																		</tr>
+																		<?php
 																		$inv_row = "<tr vAlign='center'><td bgColor='$bg' colspan=2 class='style12'>";
 																		$inv_row .= "Transactions list where Planned Delivery Date Passed and which are not Shipped</td>";
 																		$inv_row .= "</tr>";
@@ -11865,31 +9902,25 @@ if ($_REQUEST["show"] == "search") {
 																			$no_of_trans_plann_del_pass_str .= $inv_row;
 																		}
 																		?>
-                            <tr>
-                                <td class="style12_new1" bgcolor="#f4f4f4"># of transactions, Planned Delivery Date
-                                    Passed</td>
-                                <td class="style12_new2" bgcolor="#f4f4f4">
-                                    <input type="hidden" id="no_of_trans_plann_del_pass_str"
-                                        name="no_of_trans_plann_del_pass_str"
-                                        value="<?php echo $no_of_trans_plann_del_pass_str; ?>" />
-                                    <a href="javascript:void(0)"
-                                        onclick="return inv_summary('no_of_trans_plann_del_pass_str', 0);"><?php echo $no_of_trans_plann_del_pass; ?></a>
-                                </td>
-                            </tr>
+																		<tr>
+																			<td class="style12_new1" bgcolor="#f4f4f4"># of transactions, Planned Delivery Date
+																				Passed</td>
+																			<td class="style12_new2" bgcolor="#f4f4f4">
+																				<input type="hidden" id="no_of_trans_plann_del_pass_str" name="no_of_trans_plann_del_pass_str" value="<?php echo $no_of_trans_plann_del_pass_str; ?>" />
+																				<a href="javascript:void(0)" onclick="return inv_summary('no_of_trans_plann_del_pass_str', 0);"><?php echo $no_of_trans_plann_del_pass; ?></a>
+																			</td>
+																		</tr>
 
-                            <tr>
-                                <td class="style12_new1" bgcolor="#f4f4f4"># of Inventory Items, Note Date > 1 week</td>
-                                <td class="style12_new2" bgcolor="#f4f4f4">
-                                    <input type="hidden" id="no_of_inv_item_note_date_str"
-                                        name="no_of_inv_item_note_date_str"
-                                        value="<?php echo htmlentities($no_of_inv_item_note_date_str); ?>" />
-                                    <!-- <input type="hidden" id="no_of_inv_item_note_date_str" name="no_of_inv_item_note_date_str" value="" />-->
-                                    <a href="javascript:void(0)"
-                                        onclick="return inv_summary('no_of_inv_item_note_date_str', 1);"><?php echo $no_of_inv_item_note_date; ?></a>
-                                </td>
-                            </tr>
+																		<tr>
+																			<td class="style12_new1" bgcolor="#f4f4f4"># of Inventory Items, Note Date > 1 week</td>
+																			<td class="style12_new2" bgcolor="#f4f4f4">
+																				<input type="hidden" id="no_of_inv_item_note_date_str" name="no_of_inv_item_note_date_str" value="<?php echo htmlentities($no_of_inv_item_note_date_str); ?>" />
+																				<!-- <input type="hidden" id="no_of_inv_item_note_date_str" name="no_of_inv_item_note_date_str" value="" />-->
+																				<a href="javascript:void(0)" onclick="return inv_summary('no_of_inv_item_note_date_str', 1);"><?php echo $no_of_inv_item_note_date; ?></a>
+																			</td>
+																		</tr>
 
-                            <?php
+																		<?php
 																		$inv_row = "<tr vAlign='center'><td bgColor='$bg' colspan=2 class='style12'>";
 																		$inv_row .= "List of inventory items NOT completed</td>";
 																		$inv_row .= "</tr>";
@@ -11912,77 +9943,72 @@ if ($_REQUEST["show"] == "search") {
 																			$no_of_inv_not_complete_str .= $inv_row;
 																		}
 																		?>
-                            <tr>
-                                <td class="style12_new1" bgcolor="#f4f4f4"># of inventory items NOT completed</td>
-                                <td class="style12_new2" bgcolor="#f4f4f4">
-                                    <input type="hidden" id="no_of_inv_not_complete_str"
-                                        name="no_of_inv_not_complete_str"
-                                        value="<?php echo htmlentities($no_of_inv_not_complete_str); ?>" />
-                                    <a href="javascript:void(0)"
-                                        onclick="return inv_summary('no_of_inv_not_complete_str', 2);"><?php echo $no_of_inv_not_complete; ?></a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
+																		<tr>
+																			<td class="style12_new1" bgcolor="#f4f4f4"># of inventory items NOT completed</td>
+																			<td class="style12_new2" bgcolor="#f4f4f4">
+																				<input type="hidden" id="no_of_inv_not_complete_str" name="no_of_inv_not_complete_str" value="<?php echo htmlentities($no_of_inv_not_complete_str); ?>" />
+																				<a href="javascript:void(0)" onclick="return inv_summary('no_of_inv_not_complete_str', 2);"><?php echo $no_of_inv_not_complete; ?></a>
+																			</td>
+																		</tr>
+																	</table>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</div>
 
-    <?php
+											<?php
 											echo "<input type='hidden' id='inventory_preord_totctl' value='$preordercnt' />";
 										}
 											?>
 
-    <div id="light" class="white_content">
-    </div>
-    <div id="fade" class="black_overlay"></div>
+											<div id="light" class="white_content">
+											</div>
+											<div id="fade" class="black_overlay"></div>
 
-    <?php if ($_REQUEST["show"] != "inventory_new_org" && $_REQUEST["no_sess"] != "yes") { ?>
-    <div>
-        <?php include("inc/header.php"); ?>
-    </div>
-    <?php } ?>
-
-
-    <?php if ($_REQUEST["show"] != "inventory_new_org" && $_REQUEST["no_sess"] != "yes") { ?>
-    <div class="main_data_css">
-        <?php } ?>
-        <div class="dashboard_heading" style="float: left;">
-            <div style="float: left;">
-                B2B Dashboard Homepage
-            </div>
-        </div>
+											<?php if ($_REQUEST["show"] != "inventory_new_org" && $_REQUEST["no_sess"] != "yes") { ?>
+												<div>
+													<?php include("inc/header.php"); ?>
+												</div>
+											<?php } ?>
 
 
-        <div style="height: 20px;">&nbsp;</div>
+											<?php if ($_REQUEST["show"] != "inventory_new_org" && $_REQUEST["no_sess"] != "yes") { ?>
+												<div class="main_data_css">
+												<?php } ?>
+												<div class="dashboard_heading" style="float: left;">
+													<div style="float: left;">
+														B2B Dashboard Homepage
+													</div>
+												</div>
 
-        <table border="0" width="1600">
-            <tr>
-                <td></td>
-                <td align=left height=10>
 
-                </td>
-            </tr>
+												<div style="height: 20px;">&nbsp;</div>
 
-            <?php if ($_REQUEST["show"] == "search") {  ?>
-            <tr>
-                <td colspan=2>
-                    <?php
+												<table border="0" width="1600">
+													<tr>
+														<td></td>
+														<td align=left height=10>
 
-																?>
-                    <?php
+														</td>
+													</tr>
+
+													<?php if ($_REQUEST["show"] == "search") {  ?>
+														<tr>
+															<td colspan=2>
+
+																<?php
 																showStatusesDashboard_search($viewin, $eid);
 																?>
-                </td>
-            </tr>
-            <?php } else { ?>
+															</td>
+														</tr>
+													<?php } else { ?>
 
-            <tr style="padding-bottom:1px">
-                <td width=200 valign=top style="padding-bottom:1px" border=1px>
-                    <font size=2>
-                        <!------------------ Begin To-do -------->
-                        <?php
+														<tr style="padding-bottom:1px">
+															<td width=200 valign=top style="padding-bottom:1px" border=1px>
+																<font size=2>
+																	<!------------------ Begin To-do -------->
+																	<?php
 																	$super_user = "";
 																	$sql = "SELECT level FROM loop_employees where initials = '" . $_COOKIE["userinitials"] . "'";
 																	db();
@@ -11992,8 +10018,8 @@ if ($_REQUEST["show"] == "search") {
 																	}
 
 																	if ($super_user == 2) { ?>
-                        <a href="dashboard_management_v1.php">CheckBOX</a><br><br>
-                        <?php
+																		<a href="dashboard_management_v1.php">CheckBOX</a><br><br>
+																	<?php
 																	}
 
 																	$x = "Select assign_to from todolist where assign_to = '" . $_COOKIE['userinitials'] . "' and status = 1";
@@ -12011,41 +10037,40 @@ if ($_REQUEST["show"] == "search") {
 																	$oldfollowup = db_query($x);
 																	$task_due_pastdue = tep_db_num_rows($oldfollowup);
 																	?>
-                        <a
-                            href="dashboardnew_todo.php"><?php echo "Tasks (<font color=red>" . $task_due_pastdue . "</font>, <font color=#4b9952>" . $task_due_today . "</font>, <font color=black>" . $task_due . "</font>"; ?>)</a><br><br>
-                        <!------------------ End To-do -------->
+																	<a href="dashboardnew_todo.php"><?php echo "Tasks (<font color=red>" . $task_due_pastdue . "</font>, <font color=#4b9952>" . $task_due_today . "</font>, <font color=black>" . $task_due . "</font>"; ?>)</a><br><br>
+																	<!------------------ End To-do -------->
 
-                        <!------------------ Opportunity -------->
-                        <a href="dashboardnew_opportunity.php">Opportunities</a><br><br>
-                        <!------------------ Opportunity -------->
+																	<!------------------ Opportunity -------->
+																	<a href="dashboardnew_opportunity.php">Opportunities</a><br><br>
+																	<!------------------ Opportunity -------->
 
 
-                        <a href="dashboardnew_account_pipeline.php"><b>Account Pipeline</b></a><br><br>
-                        <?php if ($user_lvl == 2 || $_COOKIE['b2b_id'] == 22) { ?>
-                        <a href="dashboardnew_account_pipeline_all.php"><b>All Accounts Pipeline (MGR
-                                View)</b></a><br><br>
-                        <?php } ?>
+																	<a href="dashboardnew_account_pipeline.php"><b>Account Pipeline</b></a><br><br>
+																	<?php if ($user_lvl == 2 || $_COOKIE['b2b_id'] == 22) { ?>
+																		<a href="dashboardnew_account_pipeline_all.php"><b>All Accounts Pipeline (MGR
+																				View)</b></a><br><br>
+																	<?php } ?>
 
-                        <a href="dashboard_inventory_v3.php">All Inventory Available to Sell v3.0</a><br><br>
+																	<a href="dashboard_inventory_v3.php">All Inventory Available to Sell v3.0</a><br><br>
 
-                        <a href="dashboard_sales_quotas.php?initials=<?php echo urlencode($row['initials']); ?>">Quota
-                            History</a><br><br>
-                        <!-- <a href="">Sales Quota History</a><br><br> -->
-                        <a href="dashboard_commissions.php">Commissions</a><br><br>
+																	<a href="dashboard_sales_quotas.php?initials=<?php echo urlencode($row['initials']); ?>">Quota
+																		History</a><br><br>
+																	<!-- <a href="">Sales Quota History</a><br><br> -->
+																	<a href="dashboard_commissions.php">Commissions</a><br><br>
 
-                        <a href="function-dashboard-newlinks.php"><b>Old Dashboard Links</b></a><br><br>
+																	<a href="function-dashboard-newlinks.php"><b>Old Dashboard Links</b></a><br><br>
 
-                    </font>
-                </td>
+																</font>
+															</td>
 
-                <!------------------------- Begin Large Window ------------------------------>
+															<!------------------------- Begin Large Window ------------------------------>
 
-                <td width=1200 valign=top>
+															<td width=1200 valign=top>
 
-                    <div id="divdealinprocess">
-                    </div>
+																<div id="divdealinprocess">
+																</div>
 
-                    <?php
+																<?php
 																if ($_REQUEST["limit"] == "all") {
 
 																	$show_number = 0;
@@ -12122,10 +10147,8 @@ if ($_REQUEST["show"] == "search") {
 																		showcontacts($initials);
 																	} elseif ($_REQUEST["show"] == "freightcalendar") {
 																		?>
-                    <iframe
-                        src="https://docs.google.com/spreadsheet/ccc?key=0Akv0bNDB5PrkdElxYm1hNVN6TGhERU5rY3R1cjVSaGc#gid=23"
-                        width="1400" height="1000"></iframe>
-                    <?php
+																	<iframe src="https://docs.google.com/spreadsheet/ccc?key=0Akv0bNDB5PrkdElxYm1hNVN6TGhERU5rY3R1cjVSaGc#gid=23" width="1400" height="1000"></iframe>
+																<?php
 
 																	} elseif ($_REQUEST["show"] == "orderissues") {
 
@@ -12137,70 +10160,57 @@ if ($_REQUEST["show"] == "search") {
 																		}
 																?>
 
-                    <table>
-                        <tr>
-                            <td class="style24" colspan=19 style="height: 16px" align="middle"><strong>ORDER
-                                    ISSUES</strong></td>
-                        </tr>
-                        <tr>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a
-                                    href='dashboardnew.php?show=orderissues&sort=ID&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>ID</strong></a>
-                            </th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a
-                                    href='dashboardnew.php?show=orderissues&sort=company_name&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Company</strong></a>
-                            </th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a
-                                    href='dashboardnew.php?show=orderissues&sort=last_note_text&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Last
-                                        Note</strong></a></th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a
-                                    href='dashboardnew.php?show=orderissues&sort=po_upload_date&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>PO
-                                        Upload Date</strong></a></th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a
-                                    href='dashboardnew.php?show=orderissues&sort=po_delivery_dt&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Planned
-                                        Delivery Date</strong></a></th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a
-                                    href='dashboardnew.php?show=orderissues&sort=source&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Source</strong></a>
-                            </th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a
-                                    href='dashboardnew.php?show=orderissues&sort=quantity&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Quantity</strong></a>
-                            </th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a
-                                    href='dashboardnew.php?show=orderissues&sort=ship_date&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Ship
-                                        Date</strong></a></th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a
-                                    href='dashboardnew.php?show=orderissues&sort=last_action&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Last
-                                        Action</strong></a></th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a
-                                    href='dashboardnew.php?show=orderissues&sort=next_action&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Next
-                                        Action</strong></a></th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" width=35 align="middle">
-                                <strong>Order</strong>
-                            </th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" width=35 align="middle">
-                                <strong>Ship</strong>
-                            </th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" width=35 align="middle">
-                                <strong>Delivery</strong>
-                            </th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" width=35 align="middle">
-                                <strong>Pay</strong>
-                            </th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" width=35 align="middle">
-                                <strong>Vendor</strong>
-                            </th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a
-                                    href='dashboardnew.php?show=orderissues&sort=invoice_amount&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Invoiced
-                                        Amount</strong></a></th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a
-                                    href='dashboardnew.php?show=orderissues&sort=balance&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Balance</strong></a>
-                            </th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a
-                                    href='dashboardnew.php?show=orderissues&sort=invoice_age&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Invoice
-                                        Age</strong></a></th>
-                            <th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><strong>Remove
-                                    from List</strong></th>
-                        </tr>
-                        <?php
+																	<table>
+																		<tr>
+																			<td class="style24" colspan=19 style="height: 16px" align="middle"><strong>ORDER
+																					ISSUES</strong></td>
+																		</tr>
+																		<tr>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a href='dashboardnew.php?show=orderissues&sort=ID&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>ID</strong></a>
+																			</th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a href='dashboardnew.php?show=orderissues&sort=company_name&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Company</strong></a>
+																			</th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a href='dashboardnew.php?show=orderissues&sort=last_note_text&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Last
+																						Note</strong></a></th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a href='dashboardnew.php?show=orderissues&sort=po_upload_date&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>PO
+																						Upload Date</strong></a></th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a href='dashboardnew.php?show=orderissues&sort=po_delivery_dt&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Planned
+																						Delivery Date</strong></a></th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a href='dashboardnew.php?show=orderissues&sort=source&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Source</strong></a>
+																			</th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a href='dashboardnew.php?show=orderissues&sort=quantity&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Quantity</strong></a>
+																			</th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a href='dashboardnew.php?show=orderissues&sort=ship_date&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Ship
+																						Date</strong></a></th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a href='dashboardnew.php?show=orderissues&sort=last_action&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Last
+																						Action</strong></a></th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a href='dashboardnew.php?show=orderissues&sort=next_action&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Next
+																						Action</strong></a></th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" width=35 align="middle">
+																				<strong>Order</strong>
+																			</th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" width=35 align="middle">
+																				<strong>Ship</strong>
+																			</th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" width=35 align="middle">
+																				<strong>Delivery</strong>
+																			</th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" width=35 align="middle">
+																				<strong>Pay</strong>
+																			</th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" width=35 align="middle">
+																				<strong>Vendor</strong>
+																			</th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a href='dashboardnew.php?show=orderissues&sort=invoice_amount&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Invoiced
+																						Amount</strong></a></th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a href='dashboardnew.php?show=orderissues&sort=balance&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Balance</strong></a>
+																			</th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><a href='dashboardnew.php?show=orderissues&sort=invoice_age&sort_order_pre=<?php echo $sort_order_pre; ?>'><strong>Invoice
+																						Age</strong></a></th>
+																			<th bgColor="#e4e4e4" class="style12" style="height: 16px" align="middle"><strong>Remove
+																					from List</strong></th>
+																		</tr>
+																		<?php
 																		$dt_view_qry = "SELECT loop_transaction_buyer.no_invoice, loop_transaction_buyer.po_delivery,loop_transaction_buyer.po_delivery_dt,  loop_warehouse.b2bid, loop_warehouse.Active, loop_warehouse.company_name AS B, loop_transaction_buyer.warehouse_id AS D, loop_transaction_buyer.inv_amount AS F, loop_transaction_buyer.so_entered AS G, loop_transaction_buyer.po_date AS H , loop_transaction_buyer.id AS I, loop_transaction_buyer.inv_date_of AS J FROM loop_transaction_buyer INNER JOIN loop_warehouse ON loop_transaction_buyer.warehouse_id = loop_warehouse.id WHERE loop_transaction_buyer.po_employee = '$initials' and loop_transaction_buyer.order_issue = 1 and loop_transaction_buyer.ignore = 0 GROUP BY loop_transaction_buyer.id ORDER BY loop_transaction_buyer.id";
 																		db();
 																		$dt_view_res = db_query($dt_view_qry);
@@ -12724,41 +10734,40 @@ if ($_REQUEST["show"] == "search") {
 
 																		foreach ($MGArray as $MGArraytmp2) { ?>
 
-                        <tr>
+																			<tr>
 
-                            <td bgColor="#e4e4e4" class="style12">
-                                <?php echo $MGArraytmp2['ID']; ?>
-                            </td>
-                            <td bgColor="#e4e4e4" class="style12">
-                                <p align="center">
-                                    <span class="infotxt"><u><a
-                                                href="search_results.php?id=<?php echo $MGArraytmp2['warehouse_id']; ?>&proc=View&searchcrit=&rec_type=Supplier&page=0"><?php echo $MGArraytmp2["company_name"] . $MGArraytmp2["active"]; ?></a></u>
-                                        <span style="width:570px;">
-                                            <table cellSpacing="1" cellPadding="1" border="0" width="570">
-                                                <tr align="middle">
-                                                    <td class="style7" colspan="3" style="height: 16px"><strong>SALE
-                                                            ORDER DETAILS FOR ORDER ID:
-                                                            <?php echo $MGArraytmp2['ID']; ?></strong></td>
-                                                </tr>
+																				<td bgColor="#e4e4e4" class="style12">
+																					<?php echo $MGArraytmp2['ID']; ?>
+																				</td>
+																				<td bgColor="#e4e4e4" class="style12">
+																					<p align="center">
+																						<span class="infotxt"><u><a href="search_results.php?id=<?php echo $MGArraytmp2['warehouse_id']; ?>&proc=View&searchcrit=&rec_type=Supplier&page=0"><?php echo $MGArraytmp2["company_name"] . $MGArraytmp2["active"]; ?></a></u>
+																							<span style="width:570px;">
+																								<table cellSpacing="1" cellPadding="1" border="0" width="570">
+																									<tr align="middle">
+																										<td class="style7" colspan="3" style="height: 16px"><strong>SALE
+																												ORDER DETAILS FOR ORDER ID:
+																												<?php echo $MGArraytmp2['ID']; ?></strong></td>
+																									</tr>
 
-                                                <tr vAlign="center">
-                                                    <td bgColor="#e4e4e4" width="70" class="style17">
-                                                        <font size=1>
-                                                            <strong>QTY</strong>
-                                                        </font>
-                                                    </td>
-                                                    <td bgColor="#e4e4e4" width="100" class="style17">
-                                                        <font size=1>
-                                                            <strong>Warehouse</strong>
-                                                        </font>
-                                                    </td>
-                                                    <td bgColor="#e4e4e4" width="400" class="style17">
-                                                        <font size=1>
-                                                            <strong>Box Description</strong>
-                                                        </font>
-                                                    </td>
-                                                </tr>
-                                                <?php
+																									<tr vAlign="center">
+																										<td bgColor="#e4e4e4" width="70" class="style17">
+																											<font size=1>
+																												<strong>QTY</strong>
+																											</font>
+																										</td>
+																										<td bgColor="#e4e4e4" width="100" class="style17">
+																											<font size=1>
+																												<strong>Warehouse</strong>
+																											</font>
+																										</td>
+																										<td bgColor="#e4e4e4" width="400" class="style17">
+																											<font size=1>
+																												<strong>Box Description</strong>
+																											</font>
+																										</td>
+																									</tr>
+																									<?php
 																									db();
 																									$get_sales_order = db_query("Select *, loop_salesorders.notes AS A, loop_salesorders.pickup_date AS B, loop_salesorders.freight_vendor AS C, loop_salesorders.time AS D, loop_boxes.isbox AS I From loop_salesorders Inner Join loop_boxes ON loop_salesorders.box_id = loop_boxes.id WHERE trans_rec_id = " . $MGArraytmp2['ID']);
 
@@ -12768,13 +10777,13 @@ if ($_REQUEST["show"] == "search") {
 																										$so_freight_vendor = $boxes["C"];
 																										$so_time = $boxes["D"];
 																									?>
-                                                <tr bgColor="#e4e4e4">
-                                                    <td height="13" class="style1" align="right">
-                                                        <Font Face='arial' size='1'><?php echo $boxes["qty"]; ?>
-                                                    </td>
-                                                    <td height="13" style="width: 94px" class="style1" align="right">
-                                                        <Font Face='arial' size='1'>
-                                                            <?php
+																										<tr bgColor="#e4e4e4">
+																											<td height="13" class="style1" align="right">
+																												<Font Face='arial' size='1'><?php echo $boxes["qty"]; ?>
+																											</td>
+																											<td height="13" style="width: 94px" class="style1" align="right">
+																												<Font Face='arial' size='1'>
+																													<?php
 																													$get_wh = "SELECT warehouse_name, b2bid FROM loop_warehouse WHERE id = " . $boxes["location_warehouse_id"];
 																													db();
 																													$get_wh_res = db_query($get_wh);
@@ -12782,77 +10791,76 @@ if ($_REQUEST["show"] == "search") {
 																														echo getnickname($the_wh["warehouse_name"], $the_wh["b2bid"]);
 																													}
 																													?>
-                                                    </td>
+																											</td>
 
-                                                    <td align="left" height="13" style="width: 578px" class="style1">
-                                                        <?php if ($boxes["I"] == "Y") { ?>
-                                                        <font size="1" Face="arial"><?php echo $boxes["blength"]; ?>
-                                                            <?php echo $boxes["blength_frac"]; ?> x
-                                                            <?php echo $boxes["bwidth"]; ?>
-                                                            <?php echo $boxes["bwidth_frac"]; ?> x
-                                                            <?php echo $boxes["bdepth"]; ?>
-                                                            <?php echo $boxes["bdepth_frac"]; ?>
-                                                            <?php echo $boxes["bdescription"]; ?></font>
-                                                        <?php } else { ?>
-                                                        <font size="1" Face="arial">
-                                                            <?php echo $boxes["bdescription"]; ?></font>
-                                                        <?php } ?>
-                                                    </td>
-                                                </tr>
-                                                <?php } ?>
+																											<td align="left" height="13" style="width: 578px" class="style1">
+																												<?php if ($boxes["I"] == "Y") { ?>
+																													<font size="1" Face="arial"><?php echo $boxes["blength"]; ?>
+																														<?php echo $boxes["blength_frac"]; ?> x
+																														<?php echo $boxes["bwidth"]; ?>
+																														<?php echo $boxes["bwidth_frac"]; ?> x
+																														<?php echo $boxes["bdepth"]; ?>
+																														<?php echo $boxes["bdepth_frac"]; ?>
+																														<?php echo $boxes["bdescription"]; ?></font>
+																												<?php } else { ?>
+																													<font size="1" Face="arial">
+																														<?php echo $boxes["bdescription"]; ?></font>
+																												<?php } ?>
+																											</td>
+																										</tr>
+																									<?php } ?>
 
-                                                <?php
+																									<?php
 																									$soqry = "Select * From loop_salesorders_manual WHERE trans_rec_id = " . $MGArraytmp2['ID'];
 																									db();
 																									$get_sales_order2 = db_query($soqry);
 																									while ($boxes2 = array_shift($get_sales_order2)) {
 																									?>
-                                                <tr bgColor="#e4e4e4">
-                                                    <td height="13" class="style1" align="right">
-                                                        <Font Face='arial' size='1'><?php echo $boxes2["qty"]; ?>
-                                                    </td>
-                                                    <td height="13" class="style1" align="right">&nbsp;</td>
+																										<tr bgColor="#e4e4e4">
+																											<td height="13" class="style1" align="right">
+																												<Font Face='arial' size='1'><?php echo $boxes2["qty"]; ?>
+																											</td>
+																											<td height="13" class="style1" align="right">&nbsp;</td>
 
-                                                    <td align="left" height="13" style="width: 578px" class="style1"
-                                                        colspan=2>
-                                                        <font size="1" Face="arial">
-                                                            &nbsp;&nbsp;<?php echo $boxes2["description"]; ?></font>
-                                                    </td>
-                                                </tr>
-                                                <?php 	}	?>
-                                            </table>
-                                        </span>
-                                    </span>
-                                </p>
-                            </td>
-                            <td bgColor="#e4e4e4" class="style12">
-                                <?php echo ucfirst($MGArraytmp2['last_note_text']); ?>
-                            </td>
-                            <td bgColor="#e4e4e4" class="style12">
-                                <?php echo $MGArraytmp2['po_upload_date']; ?>
-                            </td>
-                            <td bgColor="#e4e4e4" class="style12">
-                                <?php echo $MGArraytmp2['po_delivery_dt']; ?>
-                            </td>
-                            <td bgColor="#e4e4e4" class="style12">
-                                <?php echo ucfirst($MGArraytmp2['source']); ?>
-                            </td>
-                            <td bgColor="#e4e4e4" class="style12">
-                                <?php echo $MGArraytmp2['quantity']; ?>
-                            </td>
-                            <td bgColor="#e4e4e4" class="style12">
-                                <?php echo $MGArraytmp2['ship_date']; ?>
-                            </td>
-                            <!---- Last Action ------->
-                            <td bgColor="#e4e4e4" class="style12">
-                                <?php echo $MGArraytmp2["last_action"]; ?>
-                            </td>
-                            <!---- Next Action ------->
-                            <td bgColor="#e4e4e4" class="style12">
-                                <?php echo $MGArraytmp2["next_action"]; ?>
-                            </td>
+																											<td align="left" height="13" style="width: 578px" class="style1" colspan=2>
+																												<font size="1" Face="arial">
+																													&nbsp;&nbsp;<?php echo $boxes2["description"]; ?></font>
+																											</td>
+																										</tr>
+																									<?php 	}	?>
+																								</table>
+																							</span>
+																						</span>
+																					</p>
+																				</td>
+																				<td bgColor="#e4e4e4" class="style12">
+																					<?php echo ucfirst($MGArraytmp2['last_note_text']); ?>
+																				</td>
+																				<td bgColor="#e4e4e4" class="style12">
+																					<?php echo $MGArraytmp2['po_upload_date']; ?>
+																				</td>
+																				<td bgColor="#e4e4e4" class="style12">
+																					<?php echo $MGArraytmp2['po_delivery_dt']; ?>
+																				</td>
+																				<td bgColor="#e4e4e4" class="style12">
+																					<?php echo ucfirst($MGArraytmp2['source']); ?>
+																				</td>
+																				<td bgColor="#e4e4e4" class="style12">
+																					<?php echo $MGArraytmp2['quantity']; ?>
+																				</td>
+																				<td bgColor="#e4e4e4" class="style12">
+																					<?php echo $MGArraytmp2['ship_date']; ?>
+																				</td>
+																				<!---- Last Action ------->
+																				<td bgColor="#e4e4e4" class="style12">
+																					<?php echo $MGArraytmp2["last_action"]; ?>
+																				</td>
+																				<!---- Next Action ------->
+																				<td bgColor="#e4e4e4" class="style12">
+																					<?php echo $MGArraytmp2["next_action"]; ?>
+																				</td>
 
-                            <?php
+																				<?php
 
 																				$open = "<img src=\"images/circle_open.gif\" border=\"0\">";
 																				$half = "<img src=\"images/circle__partial.gif\" border=\"0\">";
@@ -12860,11 +10868,10 @@ if ($_REQUEST["show"] == "search") {
 
 																				?>
 
-                            <!------------- ORDERED ---------->
-                            <td bgColor="#e4e4e4" class="style12" align="center">
-                                <a
-                                    href="search_results.php?warehouse_id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_type=Supplier&proc=View&searchcrit=&id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_id=<?php echo $MGArraytmp2['ID']; ?>&display=buyer_view">
-                                    <?php
+																				<!------------- ORDERED ---------->
+																				<td bgColor="#e4e4e4" class="style12" align="center">
+																					<a href="search_results.php?warehouse_id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_type=Supplier&proc=View&searchcrit=&id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_id=<?php echo $MGArraytmp2['ID']; ?>&display=buyer_view">
+																						<?php
 																						if ($MGArraytmp2["sales_order"] == 1) {
 																							echo $full;
 																						} elseif ($MGArraytmp2["po_uploaded"] == 1) {
@@ -12872,15 +10879,14 @@ if ($_REQUEST["show"] == "search") {
 																						} else {
 																							echo $open;
 																						} ?>
-                                </a>
-                            </td>
+																					</a>
+																				</td>
 
-                            <!------------- SHIPPED ---------->
+																				<!------------- SHIPPED ---------->
 
-                            <td bgColor="#e4e4e4" class="style12" align="center">
-                                <a
-                                    href="search_results.php?warehouse_id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_type=Supplier&proc=View&searchcrit=&id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_id=<?php echo $MGArraytmp2['ID']; ?>&display=buyer_ship">
-                                    <?php
+																				<td bgColor="#e4e4e4" class="style12" align="center">
+																					<a href="search_results.php?warehouse_id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_type=Supplier&proc=View&searchcrit=&id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_id=<?php echo $MGArraytmp2['ID']; ?>&display=buyer_ship">
+																						<?php
 
 																						if ($MGArraytmp2["shipped"] == 1) {
 																							echo $full;
@@ -12889,13 +10895,12 @@ if ($_REQUEST["show"] == "search") {
 																						} else {
 																							echo $open;
 																						} ?></a>
-                            </td>
+																				</td>
 
-                            <!------------- RECEIVED ---------->
-                            <td bgColor="#e4e4e4" class="style12" align="center">
-                                <a
-                                    href="search_results.php?warehouse_id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_type=Supplier&proc=View&searchcrit=&id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_id=<?php echo $MGArraytmp2['ID']; ?>&display=buyer_received">
-                                    <?php
+																				<!------------- RECEIVED ---------->
+																				<td bgColor="#e4e4e4" class="style12" align="center">
+																					<a href="search_results.php?warehouse_id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_type=Supplier&proc=View&searchcrit=&id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_id=<?php echo $MGArraytmp2['ID']; ?>&display=buyer_received">
+																						<?php
 																						if ($MGArraytmp2["courtesy_followup"] == 1) {
 																							echo $full;
 																						} elseif ($MGArraytmp2["delivered"] == 1) {
@@ -12905,14 +10910,13 @@ if ($_REQUEST["show"] == "search") {
 																						}
 
 																						?></a>
-                            </td>
+																				</td>
 
-                            <!------------- PAY ---------->
-                            <td bgColor="#e4e4e4" class="style12" align="center">
-                                <center>
-                                    <a
-                                        href="search_results.php?warehouse_id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_type=Supplier&proc=View&searchcrit=&id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_id=<?php echo $MGArraytmp2['ID']; ?>&display=buyer_payment">
-                                        <?php
+																				<!------------- PAY ---------->
+																				<td bgColor="#e4e4e4" class="style12" align="center">
+																					<center>
+																						<a href="search_results.php?warehouse_id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_type=Supplier&proc=View&searchcrit=&id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_id=<?php echo $MGArraytmp2['ID']; ?>&display=buyer_payment">
+																							<?php
 
 																							if ($MGArraytmp2["invoice_paid"] == 1) {
 																								echo $full;
@@ -12921,15 +10925,14 @@ if ($_REQUEST["show"] == "search") {
 																							} else {
 																								echo $open;
 																							} ?></a>
-                                </center>
-                            </td>
+																					</center>
+																				</td>
 
-                            <!------------- VENDOR ---------->
-                            <td bgColor="#e4e4e4" class="style12" align="center">
-                                <center>
-                                    <a
-                                        href="search_results.php?warehouse_id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_type=Supplier&proc=View&searchcrit=&id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_id=<?php echo $MGArraytmp2['ID']; ?>&display=buyer_invoice">
-                                        <?php
+																				<!------------- VENDOR ---------->
+																				<td bgColor="#e4e4e4" class="style12" align="center">
+																					<center>
+																						<a href="search_results.php?warehouse_id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_type=Supplier&proc=View&searchcrit=&id=<?php echo $MGArraytmp2['warehouse_id']; ?>&rec_id=<?php echo $MGArraytmp2['ID']; ?>&display=buyer_invoice">
+																							<?php
 
 																							if ($MGArraytmp2["vendors_paid"] == 1) {
 																								echo $full;
@@ -12938,61 +10941,59 @@ if ($_REQUEST["show"] == "search") {
 																							} else {
 																								echo $open;
 																							} ?></a>
-                                </center>
-                            </td>
+																					</center>
+																				</td>
 
-                </td>
+															</td>
 
-                <td bgColor="#e4e4e4" class="style12">
-                    <?php echo $MGArraytmp2["invoice_amount"]; ?>
-                </td>
+															<td bgColor="#e4e4e4" class="style12">
+																<?php echo $MGArraytmp2["invoice_amount"]; ?>
+															</td>
 
-                <td bgColor="#e4e4e4" class="style12">
-                    <?php echo $MGArraytmp2["balance"]; ?>
-                </td>
-                <?php
+															<td bgColor="#e4e4e4" class="style12">
+																<?php echo $MGArraytmp2["balance"]; ?>
+															</td>
+															<?php
 																			if ($MGArraytmp2["invoice_age"] > 30 && $MGArraytmp2["invoice_age"] < 1000) {
 															?>
-                <td bgColor="#ff0000" class="style12">
-                    <?php echo $MGArraytmp2["invoice_age"]; ?>
-                </td>
-                <?php
+																<td bgColor="#ff0000" class="style12">
+																	<?php echo $MGArraytmp2["invoice_age"]; ?>
+																</td>
+															<?php
 																			} elseif (number_format(($end_time - $start_t) / (3600 * 24000), 0) > 10) {
 															?>
-                <td bgColor="#e4e4e4" class="style12">&nbsp;
+																<td bgColor="#e4e4e4" class="style12">&nbsp;
 
-                </td>
-                <?php
+																</td>
+															<?php
 																			} else {
 															?>
-                <td bgColor="#e4e4e4" class="style12">
-                    <?php echo $MGArraytmp2["invoice_age"]; ?>
-                </td>
-                <?php
+																<td bgColor="#e4e4e4" class="style12">
+																	<?php echo $MGArraytmp2["invoice_age"]; ?>
+																</td>
+															<?php
 																			}
 															?>
-                <td bgColor="#e4e4e4" class="style12">
-                    <input type=button
-                        onclick="confirmationIgnore('<?php echo $MGArraytmp2["company_name"]; ?>','<?php echo $MGArraytmp2['ID']; ?>')"
-                        value="X">
-                </td>
-            </tr>
-            <?php
+															<td bgColor="#e4e4e4" class="style12">
+																<input type=button onclick="confirmationIgnore('<?php echo $MGArraytmp2["company_name"]; ?>','<?php echo $MGArraytmp2['ID']; ?>')" value="X">
+															</td>
+														</tr>
+													<?php
 																		}	//loop
 													?>
 
-        </table>
-        <?php
+												</table>
+											<?php
 																	} elseif ($_REQUEST["show"] == "preshipped") {
 											?>
-        <script>
-        showdealinprocess(<?php echo "'" . $_COOKIE["userinitials"] . "'" ?>, 'ASC', '');
-        </script>
-        <?php
+												<script>
+													showdealinprocess(<?php echo "'" . $_COOKIE["userinitials"] . "'" ?>, 'ASC', '');
+												</script>
+											<?php
 																	} else {
 																		//searchbox("dashboardnew.php",$eid); 
 											?>
-        <?php
+												<?php
 
 																		show_counts();
 																		if ($dashboard_view == "None") {
@@ -13001,61 +11002,60 @@ if ($_REQUEST["show"] == "search") {
 																		}
 												?><br />
 
-        <table cellSpacing="1" cellPadding="1" border="0" width="1000">
-            <tr>
-                <div id="span_emp_status">
-                    <td bgColor='#ABC5DF' align="center" colspan="14"><strong>Employee - Status wise company
-                            list</strong>&nbsp;&nbsp;
-                        <a href="javascript:void(0);"
-                            onclick="ex_emp_status('<?php echo $tmp_view; ?>', '<?php echo $eid; ?>', '<?php echo $show_number; ?>', 'today');">Expand</a>
-                        /<a href="javascript:void(0);" onclick="colp_emp_status();">Collapse</a>
-                    </td>
-                </div>
-            </tr>
-            <tr>
-                <td>
-                    <div id="StatusesDashboard_div"></div>
-                </td>
-            </tr>
-        </table>
-        <?php
+												<table cellSpacing="1" cellPadding="1" border="0" width="1000">
+													<tr>
+														<div id="span_emp_status">
+															<td bgColor='#ABC5DF' align="center" colspan="14"><strong>Employee - Status wise company
+																	list</strong>&nbsp;&nbsp;
+																<a href="javascript:void(0);" onclick="ex_emp_status('<?php echo $tmp_view; ?>', '<?php echo $eid; ?>', '<?php echo $show_number; ?>', 'today');">Expand</a>
+																/<a href="javascript:void(0);" onclick="colp_emp_status();">Collapse</a>
+															</td>
+														</div>
+													</tr>
+													<tr>
+														<td>
+															<div id="StatusesDashboard_div"></div>
+														</td>
+													</tr>
+												</table>
+											<?php
 
 																	}
 
 											?>
-        </td>
-        </tr>
+											</td>
+											</tr>
 
-        <?php } //Added for search bar in separate tr
+										<?php } //Added for search bar in separate tr
 										?>
-        </table>
+										</table>
 
 
 
 
-        <?php
+										<?php
 
 
 										function show_counts(): void
 										{
 										?>
-        <style>
-        .boxcounter_title {
-            font-size: 13px;
-            font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
-            background: #d3f1c9;
-            text-align: center;
-        }
+											<style>
+												.boxcounter_title {
+													font-size: 13px;
+													font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+													background: #d3f1c9;
+													text-align: center;
+												}
 
-        .boxcounter_val {
-            font-size: 12px;
-            font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
-            background: #f3f3f3;
-            text-align: center;
-        }
-        </style>
+												.boxcounter_val {
+													font-size: 12px;
+													font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+													background: #f3f3f3;
+													text-align: center;
+												}
+											</style>
 
-        <?php
+											<?php
 											//
 											//Code for box counter
 											$box_cnt_qry = "select * from loop_box_counter";
@@ -13077,39 +11077,39 @@ if ($_REQUEST["show"] == "search") {
 											$dTotalSave			=	number_format($dTotalSave, 0, '.', ',');
 
 											?>
-        <table cellpadding="3" cellspacing="1" width="30%">
-            <tr>
-                <td colspan="5" class="boxcounter_title" align="center">
-                    <b>Since 2010, UCB Has Processed...</b>
-                </td>
-            </tr>
-            <tr>
-                <td class="boxcounter_title">Gaylords</td>
-                <td class="boxcounter_title">Shipping Boxes</td>
-                <td class="boxcounter_title">Pallets</td>
-                <td class="boxcounter_title">Supersacks</td>
-                <td class="boxcounter_title">Trees Saved</td>
-            </tr>
-            <tr>
-                <td class="boxcounter_val"><?php echo number_format($boxcnt_rows["gy_qty"]); ?></td>
-                <td class="boxcounter_val"><?php echo number_format($sb_qty); ?></td>
-                <td class="boxcounter_val"><?php echo number_format($boxcnt_rows["pal_qty"]); ?></td>
-                <td class="boxcounter_val"><?php echo number_format($boxcnt_rows["sup_qty"]); ?></td>
-                <td class="boxcounter_val"><?php echo $dTotalSave; ?></td>
+											<table cellpadding="3" cellspacing="1" width="30%">
+												<tr>
+													<td colspan="5" class="boxcounter_title" align="center">
+														<b>Since 2010, UCB Has Processed...</b>
+													</td>
+												</tr>
+												<tr>
+													<td class="boxcounter_title">Gaylords</td>
+													<td class="boxcounter_title">Shipping Boxes</td>
+													<td class="boxcounter_title">Pallets</td>
+													<td class="boxcounter_title">Supersacks</td>
+													<td class="boxcounter_title">Trees Saved</td>
+												</tr>
+												<tr>
+													<td class="boxcounter_val"><?php echo number_format($boxcnt_rows["gy_qty"]); ?></td>
+													<td class="boxcounter_val"><?php echo number_format($sb_qty); ?></td>
+													<td class="boxcounter_val"><?php echo number_format($boxcnt_rows["pal_qty"]); ?></td>
+													<td class="boxcounter_val"><?php echo number_format($boxcnt_rows["sup_qty"]); ?></td>
+													<td class="boxcounter_val"><?php echo $dTotalSave; ?></td>
 
-            </tr>
+												</tr>
 
-        </table>
-        <br>
-        <?php
+											</table>
+											<br>
+										<?php
 										}
 
 										function employee_leaderboard(string $url, int $eid, string $initials, string $dashboard_view, string $name): void
 										{
 										?>
 
-        <br>
-        <?php
+											<br>
+											<?php
 											//}
 											//End Code for box counter
 											//--------------------------------------------------------------------
@@ -13125,132 +11125,126 @@ if ($_REQUEST["show"] == "search") {
 											}
 											?>
 
-        <table cellSpacing="1" cellPadding="1" border="0" width="1000">
-            <?php if ($dashboard_view != "Rescue") { ?>
-            <tr>
-                <div id="span_today_snapshot">
-                    <td bgColor='#ABC5DF' align="center" colspan="14"><strong>Today's Snapshot</strong>&nbsp;&nbsp;
-                        <a href="javascript:void(0);"
-                            onclick="ex_today_snapshot('<?php echo $initials; ?>', '<?php echo $dashboard_view; ?>');">Expand</a>
-                        /<a href="javascript:void(0);" onclick="colp_today_snapshot();">Collapse</a>
-                    </td>
-                </div>
-            </tr>
-            <tr>
-                <td>
-                    <div id="ex_today_snapshot_div"></div>
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-            </tr>
+											<table cellSpacing="1" cellPadding="1" border="0" width="1000">
+												<?php if ($dashboard_view != "Rescue") { ?>
+													<tr>
+														<div id="span_today_snapshot">
+															<td bgColor='#ABC5DF' align="center" colspan="14"><strong>Today's Snapshot</strong>&nbsp;&nbsp;
+																<a href="javascript:void(0);" onclick="ex_today_snapshot('<?php echo $initials; ?>', '<?php echo $dashboard_view; ?>');">Expand</a>
+																/<a href="javascript:void(0);" onclick="colp_today_snapshot();">Collapse</a>
+															</td>
+														</div>
+													</tr>
+													<tr>
+														<td>
+															<div id="ex_today_snapshot_div"></div>
+														</td>
+													</tr>
+													<tr>
+														<td>&nbsp;</td>
+													</tr>
 
-            <tr>
-                <div id="span_close_deal_pipline">
-                    <td bgColor='#ABC5DF' align="center" colspan="14"><strong>Closed Deal Pipeline</strong>&nbsp;&nbsp;
-                        <a href="javascript:void(0);"
-                            onclick="ex_close_deal_pipline('<?php echo $initials; ?>', '<?php echo $dashboard_view; ?>');">Expand</a>
-                        /<a href="javascript:void(0);" onclick="colp_close_deal_pipline();">Collapse</a>
-                    </td>
-                </div>
-            </tr>
-            <tr>
-                <td>
-                    <div id="close_deal_pipline_div"></div>
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-            </tr>
-            <?php } ?>
+													<tr>
+														<div id="span_close_deal_pipline">
+															<td bgColor='#ABC5DF' align="center" colspan="14"><strong>Closed Deal Pipeline</strong>&nbsp;&nbsp;
+																<a href="javascript:void(0);" onclick="ex_close_deal_pipline('<?php echo $initials; ?>', '<?php echo $dashboard_view; ?>');">Expand</a>
+																/<a href="javascript:void(0);" onclick="colp_close_deal_pipline();">Collapse</a>
+															</td>
+														</div>
+													</tr>
+													<tr>
+														<td>
+															<div id="close_deal_pipline_div"></div>
+														</td>
+													</tr>
+													<tr>
+														<td>&nbsp;</td>
+													</tr>
+												<?php } ?>
 
-            <?php if ($dashboard_view == "Rescue") { ?>
-            <tr>
-                <div id="span_close_deal_pipline">
-                    <td bgColor='#ABC5DF' align="center" colspan="14"><strong>Closed Deal Pipeline</strong>&nbsp;&nbsp;
-                        <a href="javascript:void(0);"
-                            onclick="ex_close_deal_pipline_sourcing('<?php echo $initials; ?>', '<?php echo $dashboard_view; ?>');">Expand</a>
-                        /<a href="javascript:void(0);" onclick="colp_close_deal_pipline_sourcing();">Collapse</a>
-                    </td>
-                </div>
-            </tr>
-            <tr>
-                <td>
-                    <div id="close_deal_pipline_div"></div>
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-            </tr>
-            <?php } ?>
+												<?php if ($dashboard_view == "Rescue") { ?>
+													<tr>
+														<div id="span_close_deal_pipline">
+															<td bgColor='#ABC5DF' align="center" colspan="14"><strong>Closed Deal Pipeline</strong>&nbsp;&nbsp;
+																<a href="javascript:void(0);" onclick="ex_close_deal_pipline_sourcing('<?php echo $initials; ?>', '<?php echo $dashboard_view; ?>');">Expand</a>
+																/<a href="javascript:void(0);" onclick="colp_close_deal_pipline_sourcing();">Collapse</a>
+															</td>
+														</div>
+													</tr>
+													<tr>
+														<td>
+															<div id="close_deal_pipline_div"></div>
+														</td>
+													</tr>
+													<tr>
+														<td>&nbsp;</td>
+													</tr>
+												<?php } ?>
 
-            <tr>
-                <div id="span_rev_tracker">
-                    <td bgColor='#ABC5DF' align="center" colspan="14"><strong>Revenue Quota Incentive
-                            Tracker</strong>&nbsp;&nbsp;
-                        <a href="javascript:void(0);"
-                            onclick="ex_rev_tracker('<?php echo $initials; ?>', '<?php echo $dashboard_view; ?>');">Expand</a>
-                        /<a href="javascript:void(0);" onclick="colp_rev_tracker();">Collapse</a>
-                    </td>
-                </div>
-            </tr>
-            <tr>
-                <td>
-                    <div id="rev_tracker_div"></div>
-                </td>
-            </tr>
+												<tr>
+													<div id="span_rev_tracker">
+														<td bgColor='#ABC5DF' align="center" colspan="14"><strong>Revenue Quota Incentive
+																Tracker</strong>&nbsp;&nbsp;
+															<a href="javascript:void(0);" onclick="ex_rev_tracker('<?php echo $initials; ?>', '<?php echo $dashboard_view; ?>');">Expand</a>
+															/<a href="javascript:void(0);" onclick="colp_rev_tracker();">Collapse</a>
+														</td>
+													</div>
+												</tr>
+												<tr>
+													<td>
+														<div id="rev_tracker_div"></div>
+													</td>
+												</tr>
 
-            <?php if ($dashboard_view != "Rescue") { ?>
-            <tr>
-                <td>&nbsp;</td>
-            </tr>
+												<?php if ($dashboard_view != "Rescue") { ?>
+													<tr>
+														<td>&nbsp;</td>
+													</tr>
 
-            <tr>
-                <div id="hide_tr_spin">
-                    <td bgColor='#ABC5DF' align="center" colspan="14"><strong>New Deal Spins (No. of Deals >= 2,000 and
-                            2 New Deals = 1 Spin)</strong>&nbsp;&nbsp;
-                        <a href="javascript:void(0);"
-                            onclick="ex_dash_deal_spin('<?php echo $initials; ?>', '<?php echo $dashboard_view; ?>');">Expand</a>
-                        /<a href="javascript:void(0);" onclick="colp_dash_deal_spin();">Collapse</a>
-                    </td>
-                </div>
-            </tr>
-            <tr>
-                <td>
-                    <div id="deal_spin_display"></div>
-                </td>
-            </tr>
-            <?php } ?>
-        </table>
+													<tr>
+														<div id="hide_tr_spin">
+															<td bgColor='#ABC5DF' align="center" colspan="14"><strong>New Deal Spins (No. of Deals >= 2,000 and
+																	2 New Deals = 1 Spin)</strong>&nbsp;&nbsp;
+																<a href="javascript:void(0);" onclick="ex_dash_deal_spin('<?php echo $initials; ?>', '<?php echo $dashboard_view; ?>');">Expand</a>
+																/<a href="javascript:void(0);" onclick="colp_dash_deal_spin();">Collapse</a>
+															</td>
+														</div>
+													</tr>
+													<tr>
+														<td>
+															<div id="deal_spin_display"></div>
+														</td>
+													</tr>
+												<?php } ?>
+											</table>
 
-        <br /><br />
+											<br /><br />
 
-        <table cellSpacing="1" cellPadding="1" border="0" width="1000">
-            <tr>
-                <div id="span_activity_tracking">
-                    <td bgColor='#ABC5DF' align="center" colspan="14"><strong>Activity Tracking</strong>&nbsp;&nbsp;
-                        <a href="javascript:void(0);"
-                            onclick="ex_activity_tracking('<?php echo $initials; ?>', '<?php echo $dashboard_view; ?>');">Expand</a>
-                        /<a href="javascript:void(0);" onclick="colp_activity_tracking();">Collapse</a>
-                    </td>
-                </div>
-            </tr>
-            <tr>
-                <td>
-                    <div id="activity_tracking_div"></div>
-                </td>
-            </tr>
-        </table>
+											<table cellSpacing="1" cellPadding="1" border="0" width="1000">
+												<tr>
+													<div id="span_activity_tracking">
+														<td bgColor='#ABC5DF' align="center" colspan="14"><strong>Activity Tracking</strong>&nbsp;&nbsp;
+															<a href="javascript:void(0);" onclick="ex_activity_tracking('<?php echo $initials; ?>', '<?php echo $dashboard_view; ?>');">Expand</a>
+															/<a href="javascript:void(0);" onclick="colp_activity_tracking();">Collapse</a>
+														</td>
+													</div>
+												</tr>
+												<tr>
+													<td>
+														<div id="activity_tracking_div"></div>
+													</td>
+												</tr>
+											</table>
 
-        <br /><br />
+											<br /><br />
 
-        <?php
+										<?php
 										}
 
 										?>
 
-        <!------------------------ END NEW DASHBOARD ------------>
-        <?php
+										<!------------------------ END NEW DASHBOARD ------------>
+										<?php
 										function showCustomerList(): void
 										{
 
@@ -13261,92 +11255,77 @@ if ($_REQUEST["show"] == "search") {
 											}
 
 										?>
-        <div><i>Note: Please wait until you see <font color="red">"END OF REPORT"</font> at the bottom of the report,
-                before using the sort option.</i></div>
-        <table>
-            <tr>
-                <td width="5%" bgcolor="#D9F2FF">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=dt&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"] . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">DATE</a>
-                    </font>
-                </td>
-                <td width="5%" bgcolor="#D9F2FF">
-                    <font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=age&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">AGE</a>
-                    </font>
-                </td>
-                <td width="10%" bgcolor="#D9F2FF" align="center">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=contact&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">CONTACT</a>
-                    </font>
-                </td>
-                <td width="21%" bgcolor="#D9F2FF">
-                    <font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=cname&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"] . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">COMPANY
-                            NAME</a></font>
-                </td>
-                <td width="21%" bgcolor="#D9F2FF">
-                    <font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=status&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"] . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">STATUS</a>
-                    </font>
-                </td>
-                <td width="8%" bgcolor="#D9F2FF">
-                    <font size="1" face="Arial, Helvetica, sans-serif" color="#333333">PHONE</font>
-                </td>
-                <td bgcolor="#D9F2FF" align="center">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=city&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">CITY</a>
-                    </font>
-                </td>
-                <td bgcolor="#D9F2FF" align="center">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=state&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">STATE</a>
-                    </font>
-                </td>
-                <td bgcolor="#D9F2FF" align="center">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=zip&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">ZIP</a>
-                    </font>
-                </td>
-                <td bgcolor="#D9F2FF" align="center">
-                    <font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=ns&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">Next
-                            Step</a></font>
-                </td>
-                <td bgcolor="#D9F2FF" align="center">
-                    <font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=lc&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">Last<br>Communication</a>
-                    </font>
-                </td>
-                <td bgcolor="#D9F2FF" align="center">
-                    <font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=nd&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">Next
-                            Communication</font>
-                </td>
+											<div><i>Note: Please wait until you see <font color="red">"END OF REPORT"</font> at the bottom of the report,
+													before using the sort option.</i></div>
+											<table>
+												<tr>
+													<td width="5%" bgcolor="#D9F2FF">
+														<font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=dt&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"] . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">DATE</a>
+														</font>
+													</td>
+													<td width="5%" bgcolor="#D9F2FF">
+														<font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=age&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">AGE</a>
+														</font>
+													</td>
+													<td width="10%" bgcolor="#D9F2FF" align="center">
+														<font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=contact&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">CONTACT</a>
+														</font>
+													</td>
+													<td width="21%" bgcolor="#D9F2FF">
+														<font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=cname&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"] . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">COMPANY
+																NAME</a></font>
+													</td>
+													<td width="21%" bgcolor="#D9F2FF">
+														<font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=status&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"] . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">STATUS</a>
+														</font>
+													</td>
+													<td width="8%" bgcolor="#D9F2FF">
+														<font size="1" face="Arial, Helvetica, sans-serif" color="#333333">PHONE</font>
+													</td>
+													<td bgcolor="#D9F2FF" align="center">
+														<font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=city&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">CITY</a>
+														</font>
+													</td>
+													<td bgcolor="#D9F2FF" align="center">
+														<font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=state&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">STATE</a>
+														</font>
+													</td>
+													<td bgcolor="#D9F2FF" align="center">
+														<font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=zip&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">ZIP</a>
+														</font>
+													</td>
+													<td bgcolor="#D9F2FF" align="center">
+														<font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=ns&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">Next
+																Step</a></font>
+													</td>
+													<td bgcolor="#D9F2FF" align="center">
+														<font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=lc&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">Last<br>Communication</a>
+														</font>
+													</td>
+													<td bgcolor="#D9F2FF" align="center">
+														<font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=nd&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">Next
+																Communication</font>
+													</td>
 
-                <td bgcolor="#D9F2FF" align="center">
-                    <font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=nooftrans&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">#
-                            of transactions</font>
-                </td>
-                <td bgcolor="#D9F2FF" align="center">
-                    <font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=totrev&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">Total
-                            Revenue</font>
-                </td>
-                <td bgcolor="#D9F2FF" align="center">
-                    <font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=totprofit&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">Total
-                            Profit</font>
-                </td>
-                <td bgcolor="#D9F2FF" align="center">
-                    <font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a
-                            href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=profitmargin&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">Profit
-                            margin</font>
-                </td>
-            </tr>
+													<td bgcolor="#D9F2FF" align="center">
+														<font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=nooftrans&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">#
+																of transactions</font>
+													</td>
+													<td bgcolor="#D9F2FF" align="center">
+														<font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=totrev&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">Total
+																Revenue</font>
+													</td>
+													<td bgcolor="#D9F2FF" align="center">
+														<font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=totprofit&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">Total
+																Profit</font>
+													</td>
+													<td bgcolor="#D9F2FF" align="center">
+														<font size="1" face="Arial, Helvetica, sans-serif" color="#333333"><a href="<?php echo htmlentities($_SERVER['PHP_SELF'] . "?sk=profitmargin&so=" . $so . "&show=" . $_REQUEST["show"] . "&statusid=" . $_REQUEST["statusid"]  . "&searchterm=" . $_REQUEST["searchterm"] . "&andor=" . $_REQUEST["andor"] . "&state=" . $_REQUEST["state"]); ?>">Profit
+																margin</font>
+													</td>
+												</tr>
 
-            <?php
+												<?php
 												$sql = "Select companyInfo.id AS I, companyInfo.status, companyInfo.last_contact_date, companyInfo.loopid AS LID, companyInfo.contact AS C,  companyInfo.dateCreated AS D,  companyInfo.company AS CO, companyInfo.nickname AS NN, companyInfo.phone AS PH,  companyInfo.city AS CI,  companyInfo.state AS ST,  companyInfo.zip AS ZI, companyInfo.next_step AS NS, companyInfo.last_date AS LD, companyInfo.next_date AS ND, employees.initials AS EI from companyInfo LEFT OUTER JOIN employees ON companyInfo.assignedto = employees.employeeID Where companyInfo.assignedto = " . $_COOKIE['b2b_id'] . " and companyInfo.loopid > 0 and companyInfo.active = 1 ";
 												$sql = $sql . " GROUP BY companyInfo.id ";
 												//echo "<br/>" . $sql . "<br/><br/>";
@@ -13600,92 +11579,90 @@ if ($_REQUEST["show"] == "search") {
 
 												foreach ($MGArray as $MGArraytmp2) {
 												?>
-            <tr valign="middle">
-                <td width="5%" bgcolor="#E4E4E4">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo  timestamp_to_datetime($MGArraytmp2["dateval"]);
+													<tr valign="middle">
+														<td width="5%" bgcolor="#E4E4E4">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo  timestamp_to_datetime($MGArraytmp2["dateval"]);
 																																												?></font>
-                </td>
-                <td width="5%" bgcolor="#E4E4E4">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo date_diff_new($MGArraytmp2["dateval"], "NOW");
+														</td>
+														<td width="5%" bgcolor="#E4E4E4">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333"><?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo date_diff_new($MGArraytmp2["dateval"], "NOW");
 																																												?> Days</font>
-                </td>
-                <td width="10%" bgcolor="#E4E4E4" align="center">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                        <?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo $MGArraytmp2["contact"] ?></font>
-                </td>
-                <td width="21%" bgcolor="#E4E4E4"><a href="viewCompany.php?ID=<?php echo $MGArraytmp2["I"] ?>">
-                        <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                            <?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php if ($MGArraytmp2["companynn"] != "") echo $MGArraytmp2["companynn"];
+														</td>
+														<td width="10%" bgcolor="#E4E4E4" align="center">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																<?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo $MGArraytmp2["contact"] ?></font>
+														</td>
+														<td width="21%" bgcolor="#E4E4E4"><a href="viewCompany.php?ID=<?php echo $MGArraytmp2["I"] ?>">
+																<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																	<?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php if ($MGArraytmp2["companynn"] != "") echo $MGArraytmp2["companynn"];
 																														else echo $MGArraytmp2["company"] ?><?php if ($MGArraytmp2["LID"] > 0) echo "</b>"; ?>
-                        </font>
-                    </a></td>
-                <td width="10%" bgcolor="#E4E4E4" align="left">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                        <?php echo $MGArraytmp2["status"]; ?></font>
-                </td>
-                <td width="3%" bgcolor="#E4E4E4">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                        <?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo $MGArraytmp2["phone"] ?></font>
-                </td>
-                <td width="10%" bgcolor="#E4E4E4" align="center">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                        <?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo $MGArraytmp2["city"] ?></font>
-                </td>
-                <td width="5%" bgcolor="#E4E4E4" align="center">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                        <?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo $MGArraytmp2["state"] ?></font>
-                </td>
-                <td width="5%" bgcolor="#E4E4E4" align="center">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                        <?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo $MGArraytmp2["zip"] ?></font>
-                </td>
-                <td width="15%" bgcolor="#E4E4E4" align="center">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                        <?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo $MGArraytmp2["nextstep"] ?></font>
-                </td>
-                <td width="10%" bgcolor="#E4E4E4" align="center">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                        <?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php if ($MGArraytmp2["lastcomm"] != "") echo date('m/d/Y', strtotime($MGArraytmp2["lastcomm"])); ?>
-                <td width="10%" <?php if ($MGArraytmp2["nextcomm"] == date('Y-m-d')) { ?> bgcolor="#00FF00"
-                    <?php } elseif ($MGArraytmp2["nextcomm"] < date('Y-m-d') && $MGArraytmp2["nextcomm"] != "") { ?>
-                    bgcolor="#FF0000" <?php } else { ?> bgcolor="#E4E4E4" <?php } ?> align="center">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                        <?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php if ($MGArraytmp2["nextcomm"] != "") echo date('m/d/Y', strtotime($MGArraytmp2["nextcomm"])); ?>
-                    </font>
-                </td>
-                <td bgcolor="#E4E4E4" align="center">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                        <?php echo $MGArraytmp2["nooftrans"] ?></font>
-                </td>
-                <td bgcolor="#E4E4E4" align="right">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                        $<?php echo number_format($MGArraytmp2["totrev"], 2) ?></font>
-                </td>
-                <td bgcolor="#E4E4E4" align="right">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                        $<?php echo number_format($MGArraytmp2["totprofit"], 2) ?></font>
-                </td>
-                <td bgcolor="#E4E4E4" align="center">
-                    <font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
-                        <?php echo $MGArraytmp2["profitmargin"] ?></font>
-                </td>
-            </tr>
+																</font>
+															</a></td>
+														<td width="10%" bgcolor="#E4E4E4" align="left">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																<?php echo $MGArraytmp2["status"]; ?></font>
+														</td>
+														<td width="3%" bgcolor="#E4E4E4">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																<?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo $MGArraytmp2["phone"] ?></font>
+														</td>
+														<td width="10%" bgcolor="#E4E4E4" align="center">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																<?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo $MGArraytmp2["city"] ?></font>
+														</td>
+														<td width="5%" bgcolor="#E4E4E4" align="center">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																<?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo $MGArraytmp2["state"] ?></font>
+														</td>
+														<td width="5%" bgcolor="#E4E4E4" align="center">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																<?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo $MGArraytmp2["zip"] ?></font>
+														</td>
+														<td width="15%" bgcolor="#E4E4E4" align="center">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																<?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php echo $MGArraytmp2["nextstep"] ?></font>
+														</td>
+														<td width="10%" bgcolor="#E4E4E4" align="center">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																<?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php if ($MGArraytmp2["lastcomm"] != "") echo date('m/d/Y', strtotime($MGArraytmp2["lastcomm"])); ?>
+														<td width="10%" <?php if ($MGArraytmp2["nextcomm"] == date('Y-m-d')) { ?> bgcolor="#00FF00" <?php } elseif ($MGArraytmp2["nextcomm"] < date('Y-m-d') && $MGArraytmp2["nextcomm"] != "") { ?> bgcolor="#FF0000" <?php } else { ?> bgcolor="#E4E4E4" <?php } ?> align="center">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																<?php if ($MGArraytmp2["LID"] > 0) echo "<b>"; ?><?php if ($MGArraytmp2["nextcomm"] != "") echo date('m/d/Y', strtotime($MGArraytmp2["nextcomm"])); ?>
+															</font>
+														</td>
+														<td bgcolor="#E4E4E4" align="center">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																<?php echo $MGArraytmp2["nooftrans"] ?></font>
+														</td>
+														<td bgcolor="#E4E4E4" align="right">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																$<?php echo number_format($MGArraytmp2["totrev"], 2) ?></font>
+														</td>
+														<td bgcolor="#E4E4E4" align="right">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																$<?php echo number_format($MGArraytmp2["totprofit"], 2) ?></font>
+														</td>
+														<td bgcolor="#E4E4E4" align="center">
+															<font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+																<?php echo $MGArraytmp2["profitmargin"] ?></font>
+														</td>
+													</tr>
 
-            <?php
+												<?php
 												} ?>
-        </table>
+											</table>
 
-        <div><i>
-                <font color="red">"END OF REPORT"</font>
-            </i></div>
-        <?php
+											<div><i>
+													<font color="red">"END OF REPORT"</font>
+												</i></div>
+										<?php
 										}
 
 
 										?>
 
 
-        <?php
+										<?php
 										tep_db_close();
 										?>
 
