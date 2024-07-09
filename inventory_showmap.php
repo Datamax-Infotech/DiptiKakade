@@ -1,0 +1,1 @@
+<iframe src="inventory_showmap_detail.php" width="850" height="600"></iframe>
